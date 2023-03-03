@@ -5,9 +5,9 @@ Developed by Black Bulls Group
 
 ### Branch Creation
 
-When creating working branches for Jira issues/tickets, use this as the main branch you are pulling from.
+When creating working branches for Jira issues/tickets, use the __development__ branch as the main branch you are pulling from.
 
-We will merge our branches into the development branch before merging into the master branch to review code and avoid major issues.
+We will merge our branches into the __development__branch before merging into the __master__ branch to review code and avoid major issues.
 
 ### Getting Started for Developers
 
