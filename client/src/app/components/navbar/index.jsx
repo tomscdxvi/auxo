@@ -38,9 +38,7 @@ function classNames(...classes: string[]) {
 export function Navbar() {
     return (
         <NavbarContainer>
-            <LogoContainer>
-                <Logo />
-            </LogoContainer>
+            <Logo />
             <NavItems />
         </NavbarContainer>
     )

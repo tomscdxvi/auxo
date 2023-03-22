@@ -6,6 +6,19 @@ module.exports = {
   darkMode: false,
   theme: {
     extend: {},
+    colors: {
+      /* Auxo UX/UI Custom Colour Tokens */
+
+      transparent: 'transparent',
+      black: 'black',
+      white: 'white',
+      'background': '#F9F4EF',
+      'headline': '#001858',
+      'paragraph': '#172C66',
+      'button': '#716040',
+      'button-text': '#FFFFFE',
+
+    },
     screens: {
       "small": "640px", // @media (min-width: 640px)
       

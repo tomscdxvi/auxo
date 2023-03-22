@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import tw from 'twin.macro';
 import { Navbar } from '../../components/navbar';
-import { TopSection } from './topSection';
+import { MainSection } from './mainSection';
 import { Logo } from '../../components/logo';
 
 const PageContainer = styled.div`
@@ -19,7 +19,8 @@ const PageContainer = styled.div`
 export default function HomePage() {
     return (
         <PageContainer>
-            <Logo />
+            <Navbar />
+            <MainSection />
         </PageContainer>
     )
 }
