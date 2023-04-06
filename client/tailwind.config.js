@@ -17,6 +17,7 @@ module.exports = {
       'paragraph': '#172C66',
       'button': '#716040',
       'button-text': '#FFFFFE',
+      'test': '#252F3D'
 
     },
     screens: {

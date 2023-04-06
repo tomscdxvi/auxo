@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import { useMediaQuery } from 'react-responsive';
@@ -6,6 +7,7 @@ import { SCREENS } from '../responsive';
 
 const ListContainer = styled.ul`
     ${tw`
+        pt-9
         flex
         list-none
     `}
@@ -65,11 +67,11 @@ export function NavItems() {
     return (
         <ListContainer>
             <SignUpItem>
-                <a href="#">Sign up</a>
+                <Link to="/register">Sign up</Link>
             </SignUpItem>
 
             <SignInItem>
-                <a href="#">Sign in</a>
+                <Link to="/login">Sign in</Link>
             </SignInItem>
         </ListContainer>
     )

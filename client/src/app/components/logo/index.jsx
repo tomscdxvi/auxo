@@ -1,10 +1,10 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import { useMediaQuery } from 'react-responsive';
 import { SCREENS } from '../responsive';
-
-// import Logo from .. 
+import LogoImage from '../../../assets/images/auxo-logo.png';
 
 const LogoContainer = styled.div`
     ${tw`
@@ -14,43 +14,25 @@ const LogoContainer = styled.div`
     `}
 `;
 
-const LogoText = styled.header`
-    ${tw`
-        text-xl
-        medium:text-2xl
-        font-bold
-        m-1
-        text-headline
-    `}
-`;
-
 const LogoContainerMobile = styled.div`
-    width: 100%;
+    margin: auto;
+    ${tw`
+        flex
+        items-center
+    `}
 `;
 
-const LogoTextMobile = styled.header`
-    text-align: center;
-    ${tw`
-        text-2xl
-        font-bold
-        text-headline
-        mt-32
-    `}
-`
-
-/* const Image = styled.div`
-
+const ImageContainer = styled.div`
     width:auto;
     ${tw`
         h-6
         medium:h-9
     `}
-
-    img{
+    img {
         width:auto;
         height:100%;
     }
-`; */
+`; 
 
 
 export function Logo() {
@@ -60,20 +42,22 @@ export function Logo() {
     if(isMobile) {
         return (
             <LogoContainerMobile>
-                {/* <Image>
-                    <img src={LogoImg} alt="" />
-                </Image> */}
-                <LogoTextMobile>Auxo</LogoTextMobile>
+                <ImageContainer>
+                    <Link to="/">
+                        <img src={LogoImage} alt="" />
+                    </Link>
+                </ImageContainer> 
             </LogoContainerMobile> 
         )
     }
 
     return (
         <LogoContainer>
-            {/* <Image>
-                <img src={LogoImg} alt="" />
-            </Image> */}
-            <LogoText>Auxo</LogoText>
+            <ImageContainer>
+                <Link to="/">
+                    <img src={LogoImage} alt="" style={{ width: 261, height: 72 }} />
+                </Link>
+            </ImageContainer> 
         </LogoContainer> 
     )
 }

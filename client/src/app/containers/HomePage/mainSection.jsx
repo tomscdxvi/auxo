@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import { Button } from '../../components/button';
@@ -9,7 +10,7 @@ import { SCREENS } from '../../components/responsive';
 import BikerIllustration from '../../../assets/images/bikerillustration.png'
 
 const MainSectionContainer = styled.div`
-    min-height: calc(100vh - 324px);
+    min-height: calc(100vh - 340px);
     margin-top: 16rem;
     ${tw`
         flex
@@ -79,7 +80,7 @@ const Description = styled.p`
 const HorizontalLine = styled.hr`
     width: 78%;
     position: absolute;
-    top: 71%;
+    top: 72.2%;
     visibility: hidden;
     ${tw`
         text-headline
@@ -173,9 +174,9 @@ export function MainSection() {
                     </ButtonsContainer>
 
                     <ButtonsContainer style={{ marginLeft: 135, marginTop: 50 }}>
-                        <a target="_blank" href="">
+                        <Link to="" >
                             <Button theme="outline" text="Need Help?" /> 
-                        </a>
+                        </Link>
                     </ButtonsContainer>
                 </LeftContainer>
             </MainSectionContainer>

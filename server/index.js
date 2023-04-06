@@ -1,10 +1,11 @@
-import express from "express";
-import bodyParser from "body-parser";
-import mongoose from "mongoose";
-import cors from "cors";
-import dotenv from "dotenv";
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
 
-import connectDB from "./config/config.js";
+const authRoutes = require("./routes/AuthRoutes.js");
 
 dotenv.config();
 
@@ -12,9 +13,30 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-app.use(express.json());
-
 /* MongoDB Connection */
-connectDB().then(() => {
-    app.listen(PORT, () => console.log(`Connected to Server Port: ${PORT}`));
-}).catch((error) => console.log(`${error} failed to connect`));
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true, 
+    useUnifiedTopology: true, 
+}).then(() => {
+    console.log("MongoDB Connect is Successful.")
+})
+
+try {
+    app.listen(PORT, () => console.log(`Connected to Server at Port: ${PORT}`)); 
+} catch(error) {
+    console.log(`${error} failed to connect`);
+}
+
+
+
+app.use(
+    cors({
+        origin: "http://localhost:3000",
+        method: ["GET", "POST"],
+        credentials: true
+    })
+);
+
+app.use(express.json());
+app.use("/", authRoutes);
+

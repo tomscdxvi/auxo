@@ -15,7 +15,7 @@ const PageContainer = styled.div`
     `}
 `;
 
-export default function HomePage() {
+export default function RegisterPage() {
     return (
         <PageContainer>
             <Navbar />

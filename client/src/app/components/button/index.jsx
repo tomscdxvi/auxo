@@ -2,11 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import tw from 'twin.macro'
 
-interface props {
-    theme: "filled" | "outline";
-    text: string;
-}
-
 const BaseButton = styled.button`
     ${tw`
         pl-12
@@ -24,44 +19,37 @@ const BaseButton = styled.button`
         transition-all
         duration-200
         ease-in-out
-        m-1 
         tracking-wider
-    `}
-`;
-
-const BaseButtonLink = styled.button`
-    ${tw`
-        outline-none
-        text-white
-        text-lg
-        font-semibold
-        border-solid
-        border-transparent
-        border-2 
-        focus:outline-none 
-        transition-all
-        duration-200
-        ease-in-out
+        m-3
     `}
 `;
 
 const FilledButton = styled(BaseButton)`
     ${tw`
+        text-white
         bg-button
-        text-button-text
+        hover:bg-white
+        hover:text-button
+        hover:border-button
+        hover:transition-all
+        hover:duration-300
     `}
 `;
 
-const OutlinedButton = styled(BaseButtonLink)`
+const OutlinedButton = styled(BaseButton)`
     ${tw`
-        text-headline
-        hover:underline
+        text-button
+        border-button
+        hover:bg-button
+        hover:text-white
+        hover:transition-all
+        hover:duration-300
     `}
-`; 
+`;
 
-export function Button(props: props) {
+export function Button(props) {
 
-    const { theme, text} = props;
+    const { theme, text } = props;
 
     if(theme === "filled") {
         return <FilledButton>{text}</FilledButton>
