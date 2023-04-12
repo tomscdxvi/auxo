@@ -5,6 +5,7 @@ import tw from 'twin.macro';
 import { useMediaQuery } from 'react-responsive';
 import { SCREENS } from '../responsive';
 import LogoImage from '../../../assets/images/auxo-logo.png';
+import LogoImageDark from '../../../assets/images/auxo-logo-darktheme.png';
 
 const LogoContainer = styled.div`
     ${tw`
@@ -56,6 +57,32 @@ export function Logo() {
             <ImageContainer>
                 <Link to="/">
                     <img src={LogoImage} alt="" style={{ width: 261, height: 72 }} />
+                </Link>
+            </ImageContainer> 
+        </LogoContainer> 
+    )
+}
+
+export function DarkLogo() {
+    const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
+
+    if(isMobile) {
+        return (
+            <LogoContainerMobile>
+                <ImageContainer>
+                    <Link to="/">
+                        <img src={LogoImageDark} alt="" />
+                    </Link>
+                </ImageContainer> 
+            </LogoContainerMobile> 
+        )
+    }
+
+    return (
+        <LogoContainer>
+            <ImageContainer>
+                <Link to="/home">
+                    <img src={LogoImageDark} alt="" style={{ width: 261, height: 72 }} />
                 </Link>
             </ImageContainer> 
         </LogoContainer> 

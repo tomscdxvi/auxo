@@ -1,16 +1,19 @@
 import { React, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useMediaQuery } from 'react-responsive';
 import tw from 'twin.macro';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import FormInput from '../../components/form';
+
+import { Footer } from '../../components/footer';
+import { FormInput } from '../../components/form';
 import { Button }   from '../../components/button';
 import { SCREENS } from '../../components/responsive';
 import SignUpIllustration from '../../../assets/images/signupillustration.png'
 import '../../styles/register/main.css'
+import '../../styles/form.css'
 
 const PageContainer = styled.div`
     ${tw`
@@ -25,8 +28,8 @@ const PageContainer = styled.div`
 
 const MainContainer = styled.div`
     width: 502px;
-    margin-top: 8%;
-    margin-bottom: 3%;
+    margin-top: 6%;
+    margin-bottom: 3.05%;
     ${tw`
         flex
         flex-col
@@ -40,6 +43,24 @@ const Title = styled.h1`
         mb-4
         xlarge:text-xl 
         xlarge:leading-relaxed
+    `}
+`;
+
+const Label = styled.h1`
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.15px;
+    line-height: 24px;
+    ${tw`
+        text-headline
+        tracking-wider
+        font-bold
+    `}
+`
+
+const SelectContainer = styled.div`
+    ${tw`
+        p-6
     `}
 `;
 
@@ -115,15 +136,51 @@ const ImageContainer = styled.div`
     `}
 `;
 
+/* Disabled for now due to styling issue
+const FooterContainer = styled.div`
+    width: 78%;
+    position: absolute;
+    top: 110.5%;
+    text-align: center;
+    ${tw`
+        text-sm
+        text-paragraph
+    `}
+` */
+
 
 export function MainSection() {
+
+    const navigate = useNavigate();
+
+    const timeout = (delay) => {
+        return new Promise(res => setTimeout(res, delay));
+    }
 
     const [user, setUser] = useState({
         username: "",
         email: "",
         password: "",
-        confirm_password: ""
+        confirm_password: "",
+        level: ""
     });
+
+    const initializeError = (error) => {
+        toast.error(error, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            style: {
+                background: "#CDFADC",
+                color: '#333333' 
+            }
+        }); 
+    }
 
     const inputs = [ // Disabled error message due to image (Fix in a later update)
         {
@@ -172,54 +229,53 @@ export function MainSection() {
         setUser({...user, [e.target.name]: e.target.value})
     };
 
-    const options = {
-        url: "http://localhost:5000/register",
-        method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json;charset=UTF-8'
-        },
-        data: {
-            username: user.username,
-            email: user.email,
-            password: user.password,
-            confirm_password: user.confirm_password
-        }
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        axios(options).then(res => {
-            console.log(user.username)
-            if (user.username !== "" && user.email !== "" && user.password !== "" && user.confirm_password !== "") {
-                toast.success(user.username + " has been created.", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored"
-                });
-            } else {
-                toast.error("There was an error creating this account.", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    style: {
-                        background: "#CDFADC",
-                        color: '#333333' 
+        try {
+            const { data } = await axios.post("http://localhost:5000/register", {...user}, {withCredentials: true})
+
+            if(data) {
+                if(data.errors) {
+                    const { username, password } = data.errors;
+
+                    if(username) initializeError(username);
+                        else if(password) initializeError(password);
+                } else {
+                    if (user.username !== "" && user.email !== "" && user.password !== "" && user.confirm_password !== "") {
+                        toast.success(user.username + "'s account has been created. You will be redirected to the sign in page shortly.", {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "colored"
+                        });
+
+                        await timeout(4000).then(() => {
+                            navigate("/login");
+                        })
+                    } else {
+                        toast.error("There was an error creating this account.", {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "colored",
+                            style: {
+                                background: "#CDFADC",
+                                color: '#333333' 
+                            }
+                        }); 
                     }
-                }); 
+                }
             }
-        }).catch((error) => {
+        } catch(error) {
             toast.error("There was an error creating this account.", {
                 position: "top-right",
                 autoClose: 5000,
@@ -234,49 +290,29 @@ export function MainSection() {
                     color: '#333333' 
                 }
             }); 
-        });
+        }
 
-        console.log(user);
-    };
+        /* try {
+            const { data } = await axios.post("http://localhost:5000/register", {...user}, {withCredentials: true})
 
-    const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
+            if(data) {
+                if(data.errors) {
+                    const { username, password } = data.errors;
+                    if(username) {
+                        initializeError(username);
+                    } else if(password) {
+                        initializeError(password);
+                    }
+                } else {
+                    navigate("/track")
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        } */
+    }; 
 
-    if(isMobile) {
-        return (
-            <PageContainer>
-                    <MainContainer>
-                        <Title style={{ marginLeft: '1.5rem', fontSize: '18px' }}>Create User Account</Title>
-
-                        <ToastContainer
-                            position="top-right"
-                            autoClose={5000}
-                            hideProgressBar={false}
-                            newestOnTop={false}
-                            closeOnClick
-                            rtl={false}
-                            pauseOnFocusLoss
-                            draggable
-                            pauseOnHover
-                            theme="colored"
-                        />
-
-                        <Form onSubmit={handleSubmit}>
-                            <FormContainer style={{ }}>
-                                {inputs.map((input) => (
-                                    <FormInput key={input.id} {...input} value={user[input.name]} onChange={onChangeHandler} style={{ width: 200}} />
-                                ))}
-                            </FormContainer>
-                            <ButtonsContainer>
-                                <Button theme="outline" text="Cancel" />
-                                <Button theme="filled" text="Submit" /> 
-                            </ButtonsContainer>
-                        </Form>
-                    </MainContainer>
-            </PageContainer>
-        )
-    }
-
-    // console.log(user);
+    console.log(user);
 
     return (
         <PageContainer>
@@ -305,6 +341,16 @@ export function MainSection() {
                         {inputs.map((input) => (
                             <FormInput key={input.id} {...input} value={user[input.name]} onChange={onChangeHandler} />
                         ))}
+
+                        <SelectContainer>
+                            <Label>Select your Level</Label>
+                            <select name="level" className="input-form" onChange={onChangeHandler}>
+                                <option value="" disabled selected hidden>Choose a level...</option>
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                            </select>
+                        </SelectContainer>
                     </FormContainer>
                     <ButtonsContainer>
 
@@ -312,10 +358,13 @@ export function MainSection() {
                             <Button theme="outline" text="Cancel" />
                         </Link>
 
-                        <Button theme="filled" text="Submit" /> 
+                        <Button theme="filled" text="Create" /> 
                     </ButtonsContainer>
                 </Form>
             </MainContainer>
+            {/* <FooterContainer>
+                <Footer />
+            </FooterContainer> */}
         </PageContainer>
     )
 }

@@ -1,8 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import tw from 'twin.macro'
+import '../../styles/font.css'
 
 const BaseButton = styled.button`
+    font-family: 'Montserrat', sans-serif;
     ${tw`
         pl-12
         pr-12
@@ -49,11 +51,11 @@ const OutlinedButton = styled(BaseButton)`
 
 export function Button(props) {
 
-    const { theme, text } = props;
+    const { theme, text, onClick } = props;
 
     if(theme === "filled") {
-        return <FilledButton>{text}</FilledButton>
+        return <FilledButton onClick={onClick}>{text}</FilledButton>
     } else {
-        return <OutlinedButton>{text}</OutlinedButton>
+        return <OutlinedButton onClick={onClick}>{text}</OutlinedButton>
     }
 }

@@ -11,7 +11,7 @@ import BikerIllustration from '../../../assets/images/bikerillustration.png'
 
 const MainSectionContainer = styled.div`
     min-height: calc(100vh - 340px);
-    margin-top: 16rem;
+    margin-top: 11.90%;
     ${tw`
         flex
         justify-between

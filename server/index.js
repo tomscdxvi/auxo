@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 
 const authRoutes = require("./routes/AuthRoutes.js");
+const { getUserDetails } = require("./controllers/AuthControllers.js");
 
 dotenv.config();
 
@@ -26,8 +27,6 @@ try {
 } catch(error) {
     console.log(`${error} failed to connect`);
 }
-
-
 
 app.use(
     cors({

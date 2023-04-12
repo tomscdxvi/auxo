@@ -16,9 +16,72 @@ const UserSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
+    level: {
+        type: String,
+        required: true
+    },
+    goals: [{
+        title: String,
+        description: String,
+        start_date: Date,
+        end_date: Date
+    }],
+    history: [{
+        title: {
+            type: String,
+        },
+        date: {
+            type: Date,
+        },
+        start_time: {
+            type: String,
+        },
+        end_time: {
+            type: String,
+        }
+        /*
+        workout: [{
+            title: {
+                type: String,
+                required: true,
+            },
+            sets: {
+                type: Number,
+                required: true
+            },
+            reps: {
+                type: Number,
+                required: true
+            },
+            weight: {
+                type: Number,
+                required: true
+            },
+            exercise: [{
+                name: {
+                    type: String,
+                    required: true,
+                },
+                body_part: {
+                    type: String,
+                    required: true
+                },
+                description: {
+                    type: String,
+                },
+                level: {
+                    type: String,
+                    required:true
+                }
+            }]
+        }] */
+    }],
+    users: {
+        type: Schema.Types.ObjectId,
+        ref: 'SomeOtherModel'
+    }
 });
 
 // Encrypt password with BCrypt 
@@ -38,9 +101,9 @@ UserSchema.statics.login = async function(username, password) {
         if(auth) {
             return user;
         }
-        throw error("Incorrect Password");
+        throw Error("Incorrect Password");
     }
-    throw error("Incorrect Username");
+    throw Error("Incorrect Username");
 };
 
 module.exports = mongoose.model("Users", UserSchema);
