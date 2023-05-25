@@ -5,6 +5,7 @@ import tw from 'twin.macro';
 import { useMediaQuery } from 'react-responsive';
 import { SCREENS } from '../responsive';
 import '../../styles/font.css';
+import '../../styles/home/main.css'
 
 const ListContainer = styled.ul`
     ${tw`
@@ -70,11 +71,11 @@ export function NavItems() {
     return (
         <ListContainer>
             <SignUpItem>
-                <Link to="/register">Sign up</Link>
+                <Link to="/register" className='home-link'>Sign up</Link>
             </SignUpItem>
 
             <SignInItem>
-                <Link to="/login">Sign in</Link>
+                <Link to="/login" className='home-link'>Sign in</Link>
             </SignInItem>
 
             {/* <SignUpItem>

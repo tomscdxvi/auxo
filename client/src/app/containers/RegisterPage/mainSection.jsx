@@ -95,7 +95,7 @@ const ButtonsContainer = styled.div`
 const HorizontalLine = styled.hr`
     width: 30%;
     position: absolute;
-    top: 77%;
+    top: 73%;
     right: 70%;
     z-index: 1;
     visibility: hidden;

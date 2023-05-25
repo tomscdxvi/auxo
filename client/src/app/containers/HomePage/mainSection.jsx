@@ -80,7 +80,7 @@ const Description = styled.p`
 const HorizontalLine = styled.hr`
     width: 78%;
     position: absolute;
-    top: 72.2%;
+    top: 70%;
     visibility: hidden;
     ${tw`
         text-headline

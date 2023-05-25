@@ -16,15 +16,11 @@ export default function TrackCard({ track }) {
                             {track.title} 
                         </Card.Title>
                         <Card.Subtitle className="text-muted mb-2">
-                            {track.date}: {track.start_time} - {track.end_time}
+                            Date: {track.date} | Time: {track.start_time} - {track.end_time}
+                            
                         </Card.Subtitle>
-                        {/* <Badge variant="secondary" className="mr-2">{job.job_type}</Badge>
-                        <Badge variant="secondary">{job.location}</Badge> */}
-
-                        {/* <div className="mt-2">
-                            <h5 className="text-primary">Skills</h5>
-                    {job.skills_tag.join(', ')} 
-                        </div> */}
+                        {/* <Badge variant="secondary" className="mr-2">{}</Badge>
+                        <Badge variant="secondary">{}</Badge> */}
                     </div>
                 </div>
                 <Card.Text>
@@ -33,7 +29,7 @@ export default function TrackCard({ track }) {
                     </Button>
                 </Card.Text>
                 <Collapse in={open}>
-                    <div className="mt-4" dangerouslySetInnerHTML={{__html:track.title}}></div>
+                    <div className="mt-4" dangerouslySetInnerHTML={{__html:"Workout Details..."}}></div>
                 </Collapse>
                 {/*
                 <Collapse in={open}>

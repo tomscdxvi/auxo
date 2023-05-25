@@ -13,8 +13,8 @@ import { FormInputDark } from '../../components/form';
 import { DarkLogo } from '../../components/logo';
 import { Button }   from '../../components/button';
 import { SCREENS } from '../../components/responsive';
-import SignUpIllustration from '../../../assets/images/signupillustration.png'
-import '../../styles/register/main.css'
+import SignUpIllustration from '../../../assets/images/track-illustration.png'
+import '../../styles/authenticatedhome/main.css';
 import '../../styles/font.css'
 
 const PageContainer = styled.div`
@@ -138,10 +138,10 @@ const ButtonsContainer = styled.div`
 `;
 
 const HorizontalLine = styled.hr`
-    width: 30%;
+    width: 37%;
     position: absolute;
-    top: 77%;
-    right: 70%;
+    top: 73%;
+    right: 0;
     z-index: 1;
     visibility: hidden;
     ${tw`
@@ -153,7 +153,7 @@ const HorizontalLine = styled.hr`
 const ImageContainer = styled.div`
     width: auto;
     height: 28em;
-    left: 21em;
+    right: 10em;
     top: 19em;
     position: absolute;
     visibility: hidden;
@@ -226,8 +226,6 @@ export function MainSection() {
         end_time: ""
     }); 
 
-    let today = new Date().toLocaleDateString();
-
     useEffect(() => {
         const verifyUser = async () => {
             if(!cookies.jwt) {
@@ -272,7 +270,7 @@ export function MainSection() {
                     if(title) initializeError(title);
                 } else {
                     if (track.title!== "") {
-                        toast.success(track.title + "'s account has been created. You will be redirected to the sign in page shortly.", {
+                        toast.success(track.title + " has been tracked. You will be redirected to your home page shortly.", {
                             position: "top-right",
                             autoClose: 5000,
                             hideProgressBar: false,
@@ -284,7 +282,7 @@ export function MainSection() {
                         });
 
                         await timeout(4000).then(() => {
-                            navigate("/track");
+                            navigate("/home");
                         })
                     } else {
                         toast.error("There was an error creating this account.", {
@@ -342,21 +340,21 @@ export function MainSection() {
             id: 2,
             name: "date",
             type: "date",
-            label: "Start Date",
+            label: "Date",
             required: true
         },
         {
             id: 3,
             name: "start_time",
             type: "time",
-            label: "start_time",
+            label: "Start Time",
             required: true
         },
         {
             id: 4,
             name: "end_time",
             type: "time",
-            label: "end_time",
+            label: "End Time",
             required: true
         },
     ];
@@ -369,11 +367,11 @@ export function MainSection() {
         return (
             <ListContainer>
                 <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/home">Account Details</Link>
+                    <Link to="/home" className='auth-link'>Home</Link>
                 </SignUpItem>
     
                 <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/track">Track Workout</Link>
+                    <Link to="/track" className='auth-link'>Track Workout</Link>
                 </SignUpItem>
     
                 <SignUpItem style={{ color: 'white' }}>
@@ -381,7 +379,7 @@ export function MainSection() {
                 </SignUpItem>
     
                 <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/calculate">Calculate</Link>
+                    <Link to="/calculate" className='auth-link'>Calculate</Link>
                 </SignUpItem>
     
                 <SignInItem style={{ color: 'white' }} onClick={handleLogOut}>

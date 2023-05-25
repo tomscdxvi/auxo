@@ -14,8 +14,8 @@ import { FormInputDark } from '../../components/form';
 import { Button }   from '../../components/button';
 import { DarkLogo } from '../../components/logo';
 import { SCREENS } from '../../components/responsive';
-import SignUpIllustration from '../../../assets/images/signupillustration.png'
-import '../../styles/register/main.css'
+import SignUpIllustration from '../../../assets/images/calculate-illustration.png'
+import '../../styles/authenticatedhome/main.css';
 import '../../styles/font.css'
 
 const PageContainer = styled.div`
@@ -34,7 +34,7 @@ const PageContainer = styled.div`
 const MainContainer = styled.div`
     width: 502px;
     margin-top: 2%;
-    margin-bottom: 5.35%;
+    margin-bottom: 5.4%;
     ${tw`
         flex
         flex-col
@@ -145,7 +145,7 @@ const ButtonsContainer = styled.div`
 const HorizontalLine = styled.hr`
     width: 30%;
     position: absolute;
-    top: 77%;
+    top: 71.5%;
     right: 70%;
     z-index: 1;
     visibility: hidden;
@@ -158,8 +158,8 @@ const HorizontalLine = styled.hr`
 const ImageContainer = styled.div`
     width: auto;
     height: 28em;
-    left: 21em;
-    top: 19em;
+    left: 10em;
+    top: 18em;
     position: absolute;
     visibility: hidden;
     z-index: 2;
@@ -313,11 +313,11 @@ export function MainSection() {
         return (
             <ListContainer>
                 <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/home">Account Details</Link>
+                    <Link to="/home" className='auth-link'>Home</Link>
                 </SignUpItem>
     
                 <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/track">Track Workout</Link>
+                    <Link to="/track" className='auth-link'>Track Workout</Link>
                 </SignUpItem>
     
                 <SignUpItem style={{ color: 'white' }}>
@@ -325,7 +325,7 @@ export function MainSection() {
                 </SignUpItem>
     
                 <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/calculate">Calculate</Link>
+                    <Link to="/calculate" className='auth-link'>Calculate</Link>
                 </SignUpItem>
     
                 <SignInItem style={{ color: 'white' }} onClick={handleLogOut}>
@@ -374,10 +374,10 @@ export function MainSection() {
                 <Title style={{ fontSize: 30, marginTop: '6%' }}>Calculate your one rep max (1RM) for any lift!</Title>
                 <Title style={{ fontSize: 28 }}>Formula from NFPT (Brzycki Equation)</Title>
                 <Title style={{ marginTop: "2%" }}>1RM is your max weight that you can lift for a single rep for any exercise.</Title>
-                    {/* <ImageContainer>
+                    <ImageContainer>
                         <img src={SignUpIllustration} alt="" />
                     </ImageContainer> 
-                     <HorizontalLine /> */}
+                    <HorizontalLine /> 
                     <MainContainer>
                         <Title>{OneRepMaxCalculation() == 0 ? "_" : OneRepMaxCalculation() + "lbs for 1 Rep"}</Title>
     
@@ -402,9 +402,6 @@ export function MainSection() {
                             <Button theme="filled" text="Calculate" onClick={OneRepMaxCalculation} /> 
                         </ButtonsContainer>
                     </MainContainer>
-                    <FooterContainer>
-                        <FooterDark />
-                    </FooterContainer>
                 </PageContainer>
             </>
         )

@@ -14,9 +14,9 @@ import { FooterDark } from '../../components/footer';
 import { FormInputDark } from '../../components/form';
 import { DarkLogo } from '../../components/logo';
 import { SCREENS } from '../../components/responsive';
-import SignUpIllustration from '../../../assets/images/signupillustration.png'
-import '../../styles/register/main.css'
-import '../../styles/font.css'
+import SignUpIllustration from '../../../assets/images/auth-illustration.png';
+import '../../styles/font.css';
+import '../../styles/authenticatedhome/main.css';
 
 const PageContainer = styled.div`
     min-height: 100vh;
@@ -32,7 +32,8 @@ const PageContainer = styled.div`
 
 const MainContainer = styled.div`
     width: 502px;
-    margin-top: 8%;
+    min-height: 100vh;
+    margin-top: 10%;
     margin-bottom: 3.05%;
     ${tw`
         flex
@@ -142,7 +143,7 @@ const ButtonsContainer = styled.div`
 const HorizontalLine = styled.hr`
     width: 30%;
     position: absolute;
-    top: 77%;
+    top: 74.75%;
     right: 70%;
     z-index: 1;
     visibility: hidden;
@@ -155,8 +156,8 @@ const HorizontalLine = styled.hr`
 const ImageContainer = styled.div`
     width: auto;
     height: 28em;
-    left: 21em;
-    top: 19em;
+    left: 2em;
+    top: 20.23em;
     position: absolute;
     visibility: hidden;
     z-index: 2;
@@ -386,11 +387,11 @@ export function MainSection() {
         return (
             <ListContainer>
                 <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/home">Account Details</Link>
+                    <Link to="/home" className='auth-link'>Home</Link>
                 </SignUpItem>
     
                 <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/track">Track Workout</Link>
+                    <Link to="/track" className='auth-link'>Track Workout</Link>
                 </SignUpItem>
     
                 <SignUpItem style={{ color: 'white' }}>
@@ -398,7 +399,7 @@ export function MainSection() {
                 </SignUpItem>
     
                 <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/calculate">Calculate</Link>
+                    <Link to="/calculate" className='auth-link'>Calculate</Link>
                 </SignUpItem>
     
                 <SignInItem style={{ color: 'white' }} onClick={handleLogOut}>
@@ -430,31 +431,36 @@ export function MainSection() {
                     <NavItems />
                 </NavbarContainer>
                 <PageContainer>
-                    {/* <ImageContainer>
+                    <ImageContainer>
                         <img src={SignUpIllustration} alt="" />
                     </ImageContainer> 
-                     <HorizontalLine /> */}
+                    <HorizontalLine /> 
+                    <ToastContainer position="top-right"
+                        autoClose={1500} 
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="colored"
+                    />
+
                     <MainContainer>
                         <Title>Hi, {data.data.username}</Title>
-
-                        {data.data.history.map((track) => {
-                            return (
-                                <TrackCard key={track._id} track={track} />
-                            )
+                        <Title style={{ textDecoration: "underline", marginTop: '3rem' }}>Tracking History</Title>
+                        {data.data.history?.map((track) => {
+                            if(track === null) {
+                                return (
+                                    <Title style={{ fontSize: '16px' }}>Your tracking history is empty, enter your first workout to see your history!</Title>
+                                )
+                            } else {
+                                return (
+                                    <TrackCard key={track._id} track={track} />
+                                )
+                            }
                         })} 
-                        
-                        <ToastContainer
-                            position="top-right"
-                            autoClose={1500}
-                            hideProgressBar={false}
-                            newestOnTop={false}
-                            closeOnClick
-                            rtl={false}
-                            pauseOnFocusLoss
-                            draggable
-                            pauseOnHover
-                            theme="colored"
-                        />
     
                         {/* <Form onSubmit={handleSubmit}> 
                             <ButtonsContainer>

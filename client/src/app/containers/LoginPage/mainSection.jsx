@@ -78,7 +78,7 @@ const ButtonsContainer = styled.div`
 const HorizontalLine = styled.hr`
     width: 44%;
     position: absolute;
-    top: 77%;
+    top: 72.9%;
     left: 56%;
     z-index: 1;
     visibility: hidden;
@@ -186,19 +186,6 @@ export function MainSection() {
         setValues({...values, [e.target.name]: e.target.value})
     };
 
-    const options = {
-        url: "http://localhost:5000/login",
-        method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json;charset=UTF-8'
-        },
-        data: {
-            username: values.username,
-            password: values.password,
-        }
-    };
-
     const storeUserId = (value) => {
         try {
             localStorage.setItem('@storage_user', value);
@@ -208,6 +195,7 @@ export function MainSection() {
     }
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
 
         try {
@@ -325,6 +313,26 @@ export function MainSection() {
         }) */
     }; 
 
+    useEffect(() => {
+        const keyDownHandler = (event) => {
+          console.log('User pressed: ', event.key);
+    
+          if (event.key === 'Enter') {
+
+            event.preventDefault(event);
+            // 👇️ call submit function here
+
+            handleSubmit();
+          }
+        };
+    
+        document.addEventListener('keydown', keyDownHandler);
+    
+        return () => {
+          document.removeEventListener('keydown', keyDownHandler);
+        };
+      }, []);
+
     return (
         <PageContainer>
             <ImageContainer>
@@ -347,7 +355,7 @@ export function MainSection() {
                     theme="colored"
                 />
 
-                <Form onSubmit={handleSubmit}>
+                <Form onSubmit={handleSubmit} onKeyDown={(e) => { if (e.which === 13) { handleSubmit(); }}}> 
                     <FormContainer>
                         {inputs.map((input) => (
                             <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChangeHandler} />
