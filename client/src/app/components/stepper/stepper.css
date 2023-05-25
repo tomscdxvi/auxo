@@ -1,0 +1,13 @@
+/* .active {
+    display: flex;
+    position:relative;
+    justify-content: center;
+    align-items: center;
+    font-weight: semibold;
+    color:white;
+    width: 2.75rem;
+    height: 2.5rem;
+    z-index: 10;
+    border-radius: 9999px;
+    background-color: aqua;
+} */

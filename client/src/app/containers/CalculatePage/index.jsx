@@ -5,6 +5,7 @@ import { Navbar } from '../../components/navbar';
 import { MainSection } from './mainSection';
 
 const PageContainer = styled.div`
+    background-color: #243763;
     ${tw`
         flex
         flex-col
@@ -15,10 +16,9 @@ const PageContainer = styled.div`
     `}
 `;
 
-export default function HomePage() {
+export default function CalculatePage() {
     return (
         <PageContainer>
-            <Navbar />
             <MainSection />
         </PageContainer>
     )

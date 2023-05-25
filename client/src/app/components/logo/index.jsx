@@ -1,8 +1,11 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import tw from 'twin.macro';
-
-// import Logo from .. 
+import { useMediaQuery } from 'react-responsive';
+import { SCREENS } from '../responsive';
+import LogoImage from '../../../assets/images/auxo-logo.png';
+import LogoImageDark from '../../../assets/images/auxo-logo-darktheme.png';
 
 const LogoContainer = styled.div`
     ${tw`
@@ -12,38 +15,76 @@ const LogoContainer = styled.div`
     `}
 `;
 
-const LogoText = styled.div`
+const LogoContainerMobile = styled.div`
+    margin: auto;
     ${tw`
-        text-xl
-        medium:text-2xl
-        font-bold
-        text-black
-        m-1
+        flex
+        items-center
     `}
 `;
 
-/* const Image = styled.div`
-
+const ImageContainer = styled.div`
     width:auto;
     ${tw`
         h-6
         medium:h-9
     `}
-
-    img{
+    img {
         width:auto;
         height:100%;
     }
-`; */
+`; 
 
 
 export function Logo() {
+
+    const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
+
+    if(isMobile) {
+        return (
+            <LogoContainerMobile>
+                <ImageContainer>
+                    <Link to="/">
+                        <img src={LogoImage} alt="" />
+                    </Link>
+                </ImageContainer> 
+            </LogoContainerMobile> 
+        )
+    }
+
     return (
         <LogoContainer>
-            {/* <Image>
-                <img src={LogoImg} alt="" />
-            </Image> */}
-            <LogoText>Auxo</LogoText>
-        </LogoContainer>
+            <ImageContainer>
+                <Link to="/">
+                    <img src={LogoImage} alt="" style={{ width: 261, height: 72 }} />
+                </Link>
+            </ImageContainer> 
+        </LogoContainer> 
+    )
+}
+
+export function DarkLogo() {
+    const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
+
+    if(isMobile) {
+        return (
+            <LogoContainerMobile>
+                <ImageContainer>
+                    <Link to="/">
+                        <img src={LogoImageDark} alt="" />
+                    </Link>
+                </ImageContainer> 
+            </LogoContainerMobile> 
+        )
+    }
+
+    return (
+        <LogoContainer>
+            <ImageContainer>
+                <Link to="/home">
+                    <img src={LogoImageDark} alt="" style={{ width: 261, height: 72 }} />
+                </Link>
+            </ImageContainer> 
+        </LogoContainer> 
     )
 }
