@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Card, Badge, Button, Collapse } from 'react-bootstrap'
 import CenteredModal from './Modal'
+import { DeleteButton } from '../../components/delete'
 
 export default function TrackCard({ track }) {
     
@@ -11,9 +12,10 @@ export default function TrackCard({ track }) {
         <Card className="mb-4">
             <Card.Body>
                 <div className="d-flex justify-content-between mt-2">
-                    <div>
+                    <div className="w-full">
                         <Card.Title>
                             {track.title} 
+                            <DeleteButton />
                         </Card.Title>
                         <Card.Subtitle className="text-muted mb-2">
                             Date: {track.date} | Time: {track.start_time} - {track.end_time}

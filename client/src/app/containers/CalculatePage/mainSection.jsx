@@ -395,8 +395,37 @@ export function MainSection() {
                         />
 
                         <FormContainer>
-                            <FormInputDark key={1} name="weight" type="number" placeholder="Enter the weight for the lift" label="Weight" required={true} onChange={onChangeHandlerWeight} />
-                            <FormInputDark key={2} name="rep" type="number" placeholder="Enter the number of reps" label="Repetitions" required={true} onChange={onChangeHandlerRep} />
+                            <FormInputDark 
+                                key={1} 
+                                name="weight" 
+                                type="number" 
+                                placeholder="Enter the weight for the lift" 
+                                label="Weight" 
+                                required={true} 
+                                min="1" 
+                                onChange={onChangeHandlerWeight} 
+                                onKeyPress={(event) => { // Prevent negative values from being entered (If the key is not 1-9, do not allow it)
+                                    if (!/[1-9]/.test(event.key)) {
+                                        event.preventDefault();
+                                    }
+                                }}
+                            />
+
+                            <FormInputDark 
+                                key={2} 
+                                name="rep" 
+                                type="number"
+                                placeholder="Enter the number of reps" 
+                                label="Repetitions"
+                                min="1" 
+                                required={true} 
+                                onChange={onChangeHandlerRep} 
+                                onKeyPress={(event) => { // Prevent negative values from being entered (If the key is not 1-9, do not allow it)
+                                    if (!/[1-9]/.test(event.key)) {
+                                        event.preventDefault();
+                                    }
+                                }}
+                            />
                         </FormContainer>
                         <ButtonsContainer>
                             <Button theme="filled" text="Calculate" onClick={OneRepMaxCalculation} /> 
