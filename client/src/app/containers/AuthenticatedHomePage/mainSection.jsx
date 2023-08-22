@@ -38,6 +38,8 @@ const MainContainer = styled.div`
     ${tw`
         flex
         flex-col
+        justify-center
+        items-center
     `}
 `;
 
@@ -112,21 +114,13 @@ const Title = styled.h1`
     `}
 `;
 
-const Form = styled.form`
+const TrackContainer = styled.div`
     z-index: 100;
+    width: 1004px;
     ${tw`
-        text-xs
-        overflow-hidden
-        max-h-full
-        xlarge:text-lg
-    `}
-`;
-
-const FormContainer = styled.div`
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    border-radius: 8px;
-    z-index: 100;
-    ${tw`
+        grid
+        grid-cols-3
+        gap-6
     `}
 `;
 
@@ -141,10 +135,10 @@ const ButtonsContainer = styled.div`
 `;
 
 const HorizontalLine = styled.hr`
-    width: 30%;
+    width: 23%;
     position: absolute;
-    top: 74.75%;
-    right: 70%;
+    top: 60.7%;
+    left: 0;
     z-index: 1;
     visibility: hidden;
     ${tw`
@@ -155,9 +149,9 @@ const HorizontalLine = styled.hr`
 
 const ImageContainer = styled.div`
     width: auto;
-    height: 28em;
+    height: 23em;
     left: 2em;
-    top: 20.23em;
+    top: 15em;
     position: absolute;
     visibility: hidden;
     z-index: 2;
@@ -450,24 +444,21 @@ export function MainSection() {
                     <MainContainer>
                         <Title>Hi, {data.data.username}</Title>
                         <Title style={{ textDecoration: "underline", marginTop: '3rem' }}>Tracking History</Title>
-                        {data.data.history?.map((track) => {
-                            if(track === null) {
-                                return (
-                                    <Title style={{ fontSize: '16px' }}>Your tracking history is empty, enter your first workout to see your history!</Title>
-                                )
-                            } else {
-                                return (
-                                    <TrackCard key={track._id} track={track} />
-                                )
-                            }
-                        })} 
-    
-                        {/* <Form onSubmit={handleSubmit}> 
-                            <ButtonsContainer>
-                                <Button theme="outline" text="Cancel" onClick={handleLogOut}/>
-                                <Button theme="filled" text="Submit" /> 
-                            </ButtonsContainer>
-                        </Form> */}
+
+                        <TrackContainer>
+                            {data.data.history?.map((track) => {
+                                if(track === null) {
+                                    return (
+                                        <Title style={{ fontSize: '16px' }}>Your tracking history is empty, enter your first workout to see your history!</Title>
+                                    )
+                                } else {
+                                    return (
+                                        <TrackCard key={track._id} track={track} />
+                                    )
+                                }
+                            })} 
+                        </TrackContainer>
+
                     </MainContainer>
                 </PageContainer>
             </>

@@ -6,7 +6,7 @@ import RegisterPage from '../app/containers/RegisterPage';
 const RegisterContainer = styled.div`
   ${tw`
     w-full
-    h-full
+    h-screen
     flex
     flex-col
     bg-background

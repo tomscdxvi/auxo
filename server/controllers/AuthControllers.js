@@ -1,4 +1,5 @@
 const User = require('../models/User.js');
+const Track = require("../models/Track.js");
 const jwt = require('jsonwebtoken');
 const AsyncStorage = require('@react-native-async-storage/async-storage');
 
@@ -159,6 +160,17 @@ module.exports.track = async(req, res, next) => {
         res.json({ errors, found: false });
     }
 };
+
+module.exports.deleteTrack = async(req, res, next) => {
+    const trackId = req.params._id
+    
+    await User.updateOne(
+        {},
+        { $pull: {history: trackId} },
+        {new: true}
+    );
+}
+
 
 
 

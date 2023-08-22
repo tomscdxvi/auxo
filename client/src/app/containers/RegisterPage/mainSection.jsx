@@ -27,7 +27,7 @@ const PageContainer = styled.div`
 `;
 
 const MainContainer = styled.div`
-    width: 502px;
+    width: 1000px;
     margin-top: 6%;
     margin-bottom: 3.05%;
     ${tw`
@@ -79,6 +79,8 @@ const FormContainer = styled.div`
     border-radius: 8px;
     z-index: 100;
     ${tw`
+        grid
+        grid-cols-2
     `}
 `;
 
@@ -93,10 +95,10 @@ const ButtonsContainer = styled.div`
 `;
 
 const HorizontalLine = styled.hr`
-    width: 30%;
+    width: 20%;
     position: absolute;
-    top: 73%;
-    right: 70%;
+    top: 75.8%;
+    left: 0;
     z-index: 1;
     visibility: hidden;
     ${tw`
@@ -108,7 +110,7 @@ const HorizontalLine = styled.hr`
 const ImageContainer = styled.div`
     width: auto;
     height: 28em;
-    left: 21em;
+    left: 2em;
     top: 19em;
     position: absolute;
     visibility: hidden;
@@ -182,14 +184,14 @@ export function MainSection() {
         }); 
     }
 
-    const inputs = [ // Disabled error message due to image (Fix in a later update)
+    const inputs = [ 
         {
             id: 1,
             name: "username",
             type: "text",
             placeholder: `Username`,
             pattern: "^[_A-z0-9]*((-|\s)*[_A-z0-9])*$",
-            // error: "Please refrain from using symbols and spaces around your username, please try again.",
+            error: "Symbols and/or spaces around your username are not allowed, please try again.",
             label: "Username",
             required: true
         },

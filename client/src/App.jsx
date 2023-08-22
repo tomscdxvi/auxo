@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Track from './pages/Track';
 import AuthenticatedHome from './pages/AuthenticatedHome';
 import Calculate from './pages/Calculate';
+import WorkoutDetails from './pages/WorkoutDetails';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route exact path="/home" element={<AuthenticatedHome />} />
         <Route exact path="/calculate" element={<Calculate />} />
         <Route exact path="/track" element={<Track />} />
+        <Route exact path="/details/{id}" element={<WorkoutDetails />} />
       </Routes>
     </BrowserRouter>
   )

@@ -379,7 +379,7 @@ export function MainSection() {
                     </ImageContainer> 
                     <HorizontalLine /> 
                     <MainContainer>
-                        <Title>{OneRepMaxCalculation() == 0 ? "_" : OneRepMaxCalculation() + "lbs for 1 Rep"}</Title>
+                        <Title>{OneRepMaxCalculation() === 0 ? "_" : OneRepMaxCalculation() + "lbs for 1 Rep"}</Title>
     
                         <ToastContainer
                             position="top-right"
@@ -404,8 +404,8 @@ export function MainSection() {
                                 required={true} 
                                 min="1" 
                                 onChange={onChangeHandlerWeight} 
-                                onKeyPress={(event) => { // Prevent negative values from being entered (If the key is not 1-9, do not allow it)
-                                    if (!/[1-9]/.test(event.key)) {
+                                onKeyPress={(event) => { // Prevent negative values from being entered at the start(If the key is not 1-9, do not allow it) !Need to fix
+                                    if (!/[1-9]/.test(event.key)) { 
                                         event.preventDefault();
                                     }
                                 }}

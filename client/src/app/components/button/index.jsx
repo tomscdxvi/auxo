@@ -51,11 +51,11 @@ const OutlinedButton = styled(BaseButton)`
 
 export function Button(props) {
 
-    const { theme, text, onClick } = props;
+    const { theme, text, type, onClick } = props;
 
     if(theme === "filled") {
-        return <FilledButton onClick={onClick}>{text}</FilledButton>
+        return <FilledButton onClick={onClick} type={type}>{text}</FilledButton>
     } else {
-        return <OutlinedButton onClick={onClick}>{text}</OutlinedButton>
+        return <OutlinedButton onClick={onClick} type={type}>{text}</OutlinedButton>
     }
 }

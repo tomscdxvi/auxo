@@ -38,7 +38,7 @@ export function FormInput(props) {
 
     const [focus, setFocus] = useState(false);
 
-    const { label, onChange, id, error, ...inputProps } = props;
+    const { label, onChange, onClick, id, error, ...inputProps } = props;
 
     const handleFocus = (e) => {
         setFocus(true);
@@ -49,10 +49,10 @@ export function FormInput(props) {
             <Label>{label}</Label>
             <input 
                 className="input-form" 
-                {...inputProps} 
                 onChange={onChange} 
                 onBlur={handleFocus} 
                 focus={focus.toString()} 
+                {...inputProps} 
             /> 
             <Span>{error}</Span>
         </FormContainer>
@@ -73,10 +73,10 @@ export function FormInputDark(props) {
             <Label style={{ color: 'white' }}>{label}</Label>
             <input 
                 className="input-form" 
-                {...inputProps} 
                 onChange={onChange} 
                 onBlur={handleFocus} 
                 focus={focus.toString()} 
+                {...inputProps} 
             /> 
             <Span style={{ color: 'white' }}>{error}</Span>
         </FormContainer>

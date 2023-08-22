@@ -7,16 +7,13 @@ import tw from 'twin.macro';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Box from '@mui/material/Box';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 
+import { FooterDark } from '../../components/footer';
 import { FormInputDark } from '../../components/form';
 import { DarkLogo } from '../../components/logo';
 import { Button }   from '../../components/button';
 import { SCREENS } from '../../components/responsive';
-import SignUpIllustration from '../../../assets/images/track-illustration.png';
-import PlusIcon from '../../../assets/images/plus-icon.png';
+import SignUpIllustration from '../../../assets/images/track-illustration.png'
 import '../../styles/authenticatedhome/main.css';
 import '../../styles/font.css'
 
@@ -32,14 +29,12 @@ const PageContainer = styled.div`
 `;
 
 const MainContainer = styled.div`
-    width: 1000px;
+    width: 502px;
     margin-top: 8%;
     margin-bottom: 3.05%;
     ${tw`
         flex
         flex-col
-        justify-center
-        items-center
     `}
 `;
 
@@ -129,8 +124,6 @@ const FormContainer = styled.div`
     border-radius: 8px;
     z-index: 100;
     ${tw`
-        grid
-        grid-cols-2
     `}
 `;
 
@@ -159,7 +152,7 @@ const HorizontalLine = styled.hr`
 
 const ImageContainer = styled.div`
     width: auto;
-    height: 20em;
+    height: 28em;
     right: 10em;
     top: 19em;
     position: absolute;
@@ -188,21 +181,6 @@ const ImageContainer = styled.div`
     `}
 `;
 
-const PlusIconContainer = styled.div`
-    width: auto;
-    height: 2.5em;
-    z-index: 2;
-    img {
-        width: auto;
-        height: 100%;
-        max-width: fit-content;
-    }
-
-    ${tw`
-        medium:visible
-    `}
-`;
-
 const FooterContainer = styled.div`
     width: 78%;
     position: absolute;
@@ -218,24 +196,7 @@ export function MainSection() {
 
     const navigate = useNavigate();
 
-    const [value, setValue] = useState(0);
-    const [cookies, setCookies, removeCookie] = useCookies([]);
-    const [track, setTrack] = useState({
-        title: "",
-        date: "",
-        start_time: "",
-        end_time: "",
-        workout: []
-    }); 
-
-    const [workout, setWorkout] = useState({
-        name: "",
-        sets: "",
-        reps: "",
-        weight: "",
-    });
-
-    const [workouts, setWorkouts] = useState([]);
+    const [ cookies, setCookies, removeCookie ] = useCookies([]);
 
     const timeout = (delay) => {
         return new Promise(res => setTimeout(res, delay));
@@ -257,6 +218,13 @@ export function MainSection() {
             }
         }); 
     }
+    
+    const [track, setTrack] = useState({
+        title: "",
+        date: "",
+        start_time: "",
+        end_time: ""
+    }); 
 
     useEffect(() => {
         const verifyUser = async () => {
@@ -358,7 +326,7 @@ export function MainSection() {
         navigate("/");
     };
 
-    const inputs1 = [ // Disabled error message due to image (Fix in a later update)
+    const inputs = [ // Disabled error message due to image (Fix in a later update)
         {
             id: 1,
             name: "title",
@@ -391,78 +359,8 @@ export function MainSection() {
         },
     ];
 
-    const inputs2 = [ // Disabled error message due to image (Fix in a later update)
-    {
-        id: 1,
-        name: "name",
-        type: "text",
-        placeholder: `Name`,
-        // error: "Please refrain from using symbols and spaces around your username, please try again.",
-        label: "Name",
-        required: true
-    },
-    {
-        id: 2,
-        name: "sets",
-        type: "number",
-        label: "Sets",
-        required: true
-    },
-    {
-        id: 3,
-        name: "reps",
-        type: "number",
-        label: "Reps",
-        required: true
-    },
-    {
-        id: 4,
-        name: "weight",
-        type: "number",
-        label: "Weight",
-        required: true
-    }
-    ];
-
-    const inputs3 = [ // Disabled error message due to image (Fix in a later update)
-    {
-        id: 1,
-        name: "name",
-        type: "text",
-        placeholder: `Name`,
-        // error: "Please refrain from using symbols and spaces around your username, please try again.",
-        label: "Name",
-        required: true
-    },
-    {
-        id: 2,
-        name: "body_part",
-        type: "text",
-        label: "Body Part",
-        required: true
-    },
-    {
-        id: 3,
-        name: "description",
-        type: "textarea",
-        label: "Description",
-        required: true
-    },
-    {
-        id: 4,
-        name: "level",
-        type: "text",
-        label: "Weight",
-        required: true
-    }
-    ];
-
-    const onChangeHandler1 = (e) => {
+    const onChangeHandler = (e) => {
         setTrack({...track, [e.target.name]: e.target.value})
-    }; 
-
-    const onChangeHandler2 = (e) => {
-        setWorkout({...workout, [e.target.name]: e.target.value})
     }; 
 
     const NavItems = () => {
@@ -495,34 +393,6 @@ export function MainSection() {
         )
     }
 
-    const TabPanel = (props) => {
-        const { children, tabValue, index, ...other } = props;
-      
-        return (
-          <div
-            role="tabpanel"
-            hidden={tabValue !== index}
-            id={`vertical-tabpanel-${index}`}
-            aria-labelledby={`vertical-tab-${index}`}
-            {...other}
-          >
-            {tabValue === index && (
-              <Box sx={{ p: 3 }}>
-                {children}
-              </Box>
-            )}
-          </div>
-        );
-    }
-
-    const handleAddMore = () => {
-
-    }
-      
-    const handleTabChange = (event, newValue) => {
-        setValue(newValue);
-    }; 
-
     console.log(track);
 
     return (
@@ -537,28 +407,12 @@ export function MainSection() {
                 </ImageContainer>
                 <HorizontalLine />
                 <MainContainer>
-                    
-                    <ToastContainer
-                        position="top-right"
-                        autoClose={5000}
-                        hideProgressBar={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        theme="colored"
-                    />  
-
+                    <div class="flex">
+                        <h1>Details</h1>
+                        <h1>Workout</h1>
+                        <h1>Exercises</h1>
+                    </div>
                     <Title>Start Tracking</Title>
-
-                    <Box sx={{ width: '50%', bgcolor: 'background.paper' }} className="rounded-md">
-                        <Tabs value={value} onChange={handleTabChange} centered>
-                            <Tab label="One" />
-                            <Tab label="Two" />
-                        </Tabs>
-                    </Box>
 
                     <ToastContainer
                         position="top-right"
@@ -574,37 +428,18 @@ export function MainSection() {
                     />  
 
                     <Form onSubmit={handleSubmit}> 
-                        <TabPanel tabValue={value} index={0}>
-                            <Title>Date/Time</Title>    
-                            <FormContainer>
-                                {inputs1.map((input) => (
-                                    <FormInputDark key={input.id} {...input} value={track[input.name]} onChange={onChangeHandler1} />
-                                ))}
-                            </FormContainer>
-                        </TabPanel>
-                    
-                        <TabPanel tabValue={value} index={1}>
-                            <Title>Workout Details</Title>
-                            <FormContainer>
-                                {inputs2.map((input) => (
-                                    <FormInputDark key={input.id} {...input} value={workout[input.name]} onChange={onChangeHandler2} />
-                                ))}
-                            </FormContainer>
-                            <button className="text-white text-xl">
-                                {/* Need to find a white plus icon */}
-                                {/* <PlusIconContainer>
-                                    <img src={PlusIcon} alt="" />
-                                </PlusIconContainer> */}
-                                +
-                            </button>
-                        </TabPanel> 
-
+                        <FormContainer>
+                            {inputs.map((input) => (
+                                <FormInputDark key={input.id} {...input} value={track[input.name]} onChange={onChangeHandler} />
+                            ))}
+                        </FormContainer>
                         <ButtonsContainer>
+
                             <Link to="/">
                                 <Button theme="outline" text="Cancel" />
                             </Link>
 
-                            <Button theme="filled" text="Submit" /> 
+                            <Button theme="filled" text="Submit"/> 
                         </ButtonsContainer>
                     </Form>
                 </MainContainer>

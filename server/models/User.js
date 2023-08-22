@@ -40,10 +40,9 @@ const UserSchema = new Schema({
         },
         end_time: {
             type: String,
-        }
-        /*
+        },
         workout: [{
-            title: {
+            name: {
                 type: String,
                 required: true,
             },
@@ -59,24 +58,7 @@ const UserSchema = new Schema({
                 type: Number,
                 required: true
             },
-            exercise: [{
-                name: {
-                    type: String,
-                    required: true,
-                },
-                body_part: {
-                    type: String,
-                    required: true
-                },
-                description: {
-                    type: String,
-                },
-                level: {
-                    type: String,
-                    required:true
-                }
-            }]
-        }] */
+        }] 
     }],
     users: {
         type: Schema.Types.ObjectId,

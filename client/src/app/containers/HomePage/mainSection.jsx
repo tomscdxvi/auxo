@@ -124,6 +124,7 @@ const ButtonsContainer = styled.div`
         flex
         flex-wrap
         mt-6
+        font-bold
     `}
 `;
 

@@ -8,6 +8,11 @@ import { useCookies } from 'react-cookie';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import IconButton from "@material-ui/core/IconButton";
+import InputLabel from "@material-ui/core/InputLabel";
+import Visibility from "@material-ui/icons/Visibility";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 import { Footer } from '../../components/footer';
 import { FormInput } from '../../components/form';
@@ -147,6 +152,8 @@ export function MainSection() {
         username: "",
         password: "",
     });
+
+    const [passwordType, setPasswordType] = useState("password");
     
     const initializeError = (error) => {
         toast.error(error, {
@@ -176,10 +183,10 @@ export function MainSection() {
         {
             id: 2,
             name: "password",
-            type: "password",
+            type: {passwordType},
             placeholder: `Password`,
             label: "Password",
-        },
+        }
     ];
 
     const onChangeHandler = (e) => {
@@ -199,6 +206,7 @@ export function MainSection() {
         e.preventDefault();
 
         try {
+
             const { data } = await axios.post("http://localhost:5000/login", {...values}, {withCredentials: true})
 
             if(data) {
@@ -221,10 +229,6 @@ export function MainSection() {
                         });
 
                         storeUserId(data);
-
-                        /* const { user } = await axios.get("http://localhost:5000/user", {withCredentials: true});
-
-                        console.log(user.user._id); */
 
                         await timeout(2000).then(() => {
                             navigate("/home");
@@ -263,67 +267,15 @@ export function MainSection() {
                 }
             }); 
         }
-
-        /* 
-        axios(options).then(res => {
-            console.log(values.username)
-
-            if (values.username !==  "" && values.password !== "") {
-                toast.success("Logged in.", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored"
-                });
-            } else {
-                toast.error("Error was found when trying to sign in, please double check your username and password.", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    style: {
-                        background: "#CDFADC",
-                        color: '#333333' 
-                    }
-                }); 
-            }
-        }).catch((error) => {
-            toast.error("Error was found when trying to sign in, please double check your username and password.", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                style: {
-                    background: "#CDFADC",
-                    color: '#333333' 
-                }
-            }); 
-        }) */
     }; 
 
     useEffect(() => {
         const keyDownHandler = (event) => {
-          console.log('User pressed: ', event.key);
-    
-          if (event.key === 'Enter') {
-
-            event.preventDefault(event);
-            // 👇️ call submit function here
-
-            handleSubmit();
-          }
+            console.log('User pressed: ', event.key);
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                handleSubmit(event);
+            }
         };
     
         document.addEventListener('keydown', keyDownHandler);
@@ -331,7 +283,7 @@ export function MainSection() {
         return () => {
           document.removeEventListener('keydown', keyDownHandler);
         };
-      }, []);
+    }, []);
 
     return (
         <PageContainer>
@@ -355,7 +307,7 @@ export function MainSection() {
                     theme="colored"
                 />
 
-                <Form onSubmit={handleSubmit} onKeyDown={(e) => { if (e.which === 13) { handleSubmit(); }}}> 
+                <Form onSubmit={handleSubmit}> 
                     <FormContainer>
                         {inputs.map((input) => (
                             <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChangeHandler} />
@@ -366,7 +318,7 @@ export function MainSection() {
                             <Button theme="outline" text="Cancel" />
                         </Link>
 
-                        <Button theme="filled" text="Sign In" /> 
+                        <Button theme="filled" type="submit" text="Sign In" /> 
                     </ButtonsContainer>
                 </Form>
             </MainContainer>

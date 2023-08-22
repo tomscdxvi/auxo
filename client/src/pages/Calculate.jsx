@@ -6,7 +6,7 @@ import CalculatePage from '../app/containers/CalculatePage';
 const HomeContainer = styled.div`
   ${tw`
     w-full
-    h-full
+    h-screen
     flex
     flex-col
     bg-background

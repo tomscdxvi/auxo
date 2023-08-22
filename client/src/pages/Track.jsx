@@ -7,7 +7,7 @@ const TrackContainer = styled.div`
   background-color: #243763;
   ${tw`
     w-full
-    h-full
+    h-screen
     flex
     flex-col
   `}
