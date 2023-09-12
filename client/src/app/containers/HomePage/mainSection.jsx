@@ -149,32 +149,22 @@ export function MainSection() {
                 <LeftContainer style={{ width: '100%' }}>
                     <Slogan style={{ textAlign: 'center' }}>Track on the go.</Slogan>
 
-                    <Description style={{ textAlign: 'center' }}>
+                    <Description style={{ textAlign: 'center', fontSize: '1rem' }}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
                         Maecenas a consequat risus, quis congue lorem. 
-                        Etiam dictum porttitor tortor, in vehicula mi elementum sed. 
-                        Integer porta ac leo sed hendrerit.
                     </Description>
 
-                    <ButtonsContainer style={{ marginLeft: 50 }}>
+                    <ButtonsContainer className="flex justify-center items-center">
                         <a target="_blank" href="">
-                            <Button theme="outline" text="Learn more about our company" /> 
+                            <Button theme="outline" text="Learn More" /> 
                         </a>
                     </ButtonsContainer>
 
-                    <ButtonsContainer style={{ marginLeft: 100, marginTop: 140 }}>
-                        <a target="_blank" href="">
-                            <Button theme="filled" text="Sign Up" /> 
-                        </a>
+                    <ButtonsContainer className="flex justify-center items-center mb-64">
+                        <Button theme="filled" text="Sign In" /> 
                     </ButtonsContainer>
 
-                    <ButtonsContainer style={{ marginLeft: 102.5, marginTop: 50 }}>
-                        <a target="_blank" href="https://github.com/Black-Bulls-Group">
-                            <Button theme="filled" text="Sign In" /> 
-                        </a>
-                    </ButtonsContainer>
-
-                    <ButtonsContainer style={{ marginLeft: 135, marginTop: 50 }}>
+                    <ButtonsContainer className="flex justify-center items-end">
                         <Link to="" >
                             <Button theme="outline" text="Need Help?" /> 
                         </Link>

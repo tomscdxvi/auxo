@@ -32,17 +32,10 @@ const Form = styled.form`
         text-xs
         overflow-hidden
         max-h-full
+        p-2
         xlarge:text-lg
     `}
 `;
-
-const FormContainer = styled.div`
-    z-index: 1;
-    ${tw`
-
-    `}
-`;
-
 
 export function SignIn(props) {
 
@@ -208,35 +201,35 @@ export function SignIn(props) {
 
     return (
         <Dialog open={signInOpen} onClose={handleClose}>
-        <DialogTitle>Sign In</DialogTitle>
-        <DialogContent>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="colored"
-            />
+            <DialogTitle className="p-4">Sign In</DialogTitle>
+            <DialogContent>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="colored"
+                />
 
-            <Form onSubmit={handleSubmit}> 
-                {inputs.map((input) => (
-                    <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChangeHandler} />
-                ))}
-                <DialogContentText>
-                    No account? Sign-up <a onClick={handleSignUpOpen} className="hover:text-paragraph hover:cursor-pointer">here!</a>
-                    <SignUp signUpOpen={signUpOpen} handleSignUpClose={handleSignUpClose} />
-                </DialogContentText>
-                <DialogActions className="m-3">
-                    <Button theme="outline" text="Cancel" onClick={handleClose} />
-                    <Button theme="filled" type="submit" text="Sign In" /> 
-                </DialogActions>
-            </Form>
-        </DialogContent>
-      </Dialog>
+                <Form onSubmit={handleSubmit}> 
+                    {inputs.map((input) => (
+                        <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChangeHandler} />
+                    ))}
+                    <DialogContentText>
+                        No account? Sign-up <a onClick={handleSignUpOpen} className="hover:text-paragraph hover:cursor-pointer">here!</a>
+                        <SignUp signUpOpen={signUpOpen} handleSignUpClose={handleSignUpClose} />
+                    </DialogContentText>
+                    <DialogActions className="m-3 mt-4">
+                        <Button theme="outline" text="Cancel" onClick={handleClose} />
+                        <Button theme="filled" type="submit" text="Sign In" /> 
+                    </DialogActions>
+                </Form>
+            </DialogContent>
+        </Dialog>
     )
 }

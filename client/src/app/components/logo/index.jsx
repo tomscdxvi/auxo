@@ -16,23 +16,19 @@ const LogoContainer = styled.div`
 `;
 
 const LogoContainerMobile = styled.div`
-    margin: auto;
     ${tw`
-        flex
+        w-full 
+        h-full
+        flex 
+        justify-center 
         items-center
     `}
 `;
 
 const ImageContainer = styled.div`
-    width:auto;
     ${tw`
-        h-6
-        medium:h-9
+        large:h-9
     `}
-    img {
-        width:auto;
-        height:100%;
-    }
 `; 
 
 
@@ -45,7 +41,7 @@ export function Logo() {
             <LogoContainerMobile>
                 <ImageContainer>
                     <Link to="/">
-                        <img src={LogoImage} alt="" />
+                        <img src={LogoImage} alt="" style={{ width: 130.5, height: 36 }} />
                     </Link>
                 </ImageContainer> 
             </LogoContainerMobile> 

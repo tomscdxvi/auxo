@@ -10,14 +10,13 @@ const NavbarContainer = styled.div`
     border-radius: 8px;
     ${tw`
         w-full
-        min-w-full
-        flex
-        flex-row
-        items-center
-        pb-8
+        large:flex
+        large:flex-row
+        large:items-center
+        large:pb-8
         large:pl-12
         large:pr-12 
-        justify-between
+        large:justify-between
     `}
 `;
 
