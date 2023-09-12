@@ -6,7 +6,7 @@ import HomePage from '../app/containers/HomePage';
 const HomeContainer = styled.div`
   ${tw`
     w-full
-    h-full
+    h-screen
     flex
     flex-col
     bg-background

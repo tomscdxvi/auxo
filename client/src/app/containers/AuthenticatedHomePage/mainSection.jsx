@@ -302,7 +302,7 @@ export function MainSection() {
         removeCookie("jwt");
         localStorage.removeItem('@storage_user');
         
-        navigate("/login");
+        navigate("/");
     };
 
     const onChangeHandler = (e) => {

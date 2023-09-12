@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import tw from 'twin.macro';
@@ -131,7 +131,7 @@ const ButtonsContainer = styled.div`
 const FooterContainer = styled.div`
     width: 78%;
     position: absolute;
-    top: 97.5%;
+    top: 96%;
     text-align: center;
     ${tw`
         text-sm

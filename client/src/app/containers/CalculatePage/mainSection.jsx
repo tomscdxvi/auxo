@@ -379,7 +379,7 @@ export function MainSection() {
                     </ImageContainer> 
                     <HorizontalLine /> 
                     <MainContainer>
-                        <Title>{OneRepMaxCalculation() === 0 ? "_" : OneRepMaxCalculation() + "lbs for 1 Rep"}</Title>
+                        <Title>{OneRepMaxCalculation() == 0 ? "_" : OneRepMaxCalculation() + "lbs for 1 Rep"}</Title>
     
                         <ToastContainer
                             position="top-right"

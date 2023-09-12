@@ -22,7 +22,6 @@ const BaseButton = styled.button`
         duration-200
         ease-in-out
         tracking-wider
-        m-3
     `}
 `;
 
@@ -51,10 +50,10 @@ const OutlinedButton = styled(BaseButton)`
 
 export function Button(props) {
 
-    const { theme, text, type, onClick } = props;
+    const { theme, text, type, className, onClick } = props;
 
     if(theme === "filled") {
-        return <FilledButton onClick={onClick} type={type}>{text}</FilledButton>
+        return <FilledButton className={className} onClick={onClick} type={type}>{text}</FilledButton>
     } else {
         return <OutlinedButton onClick={onClick} type={type}>{text}</OutlinedButton>
     }
