@@ -16,7 +16,7 @@ How to run this project/app
 
 In the client directory, you can run:
 
-"__npm start__" to run the app in the development mode.
+"__npm run dev__" to run the app in the development mode.
 Open http://localhost:3000 to view it in the browser.
 
 ### Running the server
@@ -25,7 +25,7 @@ How to run the server
 
 In the server directory, you can run:
 
-"__nodemon index.js__" to run the server.
+"__npm run server__" to run the server.
 
 ### Installing Node Modules
 

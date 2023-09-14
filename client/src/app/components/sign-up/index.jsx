@@ -44,6 +44,24 @@ const SelectContainer = styled.div`
     `}
 `;
 
+const MobileSelectContainer = styled.div`
+    ${tw`
+        p-0
+    `}
+`;
+
+const MobileSelectLabel = styled.h1`
+    font-size: 18px;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.15px;
+    line-height: 16px;
+    ${tw`
+        mt-6
+        text-headline
+        font-bold
+    `}
+`
+
 const Form = styled.form`
     z-index: 100;
     ${tw`
@@ -61,21 +79,28 @@ const FormContainer = styled.div`
     `}
 `;
 
+const MobileForm = styled.form`
+    z-index: 100;
+    ${tw`
+        text-lg
+        overflow-hidden
+        max-h-full
+        xlarge:text-lg
+    `}
+`;
+
+const MobileFormContainer = styled.div`
+    ${tw`
+        grid
+        grid-cols-1
+    `}
+`;
+
 export function SignUp(props) {
 
     const navigate = useNavigate();
 
-    const { signUpOpen, handleSignUpClose } = props;
-
-    const [ signInOpen, setSignInOpen ] = useState(false);
-
-    const handleSignInOpen = () => {
-        setSignInOpen(true);
-    };
-
-    const handleSignInClose = () => {
-        setSignInOpen(false);
-    };
+    const { open, handleSignUpClose } = props;
 
     const timeout = (delay) => {
         return new Promise(res => setTimeout(res, delay));
@@ -153,7 +178,7 @@ export function SignUp(props) {
         setUser({...user, [e.target.name]: e.target.value})
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmitForm = async (e) => {
         e.preventDefault();
 
         try {
@@ -167,7 +192,7 @@ export function SignUp(props) {
                         else if(password) initializeError(password);
                 } else {
                     if (user.username !== "" && user.email !== "" && user.password !== "" && user.confirm_password !== "") {
-                        toast.success(user.username + "'s account has been created. You will be redirected to the sign in page shortly.", {
+                        toast.success(user.username + "'s account has been created and can now sign-in using your account details.", {
                             position: "top-right",
                             autoClose: 5000,
                             hideProgressBar: false,
@@ -177,9 +202,9 @@ export function SignUp(props) {
                             progress: undefined,
                             theme: "colored"
                         });
-
+                        
                         await timeout(4000).then(() => {
-                            navigate("/login");
+                            handleSignUpClose();
                         })
                     } else {
                         toast.error("There was an error creating this account.", {
@@ -238,8 +263,57 @@ export function SignUp(props) {
 
     console.log(user);
 
+    const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
+
+    if(isMobile) {
+        return (
+            <Dialog open={open} onClose={handleSignUpClose} maxWidth="400px">
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="colored"
+                />
+                <DialogTitle>Create User Account</DialogTitle>
+                <DialogContent>
+                    <MobileForm onSubmit={handleSubmitForm}>
+                        <MobileFormContainer>
+                            {inputs.map((input) => (
+                                <FormInput key={input.id} {...input} value={user[input.name]} onChange={onChangeHandler} />
+                            ))}
+
+                            <MobileSelectContainer>
+                                <MobileSelectLabel>Select your Level</MobileSelectLabel>
+                                <select name="level" className="input-form !w-[250px]" onChange={onChangeHandler}>
+                                    <option value="" disabled selected hidden>Choose a level...</option>
+                                    <option value="beginner">Beginner</option>
+                                    <option value="intermediate">Intermediate</option>
+                                    <option value="advanced">Advanced</option>
+                                </select>
+                            </MobileSelectContainer>
+                        </MobileFormContainer>
+
+                        <DialogContentText>
+                            Already have an account? Sign-in <a onClick={handleSignUpClose} className="hover:text-paragraph hover:cursor-pointer">here!</a>
+                        </DialogContentText>
+                        <DialogActions className="m-3">
+                            <Button theme="outline" text="Cancel" onClick={handleSignUpClose} />
+                            <Button theme="filled" type="submit" text="Create" />
+                        </DialogActions>
+                    </MobileForm>
+                </DialogContent>
+            </Dialog>
+        )
+    }
+
     return (
-        <Dialog open={signUpOpen} onClose={handleSignUpClose} maxWidth="400px">
+        <Dialog open={open} onClose={handleSignUpClose} maxWidth="400px">
             <ToastContainer
                 position="top-right"
                 autoClose={5000}
@@ -254,7 +328,7 @@ export function SignUp(props) {
             />
             <DialogTitle>Create User Account</DialogTitle>
             <DialogContent>
-                <Form onSubmit={handleSubmit}>
+                <Form onSubmit={handleSubmitForm}>
                     <FormContainer>
                         {inputs.map((input) => (
                             <FormInput key={input.id} {...input} value={user[input.name]} onChange={onChangeHandler} />
@@ -273,7 +347,6 @@ export function SignUp(props) {
 
                     <DialogContentText>
                         Already have an account? Sign-in <a onClick={handleSignUpClose} className="hover:text-paragraph hover:cursor-pointer">here!</a>
-                        <SignIn open={signInOpen} handleClose={handleSignInClose} />
                     </DialogContentText>
                     <DialogActions className="m-3">
                         <Button theme="outline" text="Cancel" onClick={handleSignUpClose} />

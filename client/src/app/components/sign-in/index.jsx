@@ -37,6 +37,16 @@ const Form = styled.form`
     `}
 `;
 
+const MobileForm = styled.form`
+    z-index: 1;
+    ${tw`
+        text-xs
+        overflow-hidden
+        max-h-full
+        xlarge:text-lg
+    `}
+`;
+
 export function SignIn(props) {
 
     const navigate = useNavigate();
@@ -45,12 +55,12 @@ export function SignIn(props) {
         return new Promise(res => setTimeout(res, delay));
     }
 
-    const { signInOpen, handleClose, setIsOpen } = props;
+    const { open, handleClose, selected } = props;
 
     const [ signUpOpen, setSignUpOpen ] = useState(false);
 
     const handleSignUpOpen = () => {
-        setSignUpOpen(true);
+        handleClose();
     };
 
     const handleSignUpClose = () => {
@@ -199,8 +209,46 @@ export function SignIn(props) {
         };
     }, []);
 
+    const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
+
+    if(isMobile) {
+        return (
+            <Dialog open={open} onClose={handleClose} >
+                <DialogTitle>Sign In</DialogTitle>
+                <DialogContent>
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="colored"
+                    />
+
+                    <MobileForm onSubmit={handleSubmit}> 
+                        {inputs.map((input) => (
+                            <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChangeHandler} />
+                        ))}
+                        <DialogContentText>
+                            No account? Sign-up <a onClick={handleSignUpOpen} className="hover:text-paragraph hover:cursor-pointer">here!</a><span className="text-[#DA1E28]"> - Currently Unavailable</span>
+                            <SignUp signUpOpen={signUpOpen} handleSignUpClose={handleSignUpClose} />
+                        </DialogContentText>
+                        <DialogActions className="mt-4">
+                            <Button theme="outline" text="Cancel" onClick={handleClose} />
+                            <Button theme="filled" type="submit" text="Sign In" /> 
+                        </DialogActions>
+                    </MobileForm>
+                </DialogContent>
+            </Dialog>
+        )
+    }
+
     return (
-        <Dialog open={signInOpen} onClose={handleClose}>
+        <Dialog open={open} onClose={handleClose} >
             <DialogTitle className="p-4">Sign In</DialogTitle>
             <DialogContent>
                 <ToastContainer
@@ -221,7 +269,7 @@ export function SignIn(props) {
                         <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChangeHandler} />
                     ))}
                     <DialogContentText>
-                        No account? Sign-up <a onClick={handleSignUpOpen} className="hover:text-paragraph hover:cursor-pointer">here!</a>
+                        No account? Sign-up <a onClick={handleSignUpOpen} className="hover:text-paragraph hover:cursor-pointer">here!</a><span className="text-[#DA1E28]"> - Currently Unavailable</span>
                         <SignUp signUpOpen={signUpOpen} handleSignUpClose={handleSignUpClose} />
                     </DialogContentText>
                     <DialogActions className="m-3 mt-4">

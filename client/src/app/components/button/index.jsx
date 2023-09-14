@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import tw from 'twin.macro'
 import '../../styles/font.css'
+import { useMediaQuery } from 'react-responsive';
+import { SCREENS } from '../responsive';
 
 const BaseButton = styled.button`
     font-family: 'Montserrat', sans-serif;
@@ -48,13 +50,68 @@ const OutlinedButton = styled(BaseButton)`
     `}
 `;
 
+const MobileBaseButton = styled.button`
+    font-family: 'Montserrat', sans-serif;
+    ${tw`
+        pl-5
+        pr-5
+        pt-2
+        pb-2 
+        outline-none
+        rounded-md
+        text-white
+        text-base
+        border-solid
+        border-transparent
+        border-2 
+        focus:outline-none 
+        transition-all
+        duration-200
+        ease-in-out
+        tracking-wider
+    `}
+`;
+
+const MobileFilledButton = styled(MobileBaseButton)`
+    ${tw`
+        text-white
+        bg-button
+        hover:bg-white
+        hover:text-button
+        hover:border-button
+        hover:transition-all
+        hover:duration-300
+    `}
+`;
+
+const MobileOutlinedButton = styled(MobileBaseButton)`
+    ${tw`
+        text-button
+        border-button
+        hover:bg-button
+        hover:text-white
+        hover:transition-all
+        hover:duration-300
+    `}
+`;
+
 export function Button(props) {
 
     const { theme, text, type, className, onClick } = props;
 
+    const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
+
+    if(isMobile) {
+        if(theme === "filled") {
+            return <MobileFilledButton className={className} onClick={onClick} type={type}>{text}</MobileFilledButton>
+        } else {
+            return <MobileOutlinedButton onClick={onClick} className={className} type={type}>{text}</MobileOutlinedButton>
+        }
+    }
+
     if(theme === "filled") {
         return <FilledButton className={className} onClick={onClick} type={type}>{text}</FilledButton>
     } else {
-        return <OutlinedButton onClick={onClick} type={type}>{text}</OutlinedButton>
+        return <OutlinedButton onClick={onClick} className={className} type={type}>{text}</OutlinedButton>
     }
 }

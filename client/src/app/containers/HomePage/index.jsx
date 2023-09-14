@@ -4,6 +4,7 @@ import tw from 'twin.macro';
 import { Navbar } from '../../components/navbar';
 import { MainSection } from './mainSection';
 
+
 const PageContainer = styled.div`
     ${tw`
         flex

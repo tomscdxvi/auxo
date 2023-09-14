@@ -25,14 +25,11 @@ import '../../styles/register/main.css';
 
 
 
-export function Dialogs(props) {
-
-    const [ isOpen, setIsOpen ] = useState();
-
-    const [ open ] = props;
-
+export function Dialogs() {
     return (
         <>
+            <SignIn open={open && open === "first"} />
+            <SignUp open={open && open === "second"} />
         </>
     )
 }

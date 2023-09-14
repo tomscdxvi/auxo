@@ -3,12 +3,26 @@ import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import { useMediaQuery } from 'react-responsive';
+
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from "@material-ui/core/IconButton";
+import InputLabel from "@material-ui/core/InputLabel";
+import Visibility from "@material-ui/icons/Visibility";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+
 import { SCREENS } from '../responsive';
 import '../../styles/font.css';
 import '../../styles/home/main.css'
 
 import { SignIn } from '../sign-in';
 import { Button } from '../button';
+import { SignUp } from '../sign-up';
+
 
 const ListContainer = styled.ul`
     ${tw`
@@ -58,45 +72,40 @@ const SignUpItem = styled.li`
 `;
 
 
-export function NavItems(props) {
+export function NavItems() {
 
     const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
 
-    const [ isOpen, setIsOpen ] = useState(false);
     const [ open, setOpen ] = useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
 
     const handleClose = () => {
         setOpen(false);
-    };
+    }
 
+    const [ signUpOpen, setSignUpOpen ] = useState(false);
+    
+    const handleSignUpClose = () => {
+        setSignUpOpen(false);
+    }
 
     if(isMobile) {
         return (
             <ListContainerMobile>
-                
-            </ListContainerMobile>
+                <SignInItem>
+                </SignInItem>
+            </ListContainerMobile> 
         )
     }; 
 
     return (
         <ListContainer>
-            {/*
-            <SignUpItem>
-                <Link to="/register" className='home-link'>Sign up</Link>
-            </SignUpItem> */}
 
             <SignInItem>
-                <Button theme="filled" text="Sign In" onClick={handleClickOpen} />
-                <SignIn signInOpen={open} handleClose={handleClose} />
+                <Button theme="filled" text="Sign In" className="font-bold mr-8" onClick={() => setOpen(true)} />
+                <SignIn open={open} handleClose={handleClose} />
+                <Button theme="outline" text="Sign Up" className="font-bold" onClick={() => setSignUpOpen(true)} />
+                <SignUp open={signUpOpen} handleSignUpClose={handleSignUpClose} />
             </SignInItem>
-
-            {/* <SignUpItem>
-                <Link to="/track">Track</Link>
-            </SignUpItem> */}
         </ListContainer>
     )
 }

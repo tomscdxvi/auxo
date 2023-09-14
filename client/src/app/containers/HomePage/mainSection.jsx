@@ -8,6 +8,8 @@ import { useMediaQuery } from 'react-responsive'
 import { SCREENS } from '../../components/responsive';
 
 import BikerIllustration from '../../../assets/images/bikerillustration.png'
+import { SignIn } from 'src/app/components/sign-in';
+import { SignUp } from 'src/app/components/sign-up';
 
 const MainSectionContainer = styled.div`
     min-height: calc(100vh - 340px);
@@ -80,10 +82,11 @@ const Description = styled.p`
 const HorizontalLine = styled.hr`
     width: 78%;
     position: absolute;
-    top: 70%;
+    top: 71.2%;
     visibility: hidden;
     ${tw`
         text-headline
+        large:invisible
         xlarge:visible
     `}
 `
@@ -143,6 +146,21 @@ export function MainSection() {
 
     const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
 
+    const [ isOpen, setIsOpen ] = useState(false);
+
+
+    const [ open, setOpen ] = useState(false);
+
+    const handleClose = () => {
+        setOpen(false);
+    }
+
+    const [ signUpOpen, setSignUpOpen ] = useState(false);
+    
+    const handleSignUpClose = () => {
+        setSignUpOpen(false);
+    }
+
     if(isMobile) {
         return (
             <MainSectionContainer style={{  marginTop: '9.758rem' }}>
@@ -153,6 +171,16 @@ export function MainSection() {
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
                         Maecenas a consequat risus, quis congue lorem. 
                     </Description>
+                    
+                    <ButtonsContainer className="flex justify-center items-center">
+                        <Button theme="filled" text="Sign In" onClick={() => setOpen(true)} />
+                        <SignIn open={open} handleClose={handleClose} />
+                    </ButtonsContainer>
+
+                    <ButtonsContainer className="flex justify-center items-center mb-48">
+                        <Button theme="outline" text="Sign Up" className="font-bold" onClick={() => setSignUpOpen(true)} />
+                        <SignUp open={signUpOpen} handleSignUpClose={handleSignUpClose} />
+                    </ButtonsContainer>
 
                     <ButtonsContainer className="flex justify-center items-center">
                         <a target="_blank" href="">
@@ -160,12 +188,8 @@ export function MainSection() {
                         </a>
                     </ButtonsContainer>
 
-                    <ButtonsContainer className="flex justify-center items-center mb-64">
-                        <Button theme="filled" text="Sign In" /> 
-                    </ButtonsContainer>
-
                     <ButtonsContainer className="flex justify-center items-end">
-                        <Link to="" >
+                        <Link to="">
                             <Button theme="outline" text="Need Help?" /> 
                         </Link>
                     </ButtonsContainer>

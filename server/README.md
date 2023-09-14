@@ -10,7 +10,7 @@ How to run this server
 
 In the project directory, you can run:
 
-"__nodemon index.js__" to run the server at PORT=5000
+"__npm run server__" to run the server at PORT=5000
 
 Look for "Connected to Server Port: ${PORT}" or "${error} Failed to connect" in the console.
 
