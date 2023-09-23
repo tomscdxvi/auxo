@@ -19,6 +19,7 @@ import SignUpIllustration from '../../../assets/images/track-illustration.png';
 import PlusIcon from '../../../assets/images/plus-icon.png';
 import '../../styles/authenticatedhome/main.css';
 import '../../styles/font.css'
+import TrackForm from 'src/app/components/track';
 
 const PageContainer = styled.div`
     ${tw`
@@ -234,6 +235,43 @@ export function MainSection() {
         reps: "",
         weight: "",
     });
+
+    // Form Steps
+    const steps = [
+        {
+            label: "Workout Date/Time"
+        },
+        {
+            label: "Workout Details"
+        }
+    ]
+
+    // Forms State 
+    const state = {
+        index: 0,
+        steps: {
+            dateTime: {
+                valid: false,
+                strict: false,
+                value: {
+                    title: "",
+                    date: "",
+                    start_time: "",
+                    end_time: ""
+                },
+            },
+            workoutDetails: {
+                valid: false,
+                strict: false,
+                name: "",
+                sets: "",
+                reps: "",
+                weight: ""
+            }
+        }
+    }
+
+    const [form, setForm] = useState(state);
 
     const [workouts, setWorkouts] = useState([]);
 
@@ -477,7 +515,7 @@ export function MainSection() {
                 </SignUpItem>
     
                 <SignUpItem style={{ color: 'white' }}>
-                    View Plans
+                    <Link to="/plan" className='auth-link'>View Plans</Link>
                 </SignUpItem>
     
                 <SignUpItem style={{ color: 'white' }}>
@@ -553,12 +591,13 @@ export function MainSection() {
 
                     <Title>Start Tracking</Title>
 
+                    {/* 
                     <Box sx={{ width: '50%', bgcolor: 'background.paper' }} className="rounded-md">
                         <Tabs value={value} onChange={handleTabChange} centered>
                             <Tab label="One" />
                             <Tab label="Two" />
                         </Tabs>
-                    </Box>
+                    </Box> */}
 
                     <ToastContainer
                         position="top-right"
@@ -573,6 +612,9 @@ export function MainSection() {
                         theme="colored"
                     />  
 
+                    <TrackForm />
+
+                    {/*
                     <Form onSubmit={handleSubmit}> 
                         <TabPanel tabValue={value} index={0}>
                             <Title>Date/Time</Title>    
@@ -591,10 +633,6 @@ export function MainSection() {
                                 ))}
                             </FormContainer>
                             <button className="text-white text-xl">
-                                {/* Need to find a white plus icon */}
-                                {/* <PlusIconContainer>
-                                    <img src={PlusIcon} alt="" />
-                                </PlusIconContainer> */}
                                 +
                             </button>
                         </TabPanel> 
@@ -606,7 +644,7 @@ export function MainSection() {
 
                             <Button theme="filled" text="Submit" /> 
                         </ButtonsContainer>
-                    </Form>
+                    </Form>  */}
                 </MainContainer>
             </PageContainer>
         </>

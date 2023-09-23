@@ -35,10 +35,10 @@ const UserSchema = new Schema({
         date: {
             type: String,
         },
-        start_time: {
+        time: {
             type: String,
         },
-        end_time: {
+        type: {
             type: String,
         },
         workout: [{

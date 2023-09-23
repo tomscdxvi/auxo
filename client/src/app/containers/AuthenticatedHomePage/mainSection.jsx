@@ -124,6 +124,17 @@ const TrackContainer = styled.div`
     `}
 `;
 
+const MobileTrackContainer = styled.div`
+    z-index: 100;
+    width: 250px;
+    ${tw`
+        grid
+        grid-cols-1
+        gap-6
+    `}
+`;
+
+
 const ButtonsContainer = styled.div`
     ${tw`
         flex
@@ -389,7 +400,7 @@ export function MainSection() {
                 </SignUpItem>
     
                 <SignUpItem style={{ color: 'white' }}>
-                    View Plans
+                    <Link to="/plan" className='auth-link'>View Plans</Link>
                 </SignUpItem>
     
                 <SignUpItem style={{ color: 'white' }}>
@@ -411,10 +422,55 @@ export function MainSection() {
     //console.log(cookies.jwt);
     // console.log(getCookie("jwt"));
 
+    const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
+
     if(loading) {
         return (
             <>
                 <h1>Loading</h1>
+            </>
+        )
+    } else if(isMobile) {
+        return (
+            <>
+                <NavbarContainer>
+                    <DarkLogo />
+                    <NavItems />
+                </NavbarContainer>
+                <PageContainer>
+                    <HorizontalLine /> 
+                    <ToastContainer position="top-right"
+                        autoClose={1500} 
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="colored"
+                    />
+
+                    <MainContainer>
+                        <Title>Hi, {data.data.username}</Title>
+                        <Title style={{ textDecoration: "underline", marginTop: '3rem' }}>Tracking History</Title>
+
+                        <MobileTrackContainer>
+                            {data.data.history?.map((track) => {
+                                if(track === null) {
+                                    return (
+                                        <Title style={{ fontSize: '16px' }}>Your tracking history is empty, enter your first workout to see your history!</Title>
+                                    )
+                                } else {
+                                    return (
+                                        <TrackCard key={track._id} track={track} />
+                                    )
+                                }
+                            })} 
+                        </MobileTrackContainer>
+
+                    </MainContainer>
+                </PageContainer>
             </>
         )
     } else {
@@ -462,6 +518,6 @@ export function MainSection() {
                     </MainContainer>
                 </PageContainer>
             </>
-        )
+        )               
     }
 }
