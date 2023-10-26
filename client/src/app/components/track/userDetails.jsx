@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TextField } from '@mui/material'
+import { InputLabel, TextField } from '@mui/material'
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -27,7 +27,7 @@ const Form = styled.form`
 const Title = styled.h1`
     font-family: 'Montserrat', sans-serif;
     ${tw`
-        text-white
+        text-black
         mb-4
         tracking-wider
         xlarge:text-xl 
@@ -40,6 +40,8 @@ const FormContainer = styled.div`
     border-radius: 8px;
     z-index: 100;
     ${tw`
+        bg-white
+        rounded
         grid
         grid-cols-2
         gap-12
@@ -62,42 +64,62 @@ const ButtonsContainer = styled.div`
 const useStyles = makeStyles({
     root: {
       "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-        borderColor: "white"
+        borderColor: "black"
       },
       "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-        borderColor: "white"
+        borderColor: "black"
       },
       "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-        borderColor: "white"
+        borderColor: "black"
       },
       "& .MuiOutlinedInput-input": {
-        color: "white"
+        color: "black"
       },
       "&:hover .MuiOutlinedInput-input": {
-        color: "white"
+        color: "black"
       },
       "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
-        color: "white"
+        color: "black"
       },
       "& .MuiInputLabel-outlined": {
-        color: "white"
+        color: "black"
       },
       "&:hover .MuiInputLabel-outlined": {
-        color: "white"
+        color: "black"
       },
       "& .MuiInputLabel-outlined.Mui-focused": {
-        color: "white"
+        color: "black"
       }
-    }
+    },
+    select: {
+        height: "3.5rem",
+        width: "200px",
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: "black"
+        },
+        '& .MuiSvgIcon-root': {
+            color: "black"
+        },
+        "& .MuiOutlinedInput-input": {
+            color: "black"
+        },
+        "& .MuiInputLabel-outlined.Mui-focused": {
+            color: "red"
+        },
+    },
 });
   
 
 export default function UserDetails({ nextStep, handleChange, track }) {
 
+    const [date, setDate] = useState();
+
     const Next = e => {
         e.preventDefault();
         nextStep();
     }
+    
+    console.log(date);
 
     const classes = useStyles();
 
@@ -114,28 +136,44 @@ export default function UserDetails({ nextStep, handleChange, track }) {
                     />
                 </div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker 
-                        onChange={handleChange('date')} 
-                        className={classes.root}
-                        sx={{ svg: { color: 'white' } }} 
-                    />
+                    <div>
+                        <Title>Date</Title>
+                        <DatePicker 
+                            onChange={(value) => {
+                                setDate(dayjs(value).format("MM/DD/YYYY"));
 
-                    <MultiInputTimeRangeField
-                        defaultValue={[dayjs('2023-09-23T00:00'), dayjs('2023-09-23T00:00')]}
-                        onChange={handleChange('start_time')}
-                        className={classes.root}
-                    />
+                                handleChange({target: { name: "date", value: date}})
+                            }} 
+                            className={classes.root}
+                            sx={{ svg: { color: 'white' } }} 
+                        />
+                    </div>
+
+                    <div>
+                        <Title>Time</Title>
+                        <MultiInputTimeRangeField
+                            defaultValue={[dayjs('2023-09-23T00:00'), dayjs('2023-09-23T00:00')]}
+                            onChange={handleChange('time')}
+                            className={classes.root}
+                        />
+                    </div>
                 </LocalizationProvider>
-                <Select
-                    label="Age"
-                    onChange={handleChange}
-                    className={classes.root}
-                >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-
+                <div>
+                    <Title>Type</Title>
+                    <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        label="Type"
+                        defaultValue="Reps"
+                        onChange={handleChange('type')}
+                        className={classes.select}
+                    >
+                        <MenuItem value="Reps">Reps</MenuItem>
+                        <MenuItem value="Singles">Singles</MenuItem>
+                        <MenuItem value="Cardio">Cardio</MenuItem>
+                    </Select>
+                </div>
             </FormContainer>
 
             <ButtonsContainer>

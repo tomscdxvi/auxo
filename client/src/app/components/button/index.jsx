@@ -31,6 +31,7 @@ const FilledButton = styled(BaseButton)`
     ${tw`
         text-white
         bg-button
+        font-bold
         hover:bg-white
         hover:text-button
         hover:border-button
@@ -43,6 +44,20 @@ const OutlinedButton = styled(BaseButton)`
     ${tw`
         text-button
         border-button
+        font-bold
+        hover:bg-button
+        hover:text-white
+        hover:transition-all
+        hover:duration-300
+    `}
+`;
+
+const OutlinedWhiteButton = styled(BaseButton)`
+    ${tw`
+        text-button
+        border-button
+        font-bold
+        bg-white
         hover:bg-button
         hover:text-white
         hover:transition-all
@@ -111,6 +126,8 @@ export function Button(props) {
 
     if(theme === "filled") {
         return <FilledButton className={className} onClick={onClick} type={type}>{text}</FilledButton>
+    } else if (theme == "outline-white") {
+        return <OutlinedWhiteButton onClick={onClick} className={className} type={type}>{text}</OutlinedWhiteButton>
     } else {
         return <OutlinedButton onClick={onClick} className={className} type={type}>{text}</OutlinedButton>
     }
