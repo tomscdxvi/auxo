@@ -118,7 +118,6 @@ module.exports.getUserDetails = async(req, res, next) => {
 
 module.exports.track = async(req, res, next) => {
 
-
     const userId = req.params._id
 
     const { 

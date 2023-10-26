@@ -8,6 +8,9 @@ import tw from 'twin.macro';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { makeStyles } from '@material-ui/core';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 import TrackCard from './Card';
 import { FooterDark } from '../../components/footer';
@@ -121,6 +124,7 @@ const TrackContainer = styled.div`
         grid
         grid-cols-3
         gap-6
+        medium:grid-cols-2
     `}
 `;
 
@@ -200,7 +204,6 @@ const FooterContainer = styled.div`
     `}
 `
 
-
 export function MainSection() {
 
     // Navigate between pages
@@ -214,6 +217,12 @@ export function MainSection() {
 
     // Data state to store response data from the api
     const [ data, setData ] = useState([]);
+
+    const [ activePage, setActivePage ] = useState(1);
+    const numberOfItems = 4;
+    const numberOfPages = useState(
+        Math.ceil(data.data?.length / numberOfItems)
+    )
 
     // Get user data async function
     const getUserData = async () => {
@@ -502,7 +511,7 @@ export function MainSection() {
                         <Title style={{ textDecoration: "underline", marginTop: '3rem' }}>Tracking History</Title>
 
                         <TrackContainer>
-                            {data.data.history?.map((track) => {
+                            {data.data.history?.slice((activePage - 1) * numberOfItems, activePage * numberOfItems).map((track) => {
                                 if(track === null) {
                                     return (
                                         <Title style={{ fontSize: '16px' }}>Your tracking history is empty, enter your first workout to see your history!</Title>
@@ -514,7 +523,16 @@ export function MainSection() {
                                 }
                             })} 
                         </TrackContainer>
-
+                        <Stack spacing={2}>
+                            <Pagination 
+                                count={numberOfPages} 
+                                shape="rounded" 
+                                page={activePage} 
+                                onChange={(event, newPage) => {
+                                    setActivePage(newPage)
+                                }}
+                            />
+                        </Stack>
                     </MainContainer>
                 </PageContainer>
             </>

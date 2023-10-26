@@ -16,3 +16,9 @@
 .auth-link:hover {
     color: #FFFFFF !important;
 } 
+
+.MuiPagination-root {
+    button {
+        color: red !important;
+    }
+}

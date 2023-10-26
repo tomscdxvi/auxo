@@ -185,7 +185,7 @@ const ImageContainer = styled.div`
     }
 
     ${tw`
-        medium:visible
+        medium:invisible
     `}
 `;
 

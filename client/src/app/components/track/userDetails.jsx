@@ -5,8 +5,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { MultiInputTimeRangeField } from '@mui/x-date-pickers-pro/MultiInputTimeRangeField';
-import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import Box from '@mui/material/Box';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { makeStyles } from "@material-ui/core/styles";
 import styled from 'styled-components';
 import { useMediaQuery } from 'react-responsive';
@@ -27,7 +29,7 @@ const Form = styled.form`
 const Title = styled.h1`
     font-family: 'Montserrat', sans-serif;
     ${tw`
-        text-black
+        text-headline
         mb-4
         tracking-wider
         xlarge:text-xl 
@@ -41,7 +43,6 @@ const FormContainer = styled.div`
     z-index: 100;
     ${tw`
         bg-white
-        rounded
         grid
         grid-cols-2
         gap-12
@@ -64,49 +65,49 @@ const ButtonsContainer = styled.div`
 const useStyles = makeStyles({
     root: {
       "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-        borderColor: "black"
+        borderColor: "#172C66"
       },
       "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-        borderColor: "black"
+        borderColor: "#172C66"
       },
       "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-        borderColor: "black"
+        borderColor: "#172C66"
       },
       "& .MuiOutlinedInput-input": {
-        color: "black"
+        color: "#172C66"
       },
       "&:hover .MuiOutlinedInput-input": {
-        color: "black"
+        color: "#172C66"
       },
       "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
-        color: "black"
+        color: "#172C66"
       },
       "& .MuiInputLabel-outlined": {
-        color: "black"
+        color: "#172C66"
       },
       "&:hover .MuiInputLabel-outlined": {
-        color: "black"
+        color: "#172C66"
       },
       "& .MuiInputLabel-outlined.Mui-focused": {
-        color: "black"
+        color: "#172C66"
       }
     },
     select: {
-        height: "3.5rem",
-        width: "200px",
-        '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: "black"
-        },
-        '& .MuiSvgIcon-root': {
-            color: "black"
-        },
         "& .MuiOutlinedInput-input": {
-            color: "black"
-        },
-        "& .MuiInputLabel-outlined.Mui-focused": {
-            color: "red"
-        },
-    },
+            color: "#172C66"
+        },  
+        "&.MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "#172C66"
+            },
+            "&:hover fieldset": {
+              borderColor: "#172C66"
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#172C66"
+            }
+          }
+    }
 });
   
 
@@ -125,6 +126,7 @@ export default function UserDetails({ nextStep, handleChange, track }) {
 
     return (  
         <Form>
+            <Title style={{ color: "white" }}>One</Title>
             <FormContainer>
                 <div>
                     <Title>Title</Title>
@@ -158,22 +160,23 @@ export default function UserDetails({ nextStep, handleChange, track }) {
                         />
                     </div>
                 </LocalizationProvider>
-                <div>
+                <Box sx={{ minWidth: 60 }}>
                     <Title>Type</Title>
-                    <InputLabel id="demo-simple-select-label">Type</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        label="Type"
-                        defaultValue="Reps"
-                        onChange={handleChange('type')}
-                        className={classes.select}
-                    >
-                        <MenuItem value="Reps">Reps</MenuItem>
-                        <MenuItem value="Singles">Singles</MenuItem>
-                        <MenuItem value="Cardio">Cardio</MenuItem>
-                    </Select>
-                </div>
+                    <FormControl style={{ minWidth: 180 }}>
+                        <InputLabel id="demo-simple-select-label" style={{ color: "#172C66" }}>Type</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            label="Type"
+                            onChange={handleChange('type')}
+                            className={classes.select}
+                        >
+                            <MenuItem value={"Reps"}>Reps</MenuItem>
+                            <MenuItem value={"Singles"}>Singles</MenuItem>
+                            <MenuItem value={"Cardio"}>Cardio</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
             </FormContainer>
 
             <ButtonsContainer>

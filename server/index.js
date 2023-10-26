@@ -12,7 +12,8 @@ dotenv.config();
 
 /* Connection to Server */
 const app = express();
-const PORT = process.env.PORT || 5001;
+// const PORT = process.env.PORT || 5001; // !! Disabled for now, fix later for MAC OS. Getting ERR_CONNECTION_REFUSED on MAC OS.
+const PORT = 5000; // Delete later after fix ^
 
 /* MongoDB Connection */
 mongoose.connect(process.env.MONGO_URI, {

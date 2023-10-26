@@ -14,6 +14,10 @@ import { SignUp } from 'src/app/components/sign-up';
 const MainSectionContainer = styled.div`
     min-height: calc(100vh - 340px);
     margin-top: 11.90%;
+    @media (min-width: ${SCREENS.medium}) {
+        min-height: 50vh;
+        overflow-y: hidden;
+    }
     ${tw`
         flex
         justify-between
@@ -84,10 +88,14 @@ const HorizontalLine = styled.hr`
     position: absolute;
     top: 71.2%;
     visibility: hidden;
+
+    @media (min-width: ${SCREENS.medium}) {
+        top: 81%;
+        width: 90%;
+    }
     ${tw`
         text-headline
-        large:invisible
-        xlarge:visible
+        large:visible
     `}
 `
 
@@ -105,13 +113,13 @@ const BikerIllustrationContainer = styled.div`
         max-width: fit-content;
     }
 
-    @media (min-width: ${SCREENS.lg}) {
-        height: 16 em;
-        right: -4em;
-        top: -6em;
+    @media (min-width: ${SCREENS.medium}) {
+        height: 24em;
+        right: 6em;
+        top: -5em;
     }
 
-    @media (min-width: ${SCREENS.xl}) {
+    @media (min-width: ${SCREENS.large}) {
         height: 26em;
         right: 2em;
         top: -6em;
@@ -136,6 +144,12 @@ const FooterContainer = styled.div`
     position: absolute;
     top: 96%;
     text-align: center;
+    @media (min-width: ${SCREENS.medium}) {
+        width: 95%;
+        position: absolute;
+        top: 96%;
+        text-align: center;
+    }
     ${tw`
         text-sm
         text-paragraph
