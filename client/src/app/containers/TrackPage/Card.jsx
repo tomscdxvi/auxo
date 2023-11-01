@@ -19,8 +19,8 @@ export default function Track({ track }) {
                         <Card.Subtitle className="text-muted mb-2">
                             {data.data.history.date}: {data.data.history.start_time} - {data.data.history.end_time}
                         </Card.Subtitle>
-                        <Badge variant="secondary" className="mr-2">{job.job_type}</Badge>
-                        <Badge variant="secondary">{job.location}</Badge>
+                        {/* <Badge variant="secondary" className="mr-2">{job.job_type}</Badge>
+                        <Badge variant="secondary">{job.location}</Badge> */}
 
                         <div className="mt-2">
                             <h5 className="text-primary">Skills</h5>

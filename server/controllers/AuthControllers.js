@@ -1,7 +1,9 @@
 const User = require('../models/User.js');
 const Track = require("../models/Track.js");
+const Workout = require("../models/Workout.js");
 const jwt = require('jsonwebtoken');
 const AsyncStorage = require('@react-native-async-storage/async-storage');
+const { default: mongoose } = require('mongoose');
 
 const expiry = 3 * 24 * 60 * 60;
 
@@ -97,15 +99,42 @@ module.exports.login = async(req, res, next) => {
 module.exports.getUserDetails = async(req, res, next) => {
 
     //const user = await User.findById("64334e6a69c05b05b5d23c74");
-
-    const userId = req.params._id
+    const userId = new mongoose.Types.ObjectId(req.params._id);
 
     const user = await User.findById(userId).populate("users").exec();
+    /* 
+    const newUser = await User.aggregate([ 
+        {
+            $match: {
+                "_id": userId
+            }
+        },
+        {
+            $lookup: {
+                from: "tracks",
+                localField: "history",
+                foreignField: "_id",
+                as: "history_results"
+            }
+        },
+        {
+            $unwind: "$history_results"
+        },
+        {
+            $group: {
+                "_id": userId,
+                "history": { $addToSet: "$history_results" }
+            }
+        },
+        {
+            $unwind: "$history"
+        },
+    ]); */
 
     try {
         if(user) {
-            
             res.json(user);
+            // console.log(newUser);
 
             return user;
         }
@@ -125,31 +154,103 @@ module.exports.track = async(req, res, next) => {
         date, 
         start_time, 
         end_time, 
-        sets, 
-        reps, 
-        weight, 
-        name, 
-        body_part, 
-        description, 
-        level } = req.body;
+        type,
+        name,
+        intensity,
+        sets,
+        reps,
+        weight
+    } = req.body;
 
+    const user = await User.findByIdAndUpdate(
+        userId,
+        { $push : {
+            "history": {
+                title: title,
+                date: date,
+                start_time: start_time,
+                end_time: end_time,
+                type: type,
+                name: name,
+                intensity: intensity,
+                sets: sets,
+                reps: reps,
+                weight: weight,
+            }
+        }},
+        {new: true}
+    ).exec(); 
+    
+    /* 
+    const track = await Track.create({
+        title,
+        date,
+        start_time,
+        end_time,
+        type,
+        user: userId
+    }); */
+
+    /* const workout = await Workout.create({
+        name,
+        intensity,
+        sets,
+        reps,
+        weight,
+        track: track._id
+    }) */
+
+    /*
+    
     const user = await User.findByIdAndUpdate(
         userId, 
         { $push : { 
-            history : {
+            "history": {
                 title,
                 date,
                 start_time,
-                end_time
-            }
+                end_time,
+                type,
+            },
         }}, 
         {new: true}
-    ).exec();
+    ).exec();  */
+
+    /* 
+    const user = await Track.findOne({ title: title })
+        .populate('user').exec();
+    */
+
+    //const tracks = await Workout.findOne({ name: name }).populate('track').exec();
+    
+    // const newTrack = await track.save();
+
+    // const newWorkout = await workout.save();
+
+    /* 
+    await User.findByIdAndUpdate(
+        userId,
+        { $push : {
+            "history": newTrack
+        }},
+        {new: true}
+    ).exec(); */
+
+    /* await Track.findByIdAndUpdate(
+        userId,
+        { $push : {
+            "workouts": newWorkout 
+        }},
+        {new: true}
+    ).exec(); */
 
     try {
         if(user) {
-            
             res.json(user);
+            // res.json(tracks)
+
+            // console.log(user);
+            // console.log(tracks);
 
             return user;
         }
@@ -159,6 +260,54 @@ module.exports.track = async(req, res, next) => {
         res.json({ errors, found: false });
     }
 };
+
+module.exports.createWorkout = async(req, res, next) => {
+    
+    const userId = req.params._id
+
+    const { 
+        name,
+        intensity,
+        sets,
+        reps,
+        weight
+    } = req.body;
+
+    const track = await Track.create({
+        name,
+        intensity,
+        sets,
+        reps,
+        weight,
+        track: trackId
+    });
+    
+    const user = await User.findByIdAndUpdate(
+        userId, 
+        { $push : { 
+            "history.$": {
+                title,
+                date,
+                start_time,
+                end_time,
+                type,
+            },
+        }}, 
+        {new: true}
+    ).exec(); 
+
+    try {
+        if(user) {
+            res.json(user);
+
+            return user;
+        }
+    } catch (error) {
+        console.log(error);
+        const errors = handleErrors(error);
+        res.json({ errors, found: false });
+    }
+}
 
 module.exports.deleteTrack = async(req, res, next) => {
     const trackId = req.params._id

@@ -40,6 +40,15 @@ const FilledButton = styled(BaseButton)`
     `}
 `;
 
+const DisabledButton = styled(BaseButton)`
+    ${tw`
+        text-white
+        bg-[#808080]
+        opacity-80
+        font-bold
+    `}
+`;
+
 const OutlinedButton = styled(BaseButton)`
     ${tw`
         text-button
@@ -128,6 +137,8 @@ export function Button(props) {
         return <FilledButton className={className} onClick={onClick} type={type}>{text}</FilledButton>
     } else if (theme == "outline-white") {
         return <OutlinedWhiteButton onClick={onClick} className={className} type={type}>{text}</OutlinedWhiteButton>
+    } else if (theme == "disabled-filled") {
+        return <DisabledButton className={className} onClick={onClick} type={type} disabled>{text}</DisabledButton>
     } else {
         return <OutlinedButton onClick={onClick} className={className} type={type}>{text}</OutlinedButton>
     }

@@ -143,7 +143,6 @@ export default function WorkoutDetails({ prevStep, nextStep, handleChange, track
 
     return (  
         <Form>
-            <Title style={{ color: "white" }}>Two</Title>
             <FormContainer>
                 <TopFormContainer>
                     <div>
@@ -165,6 +164,7 @@ export default function WorkoutDetails({ prevStep, nextStep, handleChange, track
                                 label="Intensity"
                                 onChange={handleChange('intensity')}
                                 className={classes.select}
+                                defaultValue=""
                             >
                                 <MenuItem value={"Easy"}>Easy</MenuItem>
                                 <MenuItem value={"Normal"}>Normal</MenuItem>
@@ -174,12 +174,12 @@ export default function WorkoutDetails({ prevStep, nextStep, handleChange, track
                         <DefaultToolTip 
                             content="
                             Easy (Could easily do many more reps)
-                            Normal (Could do a 3-5 more reps)
+                            Normal (Could do 3-5 more reps)
                             Hard (Could only do 1-3 reps)"
-                            text="Button"
+                            text="Learn more"
                             placement="bottom"
-                            tooltipClass="w-[290px] cursor-default"
-                            buttonClass="text-headline !cursor-default"
+                            tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
+                            buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
                         />
                     </Box>
                 </TopFormContainer>
@@ -231,11 +231,6 @@ export default function WorkoutDetails({ prevStep, nextStep, handleChange, track
                     </div>
                 </BottomFormContainer>
             </FormContainer>
-
-            <ButtonsContainer>
-                <Button theme="filled" text="Prev" onClick={Prev} /> 
-                <Button theme="filled" text="Confirm" />
-            </ButtonsContainer>
         </Form>
     )
 }

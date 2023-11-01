@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { MultiInputTimeRangeField } from '@mui/x-date-pickers-pro/MultiInputTimeRangeField';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
@@ -16,6 +16,7 @@ import tw from 'twin.macro';
 
 import { Button } from '../button';
 import { FormInputDark } from '../form';
+import DefaultToolTip from '../tooltip';
 
 const Form = styled.form`
     z-index: 100;
@@ -113,7 +114,9 @@ const useStyles = makeStyles({
 
 export default function UserDetails({ nextStep, handleChange, track }) {
 
-    const [date, setDate] = useState();
+    const [date, setDate] = useState("");
+    const [startTime, setStartTime] = useState();
+    const [endTime, setEndTime] = useState();
 
     const Next = e => {
         e.preventDefault();
@@ -126,7 +129,6 @@ export default function UserDetails({ nextStep, handleChange, track }) {
 
     return (  
         <Form>
-            <Title style={{ color: "white" }}>One</Title>
             <FormContainer>
                 <div>
                     <Title>Title</Title>
@@ -140,25 +142,75 @@ export default function UserDetails({ nextStep, handleChange, track }) {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <div>
                         <Title>Date</Title>
+                        <TextField
+                            placeholder="Date"
+                            label="Date"
+                            onChange={handleChange('date')}
+                            className={classes.root}
+                        />
+                        <DefaultToolTip
+                            content="You have the freedom to format the date to your preference."
+                            text="Learn more"
+                            placement="bottom"
+                            tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
+                            buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
+                        />
+                        {/*
                         <DatePicker 
                             onChange={(value) => {
-                                setDate(dayjs(value).format("MM/DD/YYYY"));
-
-                                handleChange({target: { name: "date", value: date}})
+                                setDate(dayjs(value).format("MM/DD/YYYY").toString());
+                                
+                                handleChange('date')
                             }} 
                             className={classes.root}
-                            sx={{ svg: { color: 'white' } }} 
-                        />
+                            sx={{ svg: { color: "#172C66" }, width: 180 }} 
+                        /> */}
                     </div>
 
                     <div>
                         <Title>Time</Title>
-                        <MultiInputTimeRangeField
-                            defaultValue={[dayjs('2023-09-23T00:00'), dayjs('2023-09-23T00:00')]}
-                            onChange={handleChange('time')}
+                        <TextField
+                            placeholder="Start Time"
+                            label="Start Time"
+                            onChange={handleChange('start_time')}
+                            className={classes.root}
+                            sx={{ marginBottom: 2.5 }}
+                        />
+                        <TextField
+                            placeholder="End Time"
+                            label="End Time"
+                            onChange={handleChange('end_time')}
                             className={classes.root}
                         />
+                        <DefaultToolTip
+                            content="You have the freedom to format the time to your preference."
+                            text="Learn more"
+                            placement="bottom"
+                            tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
+                            buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
+                        />
+                        {/*
+                        <TimePicker
+                            label="Start Time"
+                            value={startTime}
+                            onChange={(value) => {
+                                setStartTime(value)
+                                handleChange('start_time')
+                            }}
+                            className={classes.root}
+                            sx={{ svg: { color: "#172C66" }, marginBottom: 3 }} 
+
+                        />
+
+                        <TimePicker
+                            label="End Time"
+                            defaultValue={dayjs('2022-04-17T15:30')}
+                            onChange={handleChange('end_time')}
+                            className={classes.root}
+                            sx={{ svg: { color: "#172C66" } }} 
+                        /> */}
                     </div>
+                    
                 </LocalizationProvider>
                 <Box sx={{ minWidth: 60 }}>
                     <Title>Type</Title>
@@ -168,6 +220,7 @@ export default function UserDetails({ nextStep, handleChange, track }) {
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             label="Type"
+                            defaultValue=""
                             onChange={handleChange('type')}
                             className={classes.select}
                         >
@@ -178,10 +231,6 @@ export default function UserDetails({ nextStep, handleChange, track }) {
                     </FormControl>
                 </Box>
             </FormContainer>
-
-            <ButtonsContainer>
-                <Button theme="filled" text="Next" onClick={Next} /> 
-            </ButtonsContainer>
         </Form>
     )
 }

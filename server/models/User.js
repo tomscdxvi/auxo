@@ -28,6 +28,11 @@ const UserSchema = new Schema({
         start_date: Date,
         end_date: Date
     }],
+    /*
+        history: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Tracks'
+    }],*/
     history: [{
         title: {
             type: String,
@@ -35,30 +40,34 @@ const UserSchema = new Schema({
         date: {
             type: String,
         },
-        time: {
+        start_time: {
+            type: String,
+        },
+        end_time: {
             type: String,
         },
         type: {
             type: String,
         },
-        workout: [{
-            name: {
-                type: String,
-                required: true,
-            },
-            sets: {
-                type: Number,
-                required: true
-            },
-            reps: {
-                type: Number,
-                required: true
-            },
-            weight: {
-                type: Number,
-                required: true
-            },
-        }] 
+        name: {
+            type: String,
+            required: true,
+        },
+        intensity: {
+            type: String,
+        },
+        sets: {
+            type: Number,
+            required: true
+        },
+        reps: {
+            type: Number,
+            required: true
+        },
+        weight: {
+            type: Number,
+            required: true
+        },
     }],
     users: {
         type: Schema.Types.ObjectId,

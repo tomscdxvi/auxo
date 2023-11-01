@@ -20,6 +20,7 @@ import { SCREENS } from '../../components/responsive';
 import SignUpIllustration from '../../../assets/images/auth-illustration.png';
 import '../../styles/font.css';
 import '../../styles/authenticatedhome/main.css';
+import { DeleteButton } from '../../components/delete';
 
 const PageContainer = styled.div`
     min-height: 100vh;
@@ -119,12 +120,12 @@ const Title = styled.h1`
 
 const TrackContainer = styled.div`
     z-index: 100;
-    width: 1004px;
+    width: 400px;
     ${tw`
         grid
-        grid-cols-3
+        grid-cols-2
         gap-6
-        medium:grid-cols-2
+        medium:grid-cols-1
     `}
 `;
 
@@ -219,10 +220,11 @@ export function MainSection() {
     const [ data, setData ] = useState([]);
 
     const [ activePage, setActivePage ] = useState(1);
-    const numberOfItems = 4;
-    const numberOfPages = useState(
-        Math.ceil(data.data?.length / numberOfItems)
-    )
+    const itemsPerPage = 4;
+    const numberOfPages = Math.ceil(data.data?.history.length / itemsPerPage)
+
+    console.log(data.data);
+
 
     // Get user data async function
     const getUserData = async () => {
@@ -426,13 +428,26 @@ export function MainSection() {
             </ListContainer>
         )
     }
+    
+    const handleDelete = (e) => {
 
-    //console.log(data);
-    //console.log(cookies.jwt);
+        e.preventDefault();
+
+        var array = [...data.data.history];
+
+        array.splice(-1);
+
+        setData(array);
+
+        console.log(data);
+    }
+
+    // console.log(data);
+    // console.log(cookies.jwt);
     // console.log(getCookie("jwt"));
 
     const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
-
+ 
     if(loading) {
         return (
             <>
@@ -472,7 +487,9 @@ export function MainSection() {
                                     )
                                 } else {
                                     return (
-                                        <TrackCard key={track._id} track={track} />
+                                        <>
+                                            <TrackCard key={track._id} track={track} handleDelete={handleDelete} />
+                                        </>
                                     )
                                 }
                             })} 
@@ -509,9 +526,8 @@ export function MainSection() {
                     <MainContainer>
                         <Title>Hi, {data.data.username}</Title>
                         <Title style={{ textDecoration: "underline", marginTop: '3rem' }}>Tracking History</Title>
-
                         <TrackContainer>
-                            {data.data.history?.slice((activePage - 1) * numberOfItems, activePage * numberOfItems).map((track) => {
+                            {data.data.history?.slice((activePage - 1) * itemsPerPage, activePage * itemsPerPage).map((track) => {
                                 if(track === null) {
                                     return (
                                         <Title style={{ fontSize: '16px' }}>Your tracking history is empty, enter your first workout to see your history!</Title>
