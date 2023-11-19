@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { makeStyles } from '@material-ui/core';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import { Chart as ChartJS } from 'chart.js/auto'
 
 import TrackCard from './Card';
 import { FooterDark } from '../../components/footer';
@@ -21,24 +22,19 @@ import SignUpIllustration from '../../../assets/images/auth-illustration.png';
 import '../../styles/font.css';
 import '../../styles/authenticatedhome/main.css';
 import { DeleteButton } from '../../components/delete';
+import { Button } from 'src/app/components/button';
+import { Box, Modal, Typography } from '@mui/material';
+import CustomBarChart from 'src/app/components/charts/bar-chart';
 
 const PageContainer = styled.div`
     min-height: 100vh;
     ${tw`
         flex
-        items-center
-        justify-center
-        w-full
-        large:pl-12
-        large:pr-12
     `}
 `;
 
 const MainContainer = styled.div`
-    width: 502px;
-    min-height: 100vh;
-    margin-top: 10%;
-    margin-bottom: 3.05%;
+    width: 1605px;
     ${tw`
         flex
         flex-col
@@ -48,25 +44,19 @@ const MainContainer = styled.div`
 `;
 
 const NavbarContainer = styled.div`
-    min-height:68px;
-
     ${tw`
-        w-full
-        min-w-full
+        pt-10
         max-w-screen-2xlarge
         flex
-        flex-row
+        flex-col
         items-center
-        large:pl-12
-        large:pr-12 
-        justify-between
+        ml-0
     `}
 `;
 
 const ListContainer = styled.ul`
     ${tw`
-        pt-9
-        flex
+        mt-32
         list-none
     `}
 `;
@@ -84,7 +74,8 @@ const SignInItem = styled.li`
         transition
         duration-200
         ease-in-out
-        hover:underline
+        hover:bg-button
+        rounded-md
         p-2
     `}
 `;
@@ -102,7 +93,28 @@ const SignUpItem = styled.li`
         transition
         duration-200
         ease-in-out
-        hover:underline
+        hover:bg-button
+        rounded-md
+        p-2
+    `}
+`;
+
+const ToggleItem = styled.li`
+    font-family: 'Montserrat', sans-serif;
+    ${tw`
+        text-lg
+        medium:text-xl
+        text-paragraph
+        font-medium
+        mr-1
+        medium:mr-12
+        cursor-pointer
+        transition
+        no-underline 
+        duration-200
+        hover:bg-paragraph
+        rounded-md
+        ease-in-out
         p-2
     `}
 `;
@@ -118,14 +130,21 @@ const Title = styled.h1`
     `}
 `;
 
+const ToggleContainer = styled.div`
+    ${tw`
+        flex
+        items-center
+    `}
+`
+
 const TrackContainer = styled.div`
     z-index: 100;
-    width: 400px;
+    width: 800px;
     ${tw`
-        grid
-        grid-cols-2
         gap-6
-        medium:grid-cols-1
+        grid
+        grid-cols-3
+        medium:grid-cols-2
     `}
 `;
 
@@ -138,7 +157,6 @@ const MobileTrackContainer = styled.div`
         gap-6
     `}
 `;
-
 
 const ButtonsContainer = styled.div`
     ${tw`
@@ -153,7 +171,7 @@ const ButtonsContainer = styled.div`
 const HorizontalLine = styled.hr`
     width: 23%;
     position: absolute;
-    top: 60.7%;
+    top: 57%;
     left: 0;
     z-index: 1;
     visibility: hidden;
@@ -165,9 +183,9 @@ const HorizontalLine = styled.hr`
 
 const ImageContainer = styled.div`
     width: auto;
-    height: 23em;
-    left: 2em;
-    top: 15em;
+    height: 20em;
+    left: 12em;
+    top: 16em;
     position: absolute;
     visibility: hidden;
     z-index: 2;
@@ -205,6 +223,25 @@ const FooterContainer = styled.div`
     `}
 `
 
+const useStyles = makeStyles(() => ({
+    ul: {
+        "& .MuiPaginationItem-root": {
+            color: "#fff"
+        }
+    }
+}));
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+};
+
 export function MainSection() {
 
     // Navigate between pages
@@ -219,12 +256,39 @@ export function MainSection() {
     // Data state to store response data from the api
     const [ data, setData ] = useState([]);
 
+    const [ userData, setUserData ] = useState({
+        labels: ["01/2023", "02/2023", "03/2023"],
+        datasets: [{
+            label: "Workouts",
+            data: [15, 23, 10]
+        }],
+    })
+
+    const [ viewType, setViewType ] = useState(1)
+    
+    console.log(data.data?.history.length)
+
+    const [ logOutModalOpen, setLogOutModalOpen ] = useState(false);
+    const handleLogOutModal = (e) => {
+
+        e.preventDefault();
+
+        setLogOutModalOpen(true);
+    }
+        
+    const handleLogOutModalClose = (e) => {
+
+        e.preventDefault();
+
+        setLogOutModalOpen(false);
+    }
+
+    // Pagination for array of data.
     const [ activePage, setActivePage ] = useState(1);
     const itemsPerPage = 4;
     const numberOfPages = Math.ceil(data.data?.history.length / itemsPerPage)
 
     console.log(data.data);
-
 
     // Get user data async function
     const getUserData = async () => {
@@ -264,6 +328,7 @@ export function MainSection() {
         }
     }
 
+    // Verify user when before page is rendered
     useEffect(() => {
         const verifyUser = async () => {
             if(!cookies.jwt) {
@@ -294,6 +359,7 @@ export function MainSection() {
         verifyUser();
     }, [cookies, navigate, removeCookie]);
 
+    // Get user data before page is rendered
     useEffect(() => {
         try {
             getUserData().then(() => {
@@ -305,6 +371,7 @@ export function MainSection() {
         } 
     }, []);
 
+    // User object state to store data
     const [user, setUser] = useState({
         username: "",
         email: "",
@@ -319,7 +386,7 @@ export function MainSection() {
             }
         ] 
     }); 
-
+    
     const handleLogOut = () => {
         removeCookie("jwt");
         localStorage.removeItem('@storage_user');
@@ -399,28 +466,55 @@ export function MainSection() {
     }; 
 
     const NavItems = () => {
-    
         return (
             <ListContainer>
-                <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/home" className='auth-link'>Home</Link>
-                </SignUpItem>
+                <Link to="/home" className='auth-link'>
+                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white' }} className='bg-button'>
+                        Home
+                    </SignUpItem>
+                </Link>
+
+                <Link to="/track" className='auth-link'>
+                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
+                        Track Workout
+                    </SignUpItem>
+                </Link>
+
+                <Link to="/plan" className='auth-link'>
+                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
+                        View Plans
+                    </SignUpItem>
+                </Link>
     
-                <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/track" className='auth-link'>Track Workout</Link>
-                </SignUpItem>
+                <Link to="/calculate" className='auth-link'>
+                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
+                        Calculate
+                    </SignUpItem>
+                </Link>
     
-                <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/plan" className='auth-link'>View Plans</Link>
-                </SignUpItem>
-    
-                <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/calculate" className='auth-link'>Calculate</Link>
-                </SignUpItem>
-    
-                <SignInItem style={{ color: 'white' }} onClick={handleLogOut}>
+                <SignInItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }} onClick={handleLogOutModal}>
                     Log Out
                 </SignInItem>
+
+                <Modal
+                    open={logOutModalOpen}
+                    onClose={handleLogOutModalClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Log Out
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            Do you wish to log out of this account?
+                        </Typography>
+                        <div className="flex mt-12">
+                            <Button theme="outline-white" text="Back" onClick={handleLogOutModalClose} className="mr-9" /> 
+                            <Button theme="filled" text="Confirm" className="mr-9" onClick={handleLogOut} /> 
+                        </div>
+                    </Box>
+                </Modal>
     
                 {/* <SignUpItem style={{ color: 'white' }}>
                     <Link to="/track">Track</Link>
@@ -433,19 +527,41 @@ export function MainSection() {
 
         e.preventDefault();
 
+        console.log(data.data);
+
+        /* 
         var array = [...data.data.history];
 
         array.splice(-1);
 
         setData(array);
 
-        console.log(data);
+        console.log(data); */
+    }
+
+    const handleChartView = (e) => {
+        e.preventDefault();
+
+        setViewType(2);
+    }
+
+    const handleListView = (e) => {
+        e.preventDefault();
+
+        setViewType(1);
+    }
+
+    const handleExtraView = (e) => {
+        e.preventDefault();
+
+        setViewType(3);
     }
 
     // console.log(data);
     // console.log(cookies.jwt);
     // console.log(getCookie("jwt"));
 
+    const classes = useStyles();
     const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
  
     if(loading) {
@@ -502,15 +618,15 @@ export function MainSection() {
     } else {
         return (
             <>
-                <NavbarContainer>
-                    <DarkLogo />
-                    <NavItems />
-                </NavbarContainer>
                 <PageContainer>
-                    <ImageContainer>
+                    <NavbarContainer>
+                        <DarkLogo />
+                        <NavItems />
+                    </NavbarContainer>
+                    {/* <ImageContainer>
                         <img src={SignUpIllustration} alt="" />
                     </ImageContainer> 
-                    <HorizontalLine /> 
+                    <HorizontalLine /> */}
                     <ToastContainer position="top-right"
                         autoClose={1500} 
                         hideProgressBar={false}
@@ -522,33 +638,79 @@ export function MainSection() {
                         pauseOnHover
                         theme="colored"
                     />
-
+                    <ToggleContainer>
+                        <ul>
+                            <li>
+                                <ToggleItem style={{ color: 'white', marginTop: '24px' }} onClick={handleListView}>
+                                    List
+                                </ToggleItem>
+                            </li>
+                            <li>                            
+                                <ToggleItem style={{ color: 'white', marginTop: '24px' }} onClick={handleChartView}>
+                                    Chart
+                                </ToggleItem>
+                            </li>
+                            <li>                            
+                                <ToggleItem style={{ color: 'white', marginTop: '24px' }} onClick={handleExtraView}>
+                                    Extra
+                                </ToggleItem>
+                            </li>
+                        </ul>
+                    </ToggleContainer>
                     <MainContainer>
                         <Title>Hi, {data.data.username}</Title>
                         <Title style={{ textDecoration: "underline", marginTop: '3rem' }}>Tracking History</Title>
-                        <TrackContainer>
-                            {data.data.history?.slice((activePage - 1) * itemsPerPage, activePage * itemsPerPage).map((track) => {
-                                if(track === null) {
-                                    return (
-                                        <Title style={{ fontSize: '16px' }}>Your tracking history is empty, enter your first workout to see your history!</Title>
-                                    )
-                                } else {
-                                    return (
-                                        <TrackCard key={track._id} track={track} />
-                                    )
-                                }
-                            })} 
-                        </TrackContainer>
-                        <Stack spacing={2}>
-                            <Pagination 
-                                count={numberOfPages} 
-                                shape="rounded" 
-                                page={activePage} 
-                                onChange={(event, newPage) => {
-                                    setActivePage(newPage)
-                                }}
-                            />
-                        </Stack>
+                            {viewType === 1 && 
+                                <>
+                                    <div>
+                                        <ul className='flex'>
+                                            <li>
+                                                <ToggleItem style={{ color: 'white', marginTop: '24px' }}>
+                                                    Sort (A-Z)
+                                                </ToggleItem>
+                                            </li>
+                                            <li>                            
+                                                <ToggleItem style={{ color: 'white', marginTop: '24px' }}>
+                                                    Filter
+                                                </ToggleItem>
+                                            </li>
+                                            <li>                            
+                                                <ToggleItem style={{ color: 'white', marginTop: '24px' }}>
+                                                    Search
+                                                </ToggleItem>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <TrackContainer>
+                                        {data.data.history?.slice((activePage - 1) * itemsPerPage, activePage * itemsPerPage).map((track) => {
+                                            if(track === null) {
+                                                return (
+                                                    <Title style={{ fontSize: '16px' }}>Your tracking history is empty, enter your first workout to see your history!</Title>
+                                                )
+                                            } else {
+                                                return (
+                                                    <div>
+                                                        <TrackCard key={track._id} track={track} handleDelete={handleDelete} />
+                                                    </div>
+                                                )
+                                            }
+                                        })} 
+                                    </TrackContainer>
+                                    <Stack spacing={2}>
+                                        <Pagination 
+                                            classes={{ ul: classes.ul }}
+                                            count={numberOfPages} 
+                                            shape="rounded" 
+                                            page={activePage} 
+                                            onChange={(event, newPage) => {
+                                                setActivePage(newPage)
+                                            }}
+                                        />
+                                    </Stack>
+                                </>
+                            }
+                            {viewType === 2 && <CustomBarChart chartData={userData} />}
+                            {viewType === 3 && <h1 className='text-white'>Extra</h1>}
                     </MainContainer>
                 </PageContainer>
             </>

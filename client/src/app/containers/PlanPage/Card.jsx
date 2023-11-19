@@ -1,21 +1,13 @@
 import React, { useState } from 'react';
 import { Card, Badge, Button, Collapse } from 'react-bootstrap';
 import axios from 'axios';
-import CenteredModal from './Modal';
+import CenteredModal from './';
 import { DeleteButton } from '../../components/delete';
 
-export default function TrackCard({ track }) {
+export default function TrackCard({ track, handleDelete, count }) {
     
     const [open, setOpen] = useState(false)
     const [modalShow, setModalShow] = useState(false);
-
-    const handleDelete = (e) => {
-        e.preventDefault();
-
-        console.log(track._id);
-
-        axios.delete(`http://localhost:5000/delete/${track._id}`, {withCredentials: true})
-    }
 
     return (
         <Card className="mb-4">
@@ -27,14 +19,8 @@ export default function TrackCard({ track }) {
                             <DeleteButton onClick={handleDelete} />
                         </Card.Title>
                         <Card.Subtitle className="text-muted mt-2 mb-2">
-                            Date: {track.date} 
-                            
+                            {track.description} 
                         </Card.Subtitle>
-                        <Card.Subtitle className="text-muted">
-                            Time: {track.start_time} - {track.end_time}
-                        </Card.Subtitle>
-                        {/* <Badge variant="secondary" className="mr-2">{}</Badge>
-                        <Badge variant="secondary">{}</Badge> */}
                     </div>
                 </div>
                 <Card.Text>
@@ -43,7 +29,17 @@ export default function TrackCard({ track }) {
                     </Button>
                 </Card.Text>
                 <Collapse in={open}>
-                    <div className="mt-4" dangerouslySetInnerHTML={{__html:"Workout Details..."}}></div>
+                <div id="example-collapse-text" className='accordion-collapse visible'>
+                    <Card.Subtitle>
+                        Sets: {track.sets}
+                    </Card.Subtitle>
+                    <Card.Subtitle>
+                        Reps: {track.sets}
+                    </Card.Subtitle>
+                    <Card.Subtitle>
+                        Weight: {track.weight}lbs
+                    </Card.Subtitle>
+                </div>
                 </Collapse>
                 {/*
                 <Collapse in={open}>

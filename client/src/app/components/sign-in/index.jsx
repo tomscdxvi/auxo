@@ -107,7 +107,7 @@ export function SignIn(props) {
         {
             id: 2,
             name: "password",
-            type: {passwordType},
+            type: "password",
             placeholder: `Password`,
             label: "Password",
         }

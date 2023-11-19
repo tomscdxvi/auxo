@@ -90,8 +90,8 @@ const HorizontalLine = styled.hr`
     visibility: hidden;
 
     @media (min-width: ${SCREENS.medium}) {
-        top: 81%;
-        width: 90%;
+        top: 75.5%;
+        width: 70%;
     }
     ${tw`
         text-headline
@@ -218,14 +218,12 @@ export function MainSection() {
                 <Slogan>Track on the go.</Slogan>
 
                 <Description>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Maecenas a consequat risus, quis congue lorem. 
-                    Etiam dictum porttitor tortor, in vehicula mi elementum sed. 
-                    Integer porta ac leo sed hendrerit.
+                    Are you interested in<span style={{ fontWeight: "bold" }}> starting your journey in fitness</span> or are you a <span style={{ fontWeight: "bold" }}> hardened veteran</span> that has many years of experience in this space? 
+                    With <span style={{ fontWeight: "bold" }}> Auxo</span>, you are going to constantly grow due to our <span style={{ fontWeight: "bold" }}>planning and easy-to-use tracking technology.</span>
                 </Description>
 
                 <ButtonsContainer>
-                    <a target="_blank" href="https://github.com/Black-Bulls-Group">
+                    <a target="_blank" href="https://github.com/auxo-group">
                         <Button theme="outline" text="Learn more about our company" /> 
                     </a>
                 </ButtonsContainer>
@@ -239,9 +237,10 @@ export function MainSection() {
 
             <HorizontalLine />
 
+            {/* 
             <FooterContainer>
                 <Footer />
-            </FooterContainer>
+            </FooterContainer> */}
         </MainSectionContainer>
     )
 }

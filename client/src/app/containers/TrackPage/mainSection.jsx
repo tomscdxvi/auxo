@@ -20,22 +20,17 @@ import PlusIcon from '../../../assets/images/plus-icon.png';
 import '../../styles/authenticatedhome/main.css';
 import '../../styles/font.css'
 import TrackForm from 'src/app/components/track';
+import { Modal, Typography } from '@mui/material';
 
 const PageContainer = styled.div`
+    min-height: 100vh;
     ${tw`
         flex
-        items-center
-        justify-center
-        w-full
-        large:pl-12
-        large:pr-12
     `}
 `;
 
 const MainContainer = styled.div`
-    width: 1000px;
-    margin-top: 8%;
-    margin-bottom: 3.05%;
+    width: 1605px;
     ${tw`
         flex
         flex-col
@@ -45,25 +40,19 @@ const MainContainer = styled.div`
 `;
 
 const NavbarContainer = styled.div`
-    min-height:68px;
-
     ${tw`
-        w-full
-        min-w-full
+        pt-10
         max-w-screen-2xlarge
         flex
-        flex-row
+        flex-col
         items-center
-        large:pl-12
-        large:pr-12 
-        justify-between
+        ml-0
     `}
 `;
 
 const ListContainer = styled.ul`
     ${tw`
-        pt-9
-        flex
+        mt-32
         list-none
     `}
 `;
@@ -81,7 +70,8 @@ const SignInItem = styled.li`
         transition
         duration-200
         ease-in-out
-        hover:underline
+        hover:bg-button
+        rounded-md
         p-2
     `}
 `;
@@ -99,7 +89,8 @@ const SignUpItem = styled.li`
         transition
         duration-200
         ease-in-out
-        hover:underline
+        hover:bg-button
+        rounded-md
         p-2
     `}
 `;
@@ -215,6 +206,17 @@ const FooterContainer = styled.div`
     `}
 `
 
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+};
+
 export function MainSection() {
 
     const navigate = useNavigate();
@@ -274,6 +276,21 @@ export function MainSection() {
     const [form, setForm] = useState(state);
 
     const [workouts, setWorkouts] = useState([]);
+
+    const [ logOutModalOpen, setLogOutModalOpen ] = useState(false);
+    const handleLogOutModal = (e) => {
+
+        e.preventDefault();
+
+        setLogOutModalOpen(true);
+    }
+        
+    const handleLogOutModalClose = (e) => {
+
+        e.preventDefault();
+
+        setLogOutModalOpen(false);
+    }
 
     const timeout = (delay) => {
         return new Promise(res => setTimeout(res, delay));
@@ -506,25 +523,56 @@ export function MainSection() {
     const NavItems = () => {
         return (
             <ListContainer>
-                <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/home" className='auth-link'>Home</Link>
-                </SignUpItem>
+
+                <Link to="/home" className='auth-link'>
+                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white' }}>
+                        Home
+                    </SignUpItem>
+                </Link>
+
+
+                <Link to="/track" className='auth-link'>
+                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }} className='bg-button'>
+                        Track Workout
+                    </SignUpItem>
+                </Link>
+
     
-                <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/track" className='auth-link'>Track Workout</Link>
-                </SignUpItem>
+                <Link to="/plan" className='auth-link'>
+                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
+                        View Plans
+                    </SignUpItem>
+                </Link>
     
-                <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/plan" className='auth-link'>View Plans</Link>
-                </SignUpItem>
+                <Link to="/calculate" className='auth-link'>
+                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
+                        Calculate
+                    </SignUpItem>
+                </Link>
     
-                <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/calculate" className='auth-link'>Calculate</Link>
-                </SignUpItem>
-    
-                <SignInItem style={{ color: 'white' }} onClick={handleLogOut}>
+                <SignInItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }} onClick={handleLogOutModal}>
                     Log Out
                 </SignInItem>
+
+                <Modal
+                    open={logOutModalOpen}
+                    onClose={handleLogOutModalClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Log Out
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            Do you wish to log out of this account?
+                        </Typography>
+                        <div className="flex mt-12">
+                            <Button theme="outline-white" text="Back" onClick={handleLogOutModalClose} className="mr-9" /> 
+                            <Button theme="filled" text="Confirm" className="mr-9" onClick={handleLogOut} /> 
+                        </div>
+                    </Box>
+                </Modal>
     
                 {/* <SignUpItem style={{ color: 'white' }}>
                     <Link to="/track">Track</Link>
@@ -565,15 +613,15 @@ export function MainSection() {
 
     return (
         <>
-            <NavbarContainer>
-                <DarkLogo />
-                <NavItems />
-            </NavbarContainer>
             <PageContainer>
+                <NavbarContainer>
+                    <DarkLogo />
+                    <NavItems />
+                </NavbarContainer>
                 <ImageContainer>
                     <img src={SignUpIllustration} alt="" />
                 </ImageContainer>
-                <HorizontalLine />
+                {/* <HorizontalLine /> */}
                 <MainContainer>
                     
                     <ToastContainer
@@ -588,8 +636,6 @@ export function MainSection() {
                         pauseOnHover
                         theme="colored"
                     />  
-
-                    <Title>Start Tracking</Title>
 
                     {/* 
                     <Box sx={{ width: '50%', bgcolor: 'background.paper' }} className="rounded-md">

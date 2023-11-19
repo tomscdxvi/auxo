@@ -286,7 +286,7 @@ export default function TrackForm() {
             <>
             <div>
                 <div>
-                    <Title style={{ color: "white" }}>Workout Details</Title>
+                    <Title style={{ color: "white", marginTop: 50 }}>Workout Details</Title>
                     <UserDetails 
                         handleChange={handleChangeTrack} 
                         values={track} 
@@ -302,6 +302,7 @@ export default function TrackForm() {
         return (
             <>
                 <div>
+                    <Title style={{ color: "white", marginTop: 50 }}>Exercise Details</Title>
                     <WorkoutDetails 
                         prevStep={prevStep}
                         addOne={addExercise}

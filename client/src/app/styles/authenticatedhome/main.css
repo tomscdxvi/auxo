@@ -17,6 +17,16 @@
     color: #FFFFFF !important;
 } 
 
+.link-item {
+    color: white !important; 
+    border-bottom: 2px solid white !important;
+    margin: 24px !important;
+}
+
+.link-item:hover {
+
+}
+
 .MuiPagination-root {
     button {
         color: red !important;

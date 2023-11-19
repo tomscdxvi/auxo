@@ -10,59 +10,47 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { FooterDark } from '../../components/footer';
-import { FormInputDark } from '../../components/form';
+import { FormInput, FormInputDark } from '../../components/form';
 import { Button }   from '../../components/button';
 import { DarkLogo } from '../../components/logo';
 import { SCREENS } from '../../components/responsive';
 import SignUpIllustration from '../../../assets/images/calculate-illustration.png'
 import '../../styles/authenticatedhome/main.css';
 import '../../styles/font.css'
+import DefaultToolTip from 'src/app/components/tooltip';
+import { Box, Modal, Typography } from '@mui/material';
 
 const PageContainer = styled.div`
+    min-height: 100vh;
     ${tw`
         flex
-        flex-col
-        items-center
-        justify-center
-        w-full
-        large:pl-12
-        large:pr-12
-        overflow-hidden
     `}
 `;
 
 const MainContainer = styled.div`
-    width: 502px;
-    margin-top: 2%;
-    margin-bottom: 5.4%;
+    width: 1605px;
     ${tw`
         flex
         flex-col
+        justify-center
+        items-center
     `}
 `;
 
 const NavbarContainer = styled.div`
-    min-height:68px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    border-radius: 8px;
     ${tw`
-        w-full
-        min-w-full
+        pt-10
         max-w-screen-2xlarge
         flex
-        flex-row
+        flex-col
         items-center
-        pb-8
-        large:pl-12
-        large:pr-12 
-        justify-between
+        ml-0
     `}
 `;
 
 const ListContainer = styled.ul`
     ${tw`
-        pt-9
-        flex
+        mt-32
         list-none
     `}
 `;
@@ -80,7 +68,8 @@ const SignInItem = styled.li`
         transition
         duration-200
         ease-in-out
-        hover:underline
+        hover:bg-button
+        rounded-md
         p-2
     `}
 `;
@@ -98,7 +87,8 @@ const SignUpItem = styled.li`
         transition
         duration-200
         ease-in-out
-        hover:underline
+        hover:bg-button
+        rounded-md
         p-2
     `}
 `;
@@ -129,6 +119,7 @@ const FormContainer = styled.div`
     border-radius: 8px;
     z-index: 100;
     ${tw`
+        bg-white
     `}
 `;
 
@@ -145,7 +136,7 @@ const ButtonsContainer = styled.div`
 const HorizontalLine = styled.hr`
     width: 30%;
     position: absolute;
-    top: 71.5%;
+    top: 70.3%;
     right: 70%;
     z-index: 1;
     visibility: hidden;
@@ -157,9 +148,9 @@ const HorizontalLine = styled.hr`
 
 const ImageContainer = styled.div`
     width: auto;
-    height: 28em;
-    left: 10em;
-    top: 18em;
+    height: 23em;
+    left: 23em;
+    top: 21em;
     position: absolute;
     visibility: hidden;
     z-index: 2;
@@ -197,6 +188,16 @@ const FooterContainer = styled.div`
     `}
 `
 
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+};
 
 export function MainSection() {
 
@@ -215,6 +216,21 @@ export function MainSection() {
     const [weight, setWeight] = useState(0);
 
     const [rep, setRep] = useState(0);
+
+    const [ logOutModalOpen, setLogOutModalOpen ] = useState(false);
+    const handleLogOutModal = (e) => {
+
+        e.preventDefault();
+
+        setLogOutModalOpen(true);
+    }
+        
+    const handleLogOutModalClose = (e) => {
+
+        e.preventDefault();
+
+        setLogOutModalOpen(false);
+    }
 
     // Get user data async function
     const getUserData = async () => {
@@ -295,9 +311,8 @@ export function MainSection() {
 
     const handleLogOut = () => {
         removeCookie("jwt");
-        localStorage.removeItem('@storage_user');
         
-        navigate("/login");
+        navigate("/");
     };
 
     const onChangeHandlerWeight = (e) => {
@@ -309,28 +324,58 @@ export function MainSection() {
     }
 
     const NavItems = () => {
-    
         return (
             <ListContainer>
-                <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/home" className='auth-link'>Home</Link>
-                </SignUpItem>
-    
-                <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/track" className='auth-link'>Track Workout</Link>
-                </SignUpItem>
-    
-                <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/plan" className='auth-link'>View Plans</Link>
-                </SignUpItem>
 
-                <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/calculate" className='auth-link'>Calculate</Link>
-                </SignUpItem>
+                <Link to="/home" className='auth-link'>
+                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white' }}>
+                        Home
+                    </SignUpItem>
+                </Link>
+
+
+                <Link to="/track" className='auth-link'>
+                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
+                        Track Workout
+                    </SignUpItem>
+                </Link>
+
     
-                <SignInItem style={{ color: 'white' }} onClick={handleLogOut}>
+                <Link to="/plan" className='auth-link'>
+                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
+                        View Plans
+                    </SignUpItem>
+                </Link>
+    
+                <Link to="/calculate" className='auth-link'>
+                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }} className='bg-button'>
+                        Calculate
+                    </SignUpItem>
+                </Link>
+    
+                <SignInItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }} onClick={handleLogOutModal}>
                     Log Out
                 </SignInItem>
+
+                <Modal
+                    open={logOutModalOpen}
+                    onClose={handleLogOutModalClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Log Out
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            Do you wish to log out of this account?
+                        </Typography>
+                        <div className="flex mt-12">
+                            <Button theme="outline-white" text="Back" onClick={handleLogOutModalClose} className="mr-9" /> 
+                            <Button theme="filled" text="Confirm" className="mr-9" onClick={handleLogOut} /> 
+                        </div>
+                    </Box>
+                </Modal>
     
                 {/* <SignUpItem style={{ color: 'white' }}>
                     <Link to="/track">Track</Link>
@@ -366,19 +411,25 @@ export function MainSection() {
     } else {
         return (
             <>
-                <NavbarContainer>
-                    <DarkLogo />
-                    <NavItems />
-                </NavbarContainer>
                 <PageContainer>
-                <Title style={{ fontSize: 30, marginTop: '6%' }}>Calculate your one rep max (1RM) for any lift!</Title>
-                <Title style={{ fontSize: 28 }}>Formula from NFPT (Brzycki Equation)</Title>
-                <Title style={{ marginTop: "2%" }}>1RM is your max weight that you can lift for a single rep for any exercise.</Title>
-                    <ImageContainer>
+                    <NavbarContainer>
+                        <DarkLogo />
+                        <NavItems />
+                    </NavbarContainer>
+                    {/*<ImageContainer>
                         <img src={SignUpIllustration} alt="" />
                     </ImageContainer> 
-                    <HorizontalLine /> 
+                    <HorizontalLine /> */}
                     <MainContainer>
+                        <Title style={{ fontSize: 30, marginTop: '6%' }}>Calculate your one rep max (1RM) for any lift!</Title>
+                        <Title style={{ fontSize: 28 }}>Formula from NFPT (Brzycki Equation)</Title>
+                        <DefaultToolTip
+                            content="1RM is your max weight that you can lift for a single rep for any exercise."
+                            text="Learn more"
+                            placement="right"
+                            tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
+                            buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-6 mb-4"
+                        />
                         <Title>{OneRepMaxCalculation() == 0 ? "_" : OneRepMaxCalculation() + "lbs for 1 Rep"}</Title>
     
                         <ToastContainer
@@ -395,7 +446,7 @@ export function MainSection() {
                         />
 
                         <FormContainer>
-                            <FormInputDark 
+                            <FormInput
                                 key={1} 
                                 name="weight" 
                                 type="number" 
@@ -411,7 +462,7 @@ export function MainSection() {
                                 }}
                             />
 
-                            <FormInputDark 
+                            <FormInput
                                 key={2} 
                                 name="rep" 
                                 type="number"
