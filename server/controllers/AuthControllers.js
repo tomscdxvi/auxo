@@ -102,8 +102,9 @@ module.exports.getUserDetails = async(req, res, next) => {
     const userId = new mongoose.Types.ObjectId(req.params._id);
 
     const user = await User.findById(userId).populate("users").exec();
-    /* 
-    const newUser = await User.aggregate([ 
+    
+    
+    /* const newUser = await User.aggregate([ 
         {
             $match: {
                 "_id": userId

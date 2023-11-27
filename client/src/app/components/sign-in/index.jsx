@@ -198,7 +198,8 @@ export function SignIn(props) {
             console.log('User pressed: ', event.key);
             if (event.key === 'Enter') {
                 event.preventDefault();
-                handleSubmit(event);
+
+                handleSubmit();
             }
         };
     

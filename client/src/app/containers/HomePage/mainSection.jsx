@@ -186,15 +186,17 @@ export function MainSection() {
                         Maecenas a consequat risus, quis congue lorem. 
                     </Description>
                     
-                    <ButtonsContainer className="flex justify-center items-center">
-                        <Button theme="filled" text="Sign In" onClick={() => setOpen(true)} />
-                        <SignIn open={open} handleClose={handleClose} />
-                    </ButtonsContainer>
+                    <div className='flex justify-center space-x-5 mt-24 mb-24'>
+                        <ButtonsContainer className="flex justify-center items-center">
+                            <Button theme="filled" text="Sign In" onClick={() => setOpen(true)} />
+                            <SignIn open={open} handleClose={handleClose} />
+                        </ButtonsContainer>
 
-                    <ButtonsContainer className="flex justify-center items-center mb-48">
-                        <Button theme="outline" text="Sign Up" className="font-bold" onClick={() => setSignUpOpen(true)} />
-                        <SignUp open={signUpOpen} handleSignUpClose={handleSignUpClose} />
-                    </ButtonsContainer>
+                        <ButtonsContainer className="flex justify-center items-center">
+                            <Button theme="outline" text="Sign Up" className="font-bold" onClick={() => setSignUpOpen(true)} />
+                            <SignUp open={signUpOpen} handleSignUpClose={handleSignUpClose} />
+                        </ButtonsContainer>
+                    </div>
 
                     <ButtonsContainer className="flex justify-center items-center">
                         <a target="_blank" href="">

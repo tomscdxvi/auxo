@@ -174,7 +174,7 @@ export default function UserDetails({ nextStep, handleChange, track }) {
                             label="Start Time"
                             onChange={handleChange('start_time')}
                             className={classes.root}
-                            sx={{ marginBottom: 2.5 }}
+                            sx={{ marginBottom: 2.5, marginRight: 2.5 }}
                         />
                         <TextField
                             placeholder="End Time"

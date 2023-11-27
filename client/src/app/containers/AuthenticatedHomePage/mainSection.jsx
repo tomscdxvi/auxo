@@ -23,7 +23,7 @@ import '../../styles/font.css';
 import '../../styles/authenticatedhome/main.css';
 import { DeleteButton } from '../../components/delete';
 import { Button } from 'src/app/components/button';
-import { Box, Modal, Typography } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
 import CustomBarChart from 'src/app/components/charts/bar-chart';
 
 const PageContainer = styled.div`
@@ -113,6 +113,26 @@ const ToggleItem = styled.li`
         no-underline 
         duration-200
         hover:bg-paragraph
+        rounded-md
+        ease-in-out
+        p-2
+    `}
+`;
+
+const ToggleList = styled.li`
+    font-family: 'Montserrat', sans-serif;
+    ${tw`
+        text-lg
+        medium:text-xl
+        text-paragraph
+        font-medium
+        mr-1
+        medium:mr-12
+        cursor-pointer
+        transition
+        no-underline 
+        duration-200
+        hover:underline
         rounded-md
         ease-in-out
         p-2
@@ -228,6 +248,51 @@ const useStyles = makeStyles(() => ({
         "& .MuiPaginationItem-root": {
             color: "#fff"
         }
+    },
+    root: {
+        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+          borderColor: "#fff"
+        },
+        "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+          borderColor: "#fff"
+        },
+        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+          borderColor: "#fff"
+        },
+        "& .MuiOutlinedInput-input": {
+          color: "#fff"
+        },
+        "&:hover .MuiOutlinedInput-input": {
+          color: "#fff"
+        },
+        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
+          color: "#fff"
+        },
+        "& .MuiInputLabel-outlined": {
+          color: "#fff"
+        },
+        "&:hover .MuiInputLabel-outlined": {
+          color: "#fff"
+        },
+        "& .MuiInputLabel-outlined.Mui-focused": {
+          color: "#fff"
+        }
+    },
+    select: {
+        "& .MuiOutlinedInput-input": {
+            color: "#fff"
+        },  
+        "&.MuiOutlinedInput-root": {
+            "& fieldset": {
+            borderColor: "#fff"
+            },
+            "&:hover fieldset": {
+            borderColor: "#fff"
+            },
+            "&.Mui-focused fieldset": {
+            borderColor: "#fff"
+            }
+        }
     }
 }));
 
@@ -256,18 +321,39 @@ export function MainSection() {
     // Data state to store response data from the api
     const [ data, setData ] = useState([]);
 
-    const [ userData, setUserData ] = useState({
-        labels: ["01/2023", "02/2023", "03/2023"],
+    // Handle trackingHistory and to store user's history for easy usability
+    const [ trackingHistory, setTrackingHistory ] = useState([])
+
+    const [ filteredTrackingHistory, setFilteredTrackingHistory ] = useState([trackingHistory])
+
+    // Handle chart data
+    const [ chartData, setChartData ] = useState({
+        labels: ["hello", "hello"],
         datasets: [{
             label: "Workouts",
-            data: [15, 23, 10]
+            data: [15, 23, 10],
+            backgroundColor: "#FFFFFF",
+            borderWidth: 2
         }],
+        options: {
+            legend: {
+                labels: {
+                   fontColor: 'white' //set your desired color
+                }
+            }
+        }
     })
 
+    // Set view type states for handling view change
     const [ viewType, setViewType ] = useState(1)
-    
-    console.log(data.data?.history.length)
 
+    // Set sort type state for handling sorting change
+    const [ sortType, setSortType ] = useState("SortASC")
+
+    // Set search string to filter/search for objects in array
+    const [ search, setSearch ] = useState("")
+
+    // Log out modal
     const [ logOutModalOpen, setLogOutModalOpen ] = useState(false);
     const handleLogOutModal = (e) => {
 
@@ -275,7 +361,8 @@ export function MainSection() {
 
         setLogOutModalOpen(true);
     }
-        
+    
+    // Log out Modal
     const handleLogOutModalClose = (e) => {
 
         e.preventDefault();
@@ -286,9 +373,12 @@ export function MainSection() {
     // Pagination for array of data.
     const [ activePage, setActivePage ] = useState(1);
     const itemsPerPage = 4;
-    const numberOfPages = Math.ceil(data.data?.history.length / itemsPerPage)
+    const pagesVisited = (activePage - 1) * itemsPerPage;
+    const numberOfPages = Math.ceil(trackingHistory.length / itemsPerPage);
 
-    console.log(data.data);
+    const handlePageChange = (e, value) => {
+        setActivePage(value);
+    }
 
     // Get user data async function
     const getUserData = async () => {
@@ -305,6 +395,9 @@ export function MainSection() {
 
                 // Set the data state to hold the response data which is the user's data
                 setData(res);
+
+                // Set an alternate state array with the returned user's history for easy and accessible workflow (i.e To sort and filter)
+                setTrackingHistory(res.data?.history)
 
                 
                 // Now set loading to false to render the page which the data from the api
@@ -327,6 +420,8 @@ export function MainSection() {
             console.log(error);
         }
     }
+
+    console.log(trackingHistory)
 
     // Verify user when before page is rendered
     useEffect(() => {
@@ -370,23 +465,8 @@ export function MainSection() {
             console.log(error);
         } 
     }, []);
-
-    // User object state to store data
-    const [user, setUser] = useState({
-        username: "",
-        email: "",
-        password: "",
-        confirm_password: "",
-        levels: [],
-        goals: [{
-            title: "",
-            description: "",
-            start_date: "",
-            end_date: ""
-            }
-        ] 
-    }); 
-    
+        
+    // Handle logout function 
     const handleLogOut = () => {
         removeCookie("jwt");
         localStorage.removeItem('@storage_user');
@@ -394,77 +474,7 @@ export function MainSection() {
         navigate("/");
     };
 
-    const onChangeHandler = (e) => {
-        setUser({...user, [e.target.name]: e.target.value})
-    }; 
-
-    const options = {
-        url: "http://localhost:5000/register",
-        method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json;charset=UTF-8'
-        },
-        data: {
-            username: user.username,
-            email: user.email,
-            password: user.password,
-            confirm_password: user.confirm_password
-        }
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        axios(options).then(res => {
-            // console.log(user.username)
-            if (user.username !== "" && user.email !== "" && user.password !== "" && user.confirm_password !== "") {
-                toast.success(user.username + " has been created.", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored"
-                });
-            } else {
-                toast.error("There was an error creating this account.", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    style: {
-                        background: "#CDFADC",
-                        color: '#333333' 
-                    }
-                }); 
-            }
-        }).catch((error) => {
-            toast.error("There was an error creating this account.", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                style: {
-                    background: "#CDFADC",
-                    color: '#333333' 
-                }
-            }); 
-        });
-
-        //console.log(user);
-    }; 
-
+    // Navigation items
     const NavItems = () => {
         return (
             <ListContainer>
@@ -523,6 +533,7 @@ export function MainSection() {
         )
     }
     
+    // Handle delete function
     const handleDelete = (e) => {
 
         e.preventDefault();
@@ -539,28 +550,46 @@ export function MainSection() {
         console.log(data); */
     }
 
+    // Handles chart view type 
     const handleChartView = (e) => {
         e.preventDefault();
 
         setViewType(2);
     }
 
+    // Handles the list view type
     const handleListView = (e) => {
         e.preventDefault();
 
         setViewType(1);
     }
 
+    // Handles the extra view type
     const handleExtraView = (e) => {
         e.preventDefault();
 
         setViewType(3);
     }
 
-    // console.log(data);
-    // console.log(cookies.jwt);
-    // console.log(getCookie("jwt"));
+    // Sorts the tracking history (A-Z)
+    const handleAZSort = (e) => {
+        e.preventDefault()
 
+        const sortedArray = [...trackingHistory].sort((a, b) => (a.title > b.title) ? 1 : -1)
+
+        setTrackingHistory(sortedArray)
+    }
+
+    // Sorts the tracking history (Z-A)
+    const handleZASort = (e) => {
+        e.preventDefault()
+
+        const sortedArray = [...trackingHistory].sort((a, b) => (a.title < b.title) ? 1 : -1)
+
+        setTrackingHistory(sortedArray)
+    }
+
+    // Styling classes 
     const classes = useStyles();
     const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
  
@@ -650,11 +679,11 @@ export function MainSection() {
                                     Chart
                                 </ToggleItem>
                             </li>
-                            <li>                            
+                            {/* <li>                            
                                 <ToggleItem style={{ color: 'white', marginTop: '24px' }} onClick={handleExtraView}>
                                     Extra
                                 </ToggleItem>
-                            </li>
+                            </li> */}
                         </ul>
                     </ToggleContainer>
                     <MainContainer>
@@ -665,36 +694,59 @@ export function MainSection() {
                                     <div>
                                         <ul className='flex'>
                                             <li>
-                                                <ToggleItem style={{ color: 'white', marginTop: '24px' }}>
-                                                    Sort (A-Z)
-                                                </ToggleItem>
+                                                <Box sx={{ minWidth: 60, marginRight: 2.5 }}>
+                                                    <Title>Sort</Title>
+                                                    <FormControl style={{ minWidth: 180 }}>
+                                                        <InputLabel id="demo-simple-select-label" style={{ color: "#fff" }}>Sort Options</InputLabel>
+                                                        <Select
+                                                            labelId="demo-simple-select-label"
+                                                            id="demo-simple-select"
+                                                            label="Sort Options"
+                                                            defaultValue=""
+                                                            className={classes.select}
+                                                            onChange={(e) => {
+                                                                setSortType(e.target.value)
+                                                                setActivePage(1)
+                                                            }}
+                                                        >
+                                                            <MenuItem value={"SortASC"} onClick={handleAZSort}>Sort (ASC)</MenuItem>
+                                                            <MenuItem value={"SortDESC"} onClick={handleZASort}>Sort (DESC)</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                </Box>
                                             </li>
-                                            <li>                            
-                                                <ToggleItem style={{ color: 'white', marginTop: '24px' }}>
-                                                    Filter
-                                                </ToggleItem>
-                                            </li>
-                                            <li>                            
-                                                <ToggleItem style={{ color: 'white', marginTop: '24px' }}>
-                                                    Search
-                                                </ToggleItem>
+                                            <li>    
+                                                <Title>Search</Title>                        
+                                                <TextField
+                                                    placeholder="Search"
+                                                    label="Search"
+                                                    onChange={(e) => {
+                                                        setSearch(e.target.value)
+                                                    }}
+                                                    className={classes.root}
+                                                />
                                             </li>
                                         </ul>
                                     </div>
                                     <TrackContainer>
-                                        {data.data.history?.slice((activePage - 1) * itemsPerPage, activePage * itemsPerPage).map((track) => {
-                                            if(track === null) {
-                                                return (
-                                                    <Title style={{ fontSize: '16px' }}>Your tracking history is empty, enter your first workout to see your history!</Title>
-                                                )
-                                            } else {
-                                                return (
-                                                    <div>
-                                                        <TrackCard key={track._id} track={track} handleDelete={handleDelete} />
-                                                    </div>
-                                                )
-                                            }
-                                        })} 
+                                        {/* slice is used for pagination, filter is used to search, and map is used to list out the array of objects. */}
+                                        {trackingHistory
+                                            .filter((track) => {
+                                                return search.toLowerCase() === "" ? track : track.title.toLowerCase().includes(search)
+                                            }).slice(pagesVisited, pagesVisited + itemsPerPage).map((track) => {
+                                                if(track === null) {
+                                                    return (
+                                                        <Title style={{ fontSize: '16px' }}>Your tracking history is empty, enter your first workout to see your history!</Title>
+                                                    )
+                                                } else {
+                                                    return (
+                                                        <div>
+                                                            <TrackCard key={track._id} track={track} handleDelete={handleDelete} />
+                                                        </div>
+                                                    )
+                                                }
+                                            })
+                                        } 
                                     </TrackContainer>
                                     <Stack spacing={2}>
                                         <Pagination 
@@ -702,15 +754,13 @@ export function MainSection() {
                                             count={numberOfPages} 
                                             shape="rounded" 
                                             page={activePage} 
-                                            onChange={(event, newPage) => {
-                                                setActivePage(newPage)
-                                            }}
+                                            onChange={handlePageChange}
                                         />
                                     </Stack>
                                 </>
                             }
-                            {viewType === 2 && <CustomBarChart chartData={userData} />}
-                            {viewType === 3 && <h1 className='text-white'>Extra</h1>}
+                            {viewType === 2 && <CustomBarChart chartData={chartData} />}
+                            {/* {viewType === 3 && <h1 className='text-white'>Extra</h1>} */}
                     </MainContainer>
                 </PageContainer>
             </>

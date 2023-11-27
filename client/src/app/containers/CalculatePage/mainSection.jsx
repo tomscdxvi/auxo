@@ -384,6 +384,7 @@ export function MainSection() {
         )
     }
 
+    // Calculates One Rep Max using Brzycki Equation (Formula taken from NFPT)
     const OneRepMaxCalculation = (e) => {
 
         var step1 = 0.0278 * rep;
