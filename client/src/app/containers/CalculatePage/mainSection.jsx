@@ -126,10 +126,7 @@ const FormContainer = styled.div`
 const ButtonsContainer = styled.div`
     ${tw`
         flex
-        flex-wrap
         mt-6
-        items-center
-        justify-center
     `}
 `;
 
@@ -217,6 +214,14 @@ export function MainSection() {
 
     const [rep, setRep] = useState(0);
 
+    const [ calculation, setCalculation ] = useState({
+        weight: 0,
+        rep: 0,
+        orm: 0
+    })
+
+    const [ listOfCalculations, setListOfCalculations ] = useState([]);
+
     const [ logOutModalOpen, setLogOutModalOpen ] = useState(false);
     const handleLogOutModal = (e) => {
 
@@ -268,6 +273,7 @@ export function MainSection() {
         }
     }
 
+    // Verify User on page load
     useEffect(() => {
         const verifyUser = async () => {
             if(!cookies.jwt) {
@@ -298,11 +304,12 @@ export function MainSection() {
         verifyUser();
     }, [cookies, navigate, removeCookie]);
 
+    // Get User data on page load
     useEffect(() => {
         try {
             getUserData().then(() => {
                 // console.log(`The user's id is: ${userId}`);
-                //console.log(data); 
+                // console.log(data); 
             })
         } catch(error) {
             console.log(error);
@@ -317,10 +324,22 @@ export function MainSection() {
 
     const onChangeHandlerWeight = (e) => {
         setWeight(e.target.value)
+        setCalculation((prevState) => {
+            return({
+                ...prevState, 
+                weight: e.target.value
+            })
+        });
     }; 
 
     const onChangeHandlerRep = (e) => {
         setRep(e.target.value)
+        setCalculation((prevState) => {
+            return({
+                ...prevState, 
+                rep: e.target.value
+            })
+        });
     }
 
     const NavItems = () => {
@@ -391,16 +410,15 @@ export function MainSection() {
         var step2 = 1.0278 - step1;
         var calculate = weight / step2;
 
-        console.log(calculate);
-        console.log("Lift:" + weight);
-        console.log("Rep:" + rep);
+        // console.log(listOfCalculations);
 
         return calculate.toFixed(0);
-
     }
 
-    console.log(data);
-    console.log(cookies.jwt);
+    // console.log(listOfCalculations)
+
+    // console.log(data);
+    // console.log(cookies.jwt);
     // console.log(getCookie("jwt"));
 
     if(loading) {
@@ -425,7 +443,7 @@ export function MainSection() {
                         <Title style={{ fontSize: 30, marginTop: '6%' }}>Calculate your one rep max (1RM) for any lift!</Title>
                         <Title style={{ fontSize: 28 }}>Formula from NFPT (Brzycki Equation)</Title>
                         <DefaultToolTip
-                            content="1RM is your max weight that you can lift for a single rep for any exercise."
+                            content=" RM is your max weight that you can lift for a single rep for any exercise. (Please calculate before saving)"
                             text="Learn more"
                             placement="right"
                             tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
@@ -445,43 +463,101 @@ export function MainSection() {
                             pauseOnHover
                             theme="colored"
                         />
+                        <div>
+                            <div className="flex">
+                                <FormContainer>
+                                    <FormInput
+                                        key={1} 
+                                        name="weight" 
+                                        type="number" 
+                                        placeholder="Enter the weight for the lift" 
+                                        label="Weight" 
+                                        required={true} 
+                                        min="1" 
+                                        onChange={onChangeHandlerWeight} 
+                                        onKeyPress={(event) => { // Prevent negative values from being entered at the start(If the key is not 1-9, do not allow it) !Need to fix
+                                            if (!/[1-9]/.test(event.key)) { 
+                                                event.preventDefault();
+                                            }
+                                        }}
+                                    />
 
-                        <FormContainer>
-                            <FormInput
-                                key={1} 
-                                name="weight" 
-                                type="number" 
-                                placeholder="Enter the weight for the lift" 
-                                label="Weight" 
-                                required={true} 
-                                min="1" 
-                                onChange={onChangeHandlerWeight} 
-                                onKeyPress={(event) => { // Prevent negative values from being entered at the start(If the key is not 1-9, do not allow it) !Need to fix
-                                    if (!/[1-9]/.test(event.key)) { 
-                                        event.preventDefault();
-                                    }
-                                }}
-                            />
+                                    <FormInput
+                                        key={2} 
+                                        name="rep" 
+                                        type="number"
+                                        placeholder="Enter the number of reps" 
+                                        label="Repetitions"
+                                        min="1" 
+                                        required={true} 
+                                        onChange={onChangeHandlerRep} 
+                                        onKeyPress={(event) => { // Prevent negative values from being entered (If the key is not 1-9, do not allow it)
+                                            if (!/[1-9]/.test(event.key)) {
+                                                event.preventDefault();
+                                            }
+                                        }}
+                                    />
+                                </FormContainer>
+                                <div style={{ marginLeft: 40 }}>
+                                    <Title style={{ textDecoration: 'underline' }}>History</Title>
+                                    {listOfCalculations.map((item, index) => {
+                                        if(listOfCalculations === null) {
+                                            return (
+                                                <Title>There are currently 0 calculations saved.</Title>
+                                            )
+                                        } else {
+                                            return (
+                                                <Title key={index}>Rep: {item.rep} | Weight: {item.weight} = {item.orm} for 1 Rep</Title>
+                                            )
+                                        }
+                                    })}
+                                </div>
+                            </div>
+                            <div>
+                                <ButtonsContainer>
+                                    <Button 
+                                        theme="filled" 
+                                        text="Calculate"
+                                        className="mr-[150px]"
+                                        onClick={(e) => {
+                                            e.preventDefault();
 
-                            <FormInput
-                                key={2} 
-                                name="rep" 
-                                type="number"
-                                placeholder="Enter the number of reps" 
-                                label="Repetitions"
-                                min="1" 
-                                required={true} 
-                                onChange={onChangeHandlerRep} 
-                                onKeyPress={(event) => { // Prevent negative values from being entered (If the key is not 1-9, do not allow it)
-                                    if (!/[1-9]/.test(event.key)) {
-                                        event.preventDefault();
-                                    }
-                                }}
-                            />
-                        </FormContainer>
-                        <ButtonsContainer>
-                            <Button theme="filled" text="Calculate" onClick={OneRepMaxCalculation} /> 
-                        </ButtonsContainer>
+                                            console.log(calculation.orm);
+                                            console.log(calculation.weight);
+                                            console.log(calculation.rep);
+
+                                            setCalculation((prevState) => {
+                                                return({
+                                                    ...prevState, 
+                                                    orm: OneRepMaxCalculation()
+                                                })
+                                            });
+                                        }} 
+                                    /> 
+                                    {calculation.orm === 0 ? 
+                                        <Button theme="disabled-filled" text="Save" />
+                                        :   <Button theme="filled" text="Save"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    {/* Push object into the start of the array*/}
+                                                    {/* setListOfCalculations(prevState => [calculation, ...prevState]) */}
+
+                                                    {/* Push object into the end of the array */}
+
+                                                    setListOfCalculations(prevState => [...prevState, calculation])
+
+                                                    setCalculation((prevState) => {
+                                                        return({
+                                                            ...prevState, 
+                                                            orm: 0
+                                                        })
+                                                    }) 
+                                                }} 
+                                            /> 
+                                    } 
+                                </ButtonsContainer>
+                            </div>
+                        </div>
                     </MainContainer>
                 </PageContainer>
             </>

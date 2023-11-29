@@ -7,9 +7,7 @@ import tw from 'twin.macro';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Box from '@mui/material/Box';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
+import { Modal, Typography, Box, FormControl, InputLabel, Menu, MenuItem, Select, TextField, } from '@mui/material';
 
 import { FormInputDark } from '../../components/form';
 import { DarkLogo } from '../../components/logo';
@@ -20,7 +18,6 @@ import PlusIcon from '../../../assets/images/plus-icon.png';
 import '../../styles/authenticatedhome/main.css';
 import '../../styles/font.css'
 import TrackForm from 'src/app/components/track';
-import { Modal, Typography } from '@mui/material';
 
 const PageContainer = styled.div`
     min-height: 100vh;
@@ -57,6 +54,13 @@ const ListContainer = styled.ul`
     `}
 `;
 
+const MobileListContainer = styled.ul`
+    ${tw`
+        mt-6
+        list-none
+    `}
+`;
+
 const SignInItem = styled.li`
     font-family: 'Montserrat', sans-serif;
     ${tw`
@@ -85,6 +89,24 @@ const SignUpItem = styled.li`
         font-medium
         mr-1
         medium:mr-12
+        cursor-pointer
+        transition
+        duration-200
+        ease-in-out
+        hover:bg-button
+        rounded-md
+        p-2
+    `}
+`;
+
+const MobileSignUpItem = styled.li`
+    font-family: 'Montserrat', sans-serif;
+    ${tw`
+        text-lg
+        medium:text-xl
+        text-paragraph
+        font-medium
+        mr-8
         cursor-pointer
         transition
         duration-200
@@ -291,6 +313,17 @@ export function MainSection() {
 
         setLogOutModalOpen(false);
     }
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
 
     const timeout = (delay) => {
         return new Promise(res => setTimeout(res, delay));
@@ -581,6 +614,64 @@ export function MainSection() {
         )
     }
 
+    const MobileNavItems = () => {
+        return (
+            <MobileListContainer>
+                <Link to="/home" className='auth-link'>
+                    <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white' }}>
+                        Home
+                    </MobileSignUpItem>
+                </Link>
+
+                <Link to="/track" className='auth-link'>
+                    <MobileSignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}  className='bg-button'>
+                        Track Workout
+                    </MobileSignUpItem>
+                </Link>
+
+                <Link to="/plan" className='auth-link'>
+                    <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white', marginTop: '24px' }}>
+                        View Plans
+                    </MobileSignUpItem>
+                </Link>
+    
+                <Link to="/calculate" className='auth-link'>
+                    <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white', marginTop: '24px' }}>
+                        Calculate
+                    </MobileSignUpItem>
+                </Link>
+    
+                <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white', marginTop: '24px' }} onClick={handleLogOutModal}>
+                    Log Out
+                </MobileSignUpItem>
+
+                <Modal
+                    open={logOutModalOpen}
+                    onClose={handleLogOutModalClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Log Out
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            Do you wish to log out of this account?
+                        </Typography>
+                        <div className="flex mt-12">
+                            <Button theme="outline-white" text="Back" onClick={handleLogOutModalClose} className="mr-9" /> 
+                            <Button theme="filled" text="Confirm" className="mr-9" onClick={handleLogOut} /> 
+                        </div>
+                    </Box>
+                </Modal>
+    
+                {/* <SignUpItem style={{ color: 'white' }}>
+                    <Link to="/track">Track</Link>
+                </SignUpItem> */}
+            </MobileListContainer>
+        )
+    }
+
     const TabPanel = (props) => {
         const { children, tabValue, index, ...other } = props;
       
@@ -611,88 +702,212 @@ export function MainSection() {
 
     console.log(track);
 
-    return (
-        <>
-            <PageContainer>
-                <NavbarContainer>
-                    <DarkLogo />
-                    <NavItems />
+    const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
+
+    if (isMobile) {
+        return (
+            <>
+                <NavbarContainer>  
+                    <Title         
+                        id="demo-positioned-button"
+                        aria-controls={open ? 'demo-positioned-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick}
+                        className='bm-burger-button'
+                    >
+                        =
+                    </Title>
+
+                    <Menu
+                        id="demo-positioned-menu"
+                        aria-labelledby="demo-positioned-button"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                        }}
+                        transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                        }}
+                    >
+                        <MobileNavItems />
+                    </Menu>
+
+                    {/* <Menu>
+                        <DarkLogo />
+                        <MobileNavItems />
+                    </Menu> */}
                 </NavbarContainer>
-                <ImageContainer>
-                    <img src={SignUpIllustration} alt="" />
-                </ImageContainer>
-                {/* <HorizontalLine /> */}
-                <MainContainer>
-                    
-                    <ToastContainer
-                        position="top-right"
-                        autoClose={5000}
-                        hideProgressBar={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        theme="colored"
-                    />  
-
-                    {/* 
-                    <Box sx={{ width: '50%', bgcolor: 'background.paper' }} className="rounded-md">
-                        <Tabs value={value} onChange={handleTabChange} centered>
-                            <Tab label="One" />
-                            <Tab label="Two" />
-                        </Tabs>
-                    </Box> */}
-
-                    <ToastContainer
-                        position="top-right"
-                        autoClose={5000}
-                        hideProgressBar={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        theme="colored"
-                    />  
-
-                    <TrackForm />
-
-                    {/*
-                    <Form onSubmit={handleSubmit}> 
-                        <TabPanel tabValue={value} index={0}>
-                            <Title>Date/Time</Title>    
-                            <FormContainer>
-                                {inputs1.map((input) => (
-                                    <FormInputDark key={input.id} {...input} value={track[input.name]} onChange={onChangeHandler1} />
-                                ))}
-                            </FormContainer>
-                        </TabPanel>
-                    
-                        <TabPanel tabValue={value} index={1}>
-                            <Title>Workout Details</Title>
-                            <FormContainer>
-                                {inputs2.map((input) => (
-                                    <FormInputDark key={input.id} {...input} value={workout[input.name]} onChange={onChangeHandler2} />
-                                ))}
-                            </FormContainer>
-                            <button className="text-white text-xl">
-                                +
-                            </button>
-                        </TabPanel> 
-
-                        <ButtonsContainer>
-                            <Link to="/">
-                                <Button theme="outline" text="Cancel" />
-                            </Link>
-
-                            <Button theme="filled" text="Submit" /> 
-                        </ButtonsContainer>
-                    </Form>  */}
-                </MainContainer>
-            </PageContainer>
-        </>
-    )
+                <PageContainer>
+                    <NavbarContainer>
+                        <DarkLogo />
+                        <NavItems />
+                    </NavbarContainer>
+                    <ImageContainer>
+                        <img src={SignUpIllustration} alt="" />
+                    </ImageContainer>
+                    {/* <HorizontalLine /> */}
+                    <MainContainer>
+                        
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            theme="colored"
+                        />  
+    
+                        {/* 
+                        <Box sx={{ width: '50%', bgcolor: 'background.paper' }} className="rounded-md">
+                            <Tabs value={value} onChange={handleTabChange} centered>
+                                <Tab label="One" />
+                                <Tab label="Two" />
+                            </Tabs>
+                        </Box> */}
+    
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            theme="colored"
+                        />  
+    
+                        <TrackForm />
+    
+                        {/*
+                        <Form onSubmit={handleSubmit}> 
+                            <TabPanel tabValue={value} index={0}>
+                                <Title>Date/Time</Title>    
+                                <FormContainer>
+                                    {inputs1.map((input) => (
+                                        <FormInputDark key={input.id} {...input} value={track[input.name]} onChange={onChangeHandler1} />
+                                    ))}
+                                </FormContainer>
+                            </TabPanel>
+                        
+                            <TabPanel tabValue={value} index={1}>
+                                <Title>Workout Details</Title>
+                                <FormContainer>
+                                    {inputs2.map((input) => (
+                                        <FormInputDark key={input.id} {...input} value={workout[input.name]} onChange={onChangeHandler2} />
+                                    ))}
+                                </FormContainer>
+                                <button className="text-white text-xl">
+                                    +
+                                </button>
+                            </TabPanel> 
+    
+                            <ButtonsContainer>
+                                <Link to="/">
+                                    <Button theme="outline" text="Cancel" />
+                                </Link>
+    
+                                <Button theme="filled" text="Submit" /> 
+                            </ButtonsContainer>
+                        </Form>  */}
+                    </MainContainer>
+                </PageContainer>
+            </>
+        )
+    } else {
+        return (
+            <>
+                <PageContainer>
+                    <NavbarContainer>
+                        <DarkLogo />
+                        <NavItems />
+                    </NavbarContainer>
+                    <ImageContainer>
+                        <img src={SignUpIllustration} alt="" />
+                    </ImageContainer>
+                    {/* <HorizontalLine /> */}
+                    <MainContainer>
+                        
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            theme="colored"
+                        />  
+    
+                        {/* 
+                        <Box sx={{ width: '50%', bgcolor: 'background.paper' }} className="rounded-md">
+                            <Tabs value={value} onChange={handleTabChange} centered>
+                                <Tab label="One" />
+                                <Tab label="Two" />
+                            </Tabs>
+                        </Box> */}
+    
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            theme="colored"
+                        />  
+    
+                        <TrackForm />
+    
+                        {/*
+                        <Form onSubmit={handleSubmit}> 
+                            <TabPanel tabValue={value} index={0}>
+                                <Title>Date/Time</Title>    
+                                <FormContainer>
+                                    {inputs1.map((input) => (
+                                        <FormInputDark key={input.id} {...input} value={track[input.name]} onChange={onChangeHandler1} />
+                                    ))}
+                                </FormContainer>
+                            </TabPanel>
+                        
+                            <TabPanel tabValue={value} index={1}>
+                                <Title>Workout Details</Title>
+                                <FormContainer>
+                                    {inputs2.map((input) => (
+                                        <FormInputDark key={input.id} {...input} value={workout[input.name]} onChange={onChangeHandler2} />
+                                    ))}
+                                </FormContainer>
+                                <button className="text-white text-xl">
+                                    +
+                                </button>
+                            </TabPanel> 
+    
+                            <ButtonsContainer>
+                                <Link to="/">
+                                    <Button theme="outline" text="Cancel" />
+                                </Link>
+    
+                                <Button theme="filled" text="Submit" /> 
+                            </ButtonsContainer>
+                        </Form>  */}
+                    </MainContainer>
+                </PageContainer>
+            </>
+        )
+    }
 }

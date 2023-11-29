@@ -486,10 +486,10 @@ export function MainSection() {
                         <DarkLogo />
                         <NavItems />
                     </NavbarContainer>
-                    <ImageContainer>
+                    {/* <ImageContainer>
                         <img src={SignUpIllustration} alt="" />
-                    </ImageContainer>
-                    <HorizontalLine />
+                    </ImageContainer> 
+                    <HorizontalLine /> */}
                     <MainContainer>
                         
                         <ToastContainer

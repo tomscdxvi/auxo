@@ -12,6 +12,7 @@ import { makeStyles } from '@material-ui/core';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { Chart as ChartJS } from 'chart.js/auto'
+// import { slide as Menu } from 'react-burger-menu';
 
 import TrackCard from './Card';
 import { FooterDark } from '../../components/footer';
@@ -23,7 +24,7 @@ import '../../styles/font.css';
 import '../../styles/authenticatedhome/main.css';
 import { DeleteButton } from '../../components/delete';
 import { Button } from 'src/app/components/button';
-import { Box, FormControl, InputLabel, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
+import { Box, FormControl, InputLabel, Menu, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
 import CustomBarChart from 'src/app/components/charts/bar-chart';
 
 const PageContainer = styled.div`
@@ -61,6 +62,13 @@ const ListContainer = styled.ul`
     `}
 `;
 
+const MobileListContainer = styled.ul`
+    ${tw`
+        mt-6
+        list-none
+    `}
+`;
+
 const SignInItem = styled.li`
     font-family: 'Montserrat', sans-serif;
     ${tw`
@@ -89,6 +97,24 @@ const SignUpItem = styled.li`
         font-medium
         mr-1
         medium:mr-12
+        cursor-pointer
+        transition
+        duration-200
+        ease-in-out
+        hover:bg-button
+        rounded-md
+        p-2
+    `}
+`;
+
+const MobileSignUpItem = styled.li`
+    font-family: 'Montserrat', sans-serif;
+    ${tw`
+        text-lg
+        medium:text-xl
+        text-paragraph
+        font-medium
+        mr-8
         cursor-pointer
         transition
         duration-200
@@ -327,21 +353,13 @@ export function MainSection() {
     const [ filteredTrackingHistory, setFilteredTrackingHistory ] = useState([trackingHistory])
 
     // Handle chart data
-    const [ chartData, setChartData ] = useState({
-        labels: ["hello", "hello"],
+    const [ chartData ] = useState({
+        labels: ["2023/09", "2023/10", "2023/11"],
         datasets: [{
-            label: "Workouts",
+            label: "Workouts in 2023",
             data: [15, 23, 10],
-            backgroundColor: "#FFFFFF",
-            borderWidth: 2
+            backgroundColor: "#172C66",
         }],
-        options: {
-            legend: {
-                labels: {
-                   fontColor: 'white' //set your desired color
-                }
-            }
-        }
     })
 
     // Set view type states for handling view change
@@ -370,12 +388,24 @@ export function MainSection() {
         setLogOutModalOpen(false);
     }
 
-    // Pagination for array of data.
+    // Pagination variables
     const [ activePage, setActivePage ] = useState(1);
     const itemsPerPage = 4;
     const pagesVisited = (activePage - 1) * itemsPerPage;
     const numberOfPages = Math.ceil(trackingHistory.length / itemsPerPage);
 
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
+    // Handles the page change for pagination
     const handlePageChange = (e, value) => {
         setActivePage(value);
     }
@@ -532,6 +562,64 @@ export function MainSection() {
             </ListContainer>
         )
     }
+
+    const MobileNavItems = () => {
+        return (
+            <MobileListContainer>
+                <Link to="/home" className='auth-link'>
+                    <MobileSignUpItem style={{ color: 'white', borderBottom: '2px solid white' }} className='bg-button'>
+                        Home
+                    </MobileSignUpItem>
+                </Link>
+
+                <Link to="/track" className='auth-link'>
+                    <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white', marginTop: '24px' }}>
+                        Track Workout
+                    </MobileSignUpItem>
+                </Link>
+
+                <Link to="/plan" className='auth-link'>
+                    <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white', marginTop: '24px' }}>
+                        View Plans
+                    </MobileSignUpItem>
+                </Link>
+    
+                <Link to="/calculate" className='auth-link'>
+                    <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white', marginTop: '24px' }}>
+                        Calculate
+                    </MobileSignUpItem>
+                </Link>
+    
+                <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white', marginTop: '24px' }} onClick={handleLogOutModal}>
+                    Log Out
+                </MobileSignUpItem>
+
+                <Modal
+                    open={logOutModalOpen}
+                    onClose={handleLogOutModalClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Log Out
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            Do you wish to log out of this account?
+                        </Typography>
+                        <div className="flex mt-12">
+                            <Button theme="outline-white" text="Back" onClick={handleLogOutModalClose} className="mr-9" /> 
+                            <Button theme="filled" text="Confirm" className="mr-9" onClick={handleLogOut} /> 
+                        </div>
+                    </Box>
+                </Modal>
+    
+                {/* <SignUpItem style={{ color: 'white' }}>
+                    <Link to="/track">Track</Link>
+                </SignUpItem> */}
+            </MobileListContainer>
+        )
+    }
     
     // Handle delete function
     const handleDelete = (e) => {
@@ -602,9 +690,40 @@ export function MainSection() {
     } else if(isMobile) {
         return (
             <>
-                <NavbarContainer>
-                    <DarkLogo />
-                    <NavItems />
+                <NavbarContainer>  
+                    <Title         
+                        id="demo-positioned-button"
+                        aria-controls={open ? 'demo-positioned-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick}
+                        className='bm-burger-button'
+                    >
+                        =
+                    </Title>
+
+                    <Menu
+                        id="demo-positioned-menu"
+                        aria-labelledby="demo-positioned-button"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                        }}
+                        transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                        }}
+                    >
+                        <MobileNavItems />
+                    </Menu>
+
+                    {/* <Menu>
+                        <DarkLogo />
+                        <MobileNavItems />
+                    </Menu> */}
                 </NavbarContainer>
                 <PageContainer>
                     <HorizontalLine /> 
@@ -694,7 +813,7 @@ export function MainSection() {
                                     <div>
                                         <ul className='flex'>
                                             <li>
-                                                <Box sx={{ minWidth: 60, marginRight: 2.5 }}>
+                                                <Box sx={{ minWidth: 60, marginRight: 12 }}>
                                                     <Title>Sort</Title>
                                                     <FormControl style={{ minWidth: 180 }}>
                                                         <InputLabel id="demo-simple-select-label" style={{ color: "#fff" }}>Sort Options</InputLabel>
@@ -716,15 +835,17 @@ export function MainSection() {
                                                 </Box>
                                             </li>
                                             <li>    
-                                                <Title>Search</Title>                        
-                                                <TextField
-                                                    placeholder="Search"
-                                                    label="Search"
-                                                    onChange={(e) => {
-                                                        setSearch(e.target.value)
-                                                    }}
-                                                    className={classes.root}
-                                                />
+                                                <Box sx={{ minWidth: 60 }}>
+                                                    <Title>Search</Title>                        
+                                                    <TextField
+                                                        placeholder="Search"
+                                                        label="Search"
+                                                        onChange={(e) => {
+                                                            setSearch(e.target.value)
+                                                        }}
+                                                        className={classes.root}
+                                                    />
+                                                </Box>
                                             </li>
                                         </ul>
                                     </div>
@@ -732,8 +853,9 @@ export function MainSection() {
                                         {/* slice is used for pagination, filter is used to search, and map is used to list out the array of objects. */}
                                         {trackingHistory
                                             .filter((track) => {
-                                                return search.toLowerCase() === "" ? track : track.title.toLowerCase().includes(search)
-                                            }).slice(pagesVisited, pagesVisited + itemsPerPage).map((track) => {
+                                                return search.toLowerCase() === "" ? track : track.title.toLowerCase().includes(search)})
+                                            .slice(pagesVisited, pagesVisited + itemsPerPage)
+                                            .map((track) => {
                                                 if(track === null) {
                                                     return (
                                                         <Title style={{ fontSize: '16px' }}>Your tracking history is empty, enter your first workout to see your history!</Title>
@@ -759,7 +881,11 @@ export function MainSection() {
                                     </Stack>
                                 </>
                             }
-                            {viewType === 2 && <CustomBarChart chartData={chartData} />}
+                            {viewType === 2 && 
+                                <div style={{ width: "1250px", backgroundColor: "white", borderRadius: "8px", padding: "24px" }}>
+                                    <CustomBarChart chartData={chartData} />
+                                </div>
+                            }
                             {/* {viewType === 3 && <h1 className='text-white'>Extra</h1>} */}
                     </MainContainer>
                 </PageContainer>

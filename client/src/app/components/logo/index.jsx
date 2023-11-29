@@ -17,9 +17,10 @@ const LogoContainer = styled.div`
 
 const LogoContainerMobile = styled.div`
     ${tw`
-        w-full 
-        h-full
+        w-[150px] 
+        h-[100px]
         flex 
+        ml-6
         justify-center 
         items-center
     `}
@@ -65,11 +66,9 @@ export function DarkLogo() {
     if(isMobile) {
         return (
             <LogoContainerMobile>
-                <ImageContainer>
-                    <Link to="/">
-                        <img src={LogoImageDark} alt="" />
-                    </Link>
-                </ImageContainer> 
+                <Link to="/">
+                    <img src={LogoImageDark} alt="" />
+                </Link>
             </LogoContainerMobile> 
         )
     }
