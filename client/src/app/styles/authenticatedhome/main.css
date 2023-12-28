@@ -1,0 +1,30 @@
+.Toastify__toast--error {
+    background: #FFC0C0 !important;
+    color: #333333 !important;
+}
+
+.Toastify__toast--success {
+    background: #CDFADC !important;
+    color: #333333 !important;
+}
+
+.auth-link {
+    color: #FFFFFF !important;
+    text-decoration: none !important;
+}
+
+.auth-link:hover {
+    color: #FFFFFF !important;
+} 
+
+.link-item {
+    color: white !important; 
+    border-bottom: 2px solid white !important;
+    margin: 24px !important;
+}
+
+.MuiPagination-root {
+    button {
+        color: red !important;
+    }
+}
