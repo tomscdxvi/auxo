@@ -853,7 +853,7 @@ export function MainSection() {
                                         {/* slice is used for pagination, filter is used to search, and map is used to list out the array of objects. */}
                                         {trackingHistory
                                             .filter((track) => {
-                                                return search.toLowerCase() === "" ? track : track.title.toLowerCase().includes(search)})
+                                                return search?.toLowerCase() === "" ? track : track.title?.toLowerCase().includes(search)})
                                             .slice(pagesVisited, pagesVisited + itemsPerPage)
                                             .map((track) => {
                                                 if(track === null) {
