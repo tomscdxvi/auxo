@@ -1,6 +1,6 @@
 # Auxo App
 
-Developed by Black Bulls Group
+Developed by Tommy Chiu
 
 ### Branch Creation
 
