@@ -6,7 +6,7 @@ module.exports.checkUser = (req, res, next) => {
     const token = req.cookies.jwt;
 
     if(token) {
-        jwt.verify(token, "tommy", async (error, decodedToken) => {
+        jwt.verify(token, process.env.JWT_TOKEN, async (error, decodedToken) => {
             if(error) {
                 res.json({ status: false });
                 next();

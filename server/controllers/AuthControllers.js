@@ -9,7 +9,7 @@ const { default: mongoose } = require('mongoose');
 const expiry = 3 * 24 * 60 * 60;
 
 const generateToken = (id) => {
-    return jwt.sign({id}, "tommy", {
+    return jwt.sign({id}, process.env.JWT_TOKEN, {
         expiresIn: expiry
     });
 }
