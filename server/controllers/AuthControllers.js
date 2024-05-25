@@ -1,6 +1,7 @@
 const User = require('../models/User.js');
 const Track = require("../models/Track.js");
 const Workout = require("../models/Workout.js");
+const Coach = require("../models/Coach.js");
 const jwt = require('jsonwebtoken');
 const AsyncStorage = require('@react-native-async-storage/async-storage');
 const { default: mongoose } = require('mongoose');
@@ -70,16 +71,18 @@ module.exports.register = async(req, res, next) => {
     }
 };
 
-module.exports.login = async(req, res, next) => {
+module.exports.registerCoach = async(req, res, next) => {
     try {
 
-        const { username, password } = req.body;
+        const { username, email, password } = req.body;
 
-        const user = await User.login(username, password);
+        const coach = await Coach.create({
+            username,
+            email,
+            password
+        });
 
-        // console.log(user);
-
-        const token = generateToken(user._id);
+        const token = generateToken(coach._id);
 
         res.cookie("jwt", token, {
             withCredentials: true,
@@ -87,8 +90,52 @@ module.exports.login = async(req, res, next) => {
             maxAge: expiry * 1000
         });
 
-        res.status(200).json(user._id);
+        res.status(201).json({
+            coach: coach._id,
+            created: true
+        });
 
+    } catch (error) {
+        console.log(error);
+        
+        const errors = handleErrors(error);
+
+        res.json({ errors, created: false });
+    }
+};
+
+module.exports.login = async(req, res, next) => {
+    try {
+
+        const { username, password } = req.body;
+        
+        if(username.includes("coach")){ // Login as a Coach
+            const coach = await Coach.login(username, password);
+
+            const coachToken = generateToken(coach._id);
+    
+            res.cookie("jwt", coachToken, {
+                withCredentials: true,
+                httpOnly: false,
+                maxAge: expiry * 1000
+            });
+    
+            res.status(200).json(coach._id);
+        } else { // Login as a regular User
+            const user = await User.login(username, password);
+    
+            // console.log(user);
+    
+            const userToken = generateToken(user._id);
+    
+            res.cookie("jwt", userToken, {
+                withCredentials: true,
+                httpOnly: false,
+                maxAge: expiry * 1000
+            });
+    
+            res.status(200).json(user._id); 
+        }
     } catch (error) {
         console.log(error);
         const errors = handleErrors(error);

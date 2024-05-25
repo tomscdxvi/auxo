@@ -25,8 +25,7 @@ const UserSchema = new Schema({
     goals: [{
         title: String,
         description: String,
-        start_date: Date,
-        end_date: Date
+        completion: Boolean
     }],
     /*
         history: [{
@@ -69,9 +68,9 @@ const UserSchema = new Schema({
             required: true
         },
     }],
-    users: {
+    coach: {
         type: Schema.Types.ObjectId,
-        ref: 'SomeOtherModel'
+        ref: 'Coaches'
     }
 });
 
