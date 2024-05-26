@@ -15,14 +15,14 @@ import { Chart as ChartJS } from 'chart.js/auto'
 // import { slide as Menu } from 'react-burger-menu';
 
 import TrackCard from './Card';
-import { FooterDark } from '../../components/footer';
-import { FormInputDark } from '../../components/form';
-import { DarkLogo } from '../../components/logo';
-import { SCREENS } from '../../components/responsive';
-import SignUpIllustration from '../../../assets/images/auth-illustration.png';
-import '../../styles/font.css';
-import '../../styles/authenticatedhome/main.css';
-import { DeleteButton } from '../../components/delete';
+import { FooterDark } from '../../../components/footer';
+import { FormInputDark } from '../../../components/form';
+import { DarkLogo, Logo } from '../../../components/logo';
+import { SCREENS } from '../../../components/responsive';
+import SignUpIllustration from '../../../../assets/images/auth-illustration.png';
+import '../../../styles/font.css';
+import '../../../styles/authenticatedhome/main.css';
+import { DeleteButton } from '../../../components/delete';
 import { Button } from 'src/app/components/button';
 import { Box, FormControl, InputLabel, Menu, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
 import CustomBarChart from 'src/app/components/charts/bar-chart';
@@ -83,6 +83,7 @@ const SignInItem = styled.li`
         duration-200
         ease-in-out
         hover:bg-button
+        hover:text-white
         rounded-md
         p-2
     `}
@@ -102,6 +103,7 @@ const SignUpItem = styled.li`
         duration-200
         ease-in-out
         hover:bg-button
+        hover:text-white
         rounded-md
         p-2
     `}
@@ -168,7 +170,8 @@ const ToggleList = styled.li`
 const Title = styled.h1`
     font-family: 'Montserrat', sans-serif;
     ${tw`
-        text-white
+        text-headline
+        font-bold
         mb-4
         tracking-wider
         xlarge:text-xl 
@@ -393,6 +396,7 @@ export function MainSection() {
             }
         };
         verifyUser();
+        setLoading(false);
     }, [cookies, navigate, removeCookie]); 
         
     // Handle logout function 
@@ -408,30 +412,33 @@ export function MainSection() {
         return (
             <ListContainer>
                 <Link to="/home" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white' }} className='bg-button'>
+                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white' }} className='bg-button font-bold'>
                         Home
                     </SignUpItem>
                 </Link>
 
+                {/* Create view clients page to list all clients under a coach 
                 <Link to="/track" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
+                    <SignUpItem style={{ borderBottom: '2px solid white', marginTop: '24px' }} className='text-headline font-bold'>
                         Track Workout
                     </SignUpItem>
-                </Link>
-
-                <Link to="/plan" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
-                        View Plans
+                </Link> */}
+                
+                {/* Create view clients page to list all clients under a coach*/}
+                <Link to="/" className='auth-link'>
+                    <SignUpItem style={{ borderBottom: '2px solid white', marginTop: '24px' }} className='text-headline font-bold'>
+                        View Clients
                     </SignUpItem>
                 </Link>
-    
+                
+                {/* 
                 <Link to="/calculate" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
+                    <SignUpItem style={{ borderBottom: '2px solid white', marginTop: '24px' }} className='text-headline font-bold'>
                         Calculate
                     </SignUpItem>
-                </Link>
+                </Link> */}
     
-                <SignInItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }} onClick={handleLogOutModal}>
+                <SignInItem style={{ borderBottom: '2px solid white', marginTop: '24px' }} onClick={handleLogOutModal} className='text-headline font-bold'>
                     Log Out
                 </SignInItem>
 
@@ -477,7 +484,7 @@ export function MainSection() {
             <>
                 <PageContainer>
                     <NavbarContainer>
-                        <DarkLogo />
+                        <Logo />
                         <NavItems />
                     </NavbarContainer>
                     {/* <ImageContainer>

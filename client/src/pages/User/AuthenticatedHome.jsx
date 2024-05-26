@@ -1,7 +1,7 @@
 import { React, useState } from 'react'
 import styled from 'styled-components';
 import tw from 'twin.macro';
-import { AuthenticatedCoachPage } from 'src/app/containers/AuthenticatedCoachPage';
+import AuthenticatedHomePage from '../../app/containers/User/AuthenticatedHomePage';
 
 const HomeContainer = styled.div`
   background-color: #243763;
@@ -13,10 +13,10 @@ const HomeContainer = styled.div`
   `}
 `;
 
-export default function AuthenticatedCoach() {
+export default function AuthenticatedHome() {
   return (
     <HomeContainer>
-      <AuthenticatedCoachPage />
+      <AuthenticatedHomePage />
     </HomeContainer>
   )
 }

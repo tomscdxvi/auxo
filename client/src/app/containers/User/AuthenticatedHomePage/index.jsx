@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import tw from 'twin.macro';
-import { NavbarLoggedIn } from '../../components/navbar';
+import { NavbarLoggedIn } from '../../../components/navbar';
 import { MainSection } from './mainSection';
 
 const PageContainer = styled.div`
@@ -15,7 +15,7 @@ const PageContainer = styled.div`
     `}
 `;
 
-export function AuthenticatedCoachPage() {
+export default function AuthenticatedHomePage() {
     return (
         <PageContainer>
             <MainSection />

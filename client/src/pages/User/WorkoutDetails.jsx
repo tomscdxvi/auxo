@@ -1,7 +1,7 @@
 import { React, useState } from 'react'
 import styled from 'styled-components';
 import tw from 'twin.macro';
-import { WorkoutDetails } from '../app/containers/WorkoutDetailsPage';
+import WorkoutDetails from '../../app/containers/User/WorkoutDetailsPage';
 
 const WorkoutDetailsContainer = styled.div`
   background-color: #243763;

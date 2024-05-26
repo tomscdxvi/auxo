@@ -3,12 +3,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
-import Track from './pages/Track';
-import AuthenticatedHome from './pages/AuthenticatedHome';
-import AuthenticatedCoach from './pages/AuthenticatedCoach';
-import Calculate from './pages/Calculate';
-import WorkoutDetails from './pages/WorkoutDetails';
-import Plan from './pages/Plan';
+import Track from './pages/User/Track';
+import AuthenticatedHome from './pages/User/AuthenticatedHome';
+import AuthenticatedCoach from './pages/Coach/AuthenticatedCoach';
+import Calculate from './pages/User/Calculate';
+import WorkoutDetails from './pages/User/WorkoutDetails';
+import Plan from './pages/User/Plan';
 
 
 function App() {

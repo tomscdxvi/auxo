@@ -1,22 +1,22 @@
 import { React, useState } from 'react'
 import styled from 'styled-components';
 import tw from 'twin.macro';
-import { AuthenticatedHomePage } from '../app/containers/AuthenticatedHomePage';
+import AuthenticatedCoachPage from '../../app/containers/Coach/AuthenticatedCoachPage';
 
 const HomeContainer = styled.div`
-  background-color: #243763;
   ${tw`
     w-full
     h-full
     flex
     flex-col
+    bg-background
   `}
 `;
 
-export default function AuthenticatedHome() {
+export default function AuthenticatedCoach() {
   return (
     <HomeContainer>
-      <AuthenticatedHomePage />
+      <AuthenticatedCoachPage />
     </HomeContainer>
   )
 }

@@ -9,14 +9,14 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Modal, Typography, Box, FormControl, InputLabel, Menu, MenuItem, Select, TextField, } from '@mui/material';
 
-import { FormInputDark } from '../../components/form';
-import { DarkLogo } from '../../components/logo';
-import { Button }   from '../../components/button';
-import { SCREENS } from '../../components/responsive';
-import SignUpIllustration from '../../../assets/images/track-illustration.png';
-import PlusIcon from '../../../assets/images/plus-icon.png';
-import '../../styles/authenticatedhome/main.css';
-import '../../styles/font.css'
+import { FormInputDark } from '../../../components/form';
+import { DarkLogo } from '../../../components/logo';
+import { Button }   from '../../../components/button';
+import { SCREENS } from '../../../components/responsive';
+import SignUpIllustration from '../../../../assets/images/track-illustration.png';
+import PlusIcon from '../../../../assets/images/plus-icon.png';
+import '../../../styles/authenticatedhome/main.css';
+import '../../../styles/font.css'
 import TrackForm from 'src/app/components/track';
 
 const PageContainer = styled.div`

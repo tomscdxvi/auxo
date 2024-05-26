@@ -8,14 +8,14 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { FooterDark } from '../../components/footer';
-import { FormInputDark } from '../../components/form';
-import { DarkLogo } from '../../components/logo';
-import { Button }   from '../../components/button';
-import { SCREENS } from '../../components/responsive';
-import SignUpIllustration from '../../../assets/images/track-illustration.png'
-import '../../styles/authenticatedhome/main.css';
-import '../../styles/font.css'
+import { FooterDark } from '../../../components/footer';
+import { FormInputDark } from '../../../components/form';
+import { DarkLogo } from '../../../components/logo';
+import { Button }   from '../../../components/button';
+import { SCREENS } from '../../../components/responsive';
+import SignUpIllustration from '../../../../assets/images/track-illustration.png'
+import '../../../styles/authenticatedhome/main.css';
+import '../../../styles/font.css'
 
 const PageContainer = styled.div`
     ${tw`

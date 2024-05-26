@@ -1,7 +1,7 @@
 import { React, useState } from 'react'
 import styled from 'styled-components';
 import tw from 'twin.macro';
-import { PlanPage } from 'src/app/containers/PlanPage';
+import TrackPage from '../../app/containers/User/TrackPage';
 
 const TrackContainer = styled.div`
   background-color: #243763;
@@ -13,10 +13,10 @@ const TrackContainer = styled.div`
   `}
 `;
 
-export default function Plan() {
+export default function Track() {
   return (
     <TrackContainer>
-        <PlanPage />
+      <TrackPage />
     </TrackContainer>
   )
 }
