@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Track from './pages/Track';
 import AuthenticatedHome from './pages/AuthenticatedHome';
+import AuthenticatedCoach from './pages/AuthenticatedCoach';
 import Calculate from './pages/Calculate';
 import WorkoutDetails from './pages/WorkoutDetails';
 import Plan from './pages/Plan';
@@ -18,6 +19,7 @@ function App() {
         <Route exact path="/register" element={<Register />} />
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/home" element={<AuthenticatedHome />} />
+        <Route exact path='/coach' element={<AuthenticatedCoach />} />
         <Route exact path="/calculate" element={<Calculate />} />
         <Route exact path="/track" element={<Track />} />
         <Route exact path="/plan" element={<Plan />} />
