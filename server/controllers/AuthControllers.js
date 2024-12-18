@@ -1,6 +1,4 @@
 const User = require('../models/User.js');
-const Track = require("../models/Track.js");
-const Workout = require("../models/Workout.js");
 const jwt = require('jsonwebtoken');
 const AsyncStorage = require('@react-native-async-storage/async-storage');
 const { default: mongoose } = require('mongoose');
@@ -99,9 +97,9 @@ module.exports.login = async(req, res, next) => {
 module.exports.getUserDetails = async(req, res, next) => {
 
     //const user = await User.findById("64334e6a69c05b05b5d23c74");
-    const userId = new mongoose.Types.ObjectId(req.params._id);
+    const userId = new mongoose.Types.ObjectId(req.params._id); 
 
-    const user = await User.findById(userId).populate("users").exec();
+    const user = await User.findById(userId).exec();
     
     
     /* const newUser = await User.aggregate([ 

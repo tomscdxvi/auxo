@@ -5,7 +5,6 @@ import { useMediaQuery } from 'react-responsive';
 import tw from 'twin.macro';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Dialog from '@mui/material/Dialog';
@@ -13,11 +12,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import IconButton from "@material-ui/core/IconButton";
-import InputLabel from "@material-ui/core/InputLabel";
-import Visibility from "@material-ui/icons/Visibility";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
 
 import { Footer } from '../footer';
 import { FormInput } from '../form';
@@ -59,8 +56,8 @@ export function SignIn(props) {
 
     const [ signUpOpen, setSignUpOpen ] = useState(false);
 
-    const handleSignUpOpen = () => {
-        handleClose();
+    const navigateToRegister = () => {
+        navigate("/register");
     };
 
     const handleSignUpClose = () => {
@@ -125,9 +122,9 @@ export function SignIn(props) {
         }
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (event) => {
 
-        e.preventDefault();
+        event.preventDefault();
 
         try {
 
@@ -176,7 +173,7 @@ export function SignIn(props) {
                 }
             }
         } catch(error) {
-            toast.error("An error occured while trying to login to this account.", {
+            toast.error("An error occurred while trying to login to this account.", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -193,22 +190,12 @@ export function SignIn(props) {
         }
     }; 
 
-    useEffect(() => {
-        const keyDownHandler = (event) => {
-            console.log('User pressed: ', event.key);
-            if (event.key === 'Enter') {
-                event.preventDefault();
-
-                handleSubmit();
-            }
-        };
-    
-        document.addEventListener('keydown', keyDownHandler);
-    
-        return () => {
-          document.removeEventListener('keydown', keyDownHandler);
-        };
-    }, []);
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault(); // Prevent the default action (form submission)
+            handleSubmit(event); // Call handleSubmit when Enter key is pressed
+        }
+    };
 
     const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
 
@@ -235,7 +222,7 @@ export function SignIn(props) {
                             <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChangeHandler} />
                         ))}
                         <DialogContentText>
-                            No account? Sign-up <a onClick={handleSignUpOpen} className="hover:text-paragraph hover:cursor-pointer">here!</a><span className="text-[#DA1E28]"> - Currently Unavailable</span>
+                            No account? Sign-up <a onClick={navigateToRegister} className="hover:text-paragraph hover:cursor-pointer">here!</a><span className="text-[#DA1E28]"> - Currently Unavailable</span>
                             <SignUp signUpOpen={signUpOpen} handleSignUpClose={handleSignUpClose} />
                         </DialogContentText>
                         <DialogActions className="mt-4">
@@ -249,7 +236,7 @@ export function SignIn(props) {
     }
 
     return (
-        <Dialog open={open} onClose={handleClose} >
+        <Dialog open={open} onClose={handleClose}>
             <DialogTitle className="p-4">Sign In</DialogTitle>
             <DialogContent>
                 <ToastContainer
@@ -265,17 +252,17 @@ export function SignIn(props) {
                     theme="colored"
                 />
 
-                <Form onSubmit={handleSubmit}> 
+                <Form onSubmit={handleSubmit} onKeyDown={handleKeyDown}> 
                     {inputs.map((input) => (
                         <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChangeHandler} />
                     ))}
                     <DialogContentText>
-                        No account? Sign-up <a onClick={handleSignUpOpen} className="hover:text-paragraph hover:cursor-pointer">here!</a><span className="text-[#DA1E28]"> - Currently Unavailable</span>
+                        No account? Sign-up <a onClick={navigateToRegister} className="hover:text-paragraph hover:cursor-pointer">here!</a>
                         <SignUp signUpOpen={signUpOpen} handleSignUpClose={handleSignUpClose} />
                     </DialogContentText>
                     <DialogActions className="m-3 mt-4">
-                        <Button theme="outline" text="Cancel" onClick={handleClose} />
-                        <Button theme="filled" type="submit" text="Sign In" /> 
+                            <Button theme="outline" text="Cancel" onClick={handleClose} />
+                            <Button theme="filled" type="submit" text="Sign In" /> 
                     </DialogActions>
                 </Form>
             </DialogContent>

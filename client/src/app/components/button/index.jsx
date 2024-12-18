@@ -29,10 +29,10 @@ const BaseButton = styled.button`
 
 const FilledButton = styled(BaseButton)`
     ${tw`
-        text-white
-        bg-button
+        text-black
+        bg-white
         font-bold
-        hover:bg-white
+        hover:bg-button
         hover:text-button
         hover:border-button
         hover:transition-all
@@ -51,8 +51,8 @@ const DisabledButton = styled(BaseButton)`
 
 const OutlinedButton = styled(BaseButton)`
     ${tw`
-        text-button
-        border-button
+        text-black
+        bg-white
         font-bold
         hover:bg-button
         hover:text-white
@@ -119,6 +119,14 @@ const MobileOutlinedButton = styled(MobileBaseButton)`
     `}
 `;
 
+const TextButton = styled(BaseButton)`
+    ${tw`
+        text-white
+        font-bold
+    `}
+`;
+
+
 export function Button(props) {
 
     const { theme, text, type, className, onClick } = props;
@@ -139,6 +147,8 @@ export function Button(props) {
         return <OutlinedWhiteButton onClick={onClick} className={className} type={type}>{text}</OutlinedWhiteButton>
     } else if (theme == "disabled-filled") {
         return <DisabledButton className={className} onClick={onClick} type={type} disabled>{text}</DisabledButton>
+    } else if (theme == "text") {
+        return <TextButton className={className} onClick={onClick} type={type}>{text}</TextButton>
     } else {
         return <OutlinedButton onClick={onClick} className={className} type={type}>{text}</OutlinedButton>
     }

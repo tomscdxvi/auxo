@@ -28,51 +28,9 @@ const UserSchema = new Schema({
         start_date: Date,
         end_date: Date
     }],
-    /*
-        history: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Tracks'
-    }],*/
     history: [{
-        title: {
-            type: String,
-        },
-        date: {
-            type: String,
-        },
-        start_time: {
-            type: String,
-        },
-        end_time: {
-            type: String,
-        },
-        type: {
-            type: String,
-        },
-        name: {
-            type: String,
-            required: true,
-        },
-        intensity: {
-            type: String,
-        },
-        sets: {
-            type: Number,
-            required: true
-        },
-        reps: {
-            type: Number,
-            required: true
-        },
-        weight: {
-            type: Number,
-            required: true
-        },
+        type: Schema.Types.Mixed
     }],
-    users: {
-        type: Schema.Types.ObjectId,
-        ref: 'SomeOtherModel'
-    }
 });
 
 // Encrypt password with BCrypt 

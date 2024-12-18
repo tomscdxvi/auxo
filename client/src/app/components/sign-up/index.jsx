@@ -11,11 +11,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import IconButton from "@material-ui/core/IconButton";
-import InputLabel from "@material-ui/core/InputLabel";
-import Visibility from "@material-ui/icons/Visibility";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
 
 import { Footer } from '../footer';
 import { FormInput } from '../form';

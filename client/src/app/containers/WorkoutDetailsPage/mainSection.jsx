@@ -232,24 +232,10 @@ export function MainSection() {
                 navigate("/");
             } else {
                 const { data } = await axios.post(
-                    "http://localhost:5000", 
+                    "http://localhost:5000/track", 
                     {}, 
                     {withCredentials: true}
                 );
-                if(!data.status) {
-                    removeCookie("jwt"); 
-                    navigate("/"); 
-                } else {
-                    toast("Hi " + data.username + ". You will be redirected to your user page shortly.", {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "colored"});
-                }
             }
         };
         verifyUser();

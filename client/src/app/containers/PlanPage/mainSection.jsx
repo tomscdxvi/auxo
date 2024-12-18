@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 
 import { FormInputDark } from '../../components/form';
 import { DarkLogo } from '../../components/logo';
@@ -354,28 +354,13 @@ export function MainSection() {
     useEffect(() => {
         const verifyUser = async () => {
             if(!cookies.jwt) {
-                navigate("/login");
+                navigate("/");
             } else {
                 const { data } = await axios.post(
-                    "http://localhost:5000/home",
+                    "http://localhost:5000/plan",
                     {},
                     { withCredentials: true }
                 );
-                if(!data.status) {
-                    removeCookie("jwt");
-                    navigate("/login");
-                } else {
-                    /* toast("⭐ Welcome back, ", {
-                        position: "top-right",
-                        autoClose: 1500,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "colored"
-                    }); */
-                }
             }
         };
         verifyUser();

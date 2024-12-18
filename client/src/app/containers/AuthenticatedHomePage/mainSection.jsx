@@ -3,14 +3,11 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import styled from 'styled-components';
 import { useMediaQuery } from 'react-responsive';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import tw from 'twin.macro';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { makeStyles } from '@material-ui/core';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import { makeStyles } from '@mui/styles';
 import { Chart as ChartJS } from 'chart.js/auto'
 // import { slide as Menu } from 'react-burger-menu';
 
@@ -24,7 +21,7 @@ import '../../styles/font.css';
 import '../../styles/authenticatedhome/main.css';
 import { DeleteButton } from '../../components/delete';
 import { Button } from 'src/app/components/button';
-import { Box, FormControl, InputLabel, Menu, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
+import { Box, FormControl, InputLabel, Menu, MenuItem, Modal, Select, TextField, Typography, Pagination, Stack } from '@mui/material';
 import CustomBarChart from 'src/app/components/charts/bar-chart';
 
 const PageContainer = styled.div`
@@ -457,28 +454,13 @@ export function MainSection() {
     useEffect(() => {
         const verifyUser = async () => {
             if(!cookies.jwt) {
-                navigate("/login");
+                navigate("/");
             } else {
                 const { data } = await axios.post(
                     "http://localhost:5000/home",
                     {},
                     { withCredentials: true }
                 );
-                if(!data.status) {
-                    removeCookie("jwt");
-                    navigate("/login");
-                } else {
-                    /* toast("⭐ Welcome back, ", {
-                        position: "top-right",
-                        autoClose: 1500,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "colored"
-                    }); */
-                }
             }
         };
         verifyUser();
@@ -872,20 +854,32 @@ export function MainSection() {
                                     </TrackContainer>
                                     <Stack spacing={2}>
                                         <Pagination 
-                                            classes={{ ul: classes.ul }}
+                                            variant="outlined"
+                                            color="primary"
                                             count={numberOfPages} 
                                             shape="rounded" 
                                             page={activePage} 
                                             onChange={handlePageChange}
+                                            sx={{
+                                                "& .MuiPaginationItem-root": {
+                                                    color: "#fff !important", // Text color
+                                                    borderColor: "#fff", // Border color if outlined
+                                                },
+                                                "& .Mui-selected": {
+                                                    backgroundColor: "rgba(255, 255, 255, 0.2)", // Optional: background for the selected item
+                                                },
+                                            }}
                                         />
                                     </Stack>
                                 </>
                             }
+                            {/*
                             {viewType === 2 && 
                                 <div style={{ width: "1250px", backgroundColor: "white", borderRadius: "8px", padding: "24px" }}>
                                     <CustomBarChart chartData={chartData} />
                                 </div>
                             }
+                            */}
                             {/* {viewType === 3 && <h1 className='text-white'>Extra</h1>} */}
                     </MainContainer>
                 </PageContainer>

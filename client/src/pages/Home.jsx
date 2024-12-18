@@ -9,7 +9,7 @@ const HomeContainer = styled.div`
     h-screen
     flex
     flex-col
-    bg-background
+    bg-home-background
   `}
 `;
 

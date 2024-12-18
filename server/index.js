@@ -15,12 +15,17 @@ const app = express();
 // const PORT = process.env.PORT || 5001; // !! Disabled for now, fix later for MAC OS. Getting ERR_CONNECTION_REFUSED on MAC OS.
 const PORT = 5000; // Delete later after fix ^
 
+app.use(cookieParser());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 /* MongoDB Connection */
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true, 
     useUnifiedTopology: true, 
 }).then(() => {
-    console.log("MongoDB Connect is Successful.")
+    console.log("MongoDB Connection is Successful.")
 })
 
 try {
@@ -37,6 +42,5 @@ app.use(
     })
 );
 
-app.use(express.json());
 app.use("/", authRoutes);
 
