@@ -494,9 +494,9 @@ export function MainSection() {
                     <div className="d-flex justify-between align-middle mt-6">
                         {step > 1 && <Button onClick={handlePrev} theme="filled" text="Back" />}
                         {step < 4 ? (
-                            <Button onClick={handleNext} theme="outline" text="Next" />
+                            <Button onClick={handleNext} theme="filled" text="Next" />
                         ) : (
-                            <Button type="submit" theme="outline" text="Create Account" />
+                            <Button type="submit" theme="filled" text="Create Account" />
                         )}
                     </div>
                 </Form>

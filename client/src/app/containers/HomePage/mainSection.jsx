@@ -236,7 +236,7 @@ export function MainSection() {
 
                 <ButtonsContainer>
                     <a target="_blank" href="https://github.com/auxo-group">
-                        <Button theme="outline" text="Get started!" /> 
+                        <Button theme="filled" text="Get started!" /> 
                     </a>
                 </ButtonsContainer>
             </LeftContainer>

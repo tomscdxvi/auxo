@@ -3,12 +3,11 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import styled from 'styled-components';
 import { useMediaQuery } from 'react-responsive';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import tw from 'twin.macro';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { Chart as ChartJS } from 'chart.js/auto'

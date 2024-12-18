@@ -7,14 +7,14 @@ import tw from 'twin.macro';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { FooterDark } from '../../components/footer';
-import { FormInput, FormInputDark } from '../../components/form';
-import { Button }   from '../../components/button';
-import { DarkLogo } from '../../components/logo';
-import { SCREENS } from '../../components/responsive';
-import SignUpIllustration from '../../../assets/images/calculate-illustration.png'
-import '../../styles/authenticatedhome/main.css';
-import '../../styles/font.css'
+import { FooterDark } from '../../../components/footer';
+import { FormInput, FormInputDark } from '../../../components/form';
+import { Button }   from '../../../components/button';
+import { DarkLogo } from '../../../components/logo';
+import { SCREENS } from '../../../components/responsive';
+import SignUpIllustration from '../../../../assets/images/calculate-illustration.png'
+import '../../../styles/authenticatedhome/main.css';
+import '../../../styles/font.css'
 import DefaultToolTip from 'src/app/components/tooltip';
 import { Box, Modal, Typography } from '@mui/material';
 

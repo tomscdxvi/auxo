@@ -1,11 +1,10 @@
 import { React, useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useMediaQuery } from 'react-responsive';
 import tw from 'twin.macro';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Dialog from '@mui/material/Dialog';
@@ -13,11 +12,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import IconButton from "@material-ui/core/IconButton";
-import InputLabel from "@material-ui/core/InputLabel";
-import Visibility from "@material-ui/icons/Visibility";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
 
 import { Footer } from '../footer';
 import { FormInput } from '../form';
@@ -50,6 +47,7 @@ const MobileForm = styled.form`
 export function SignIn(props) {
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     const timeout = (delay) => {
         return new Promise(res => setTimeout(res, delay));
@@ -57,14 +55,13 @@ export function SignIn(props) {
 
     const { open, handleClose, selected } = props;
 
-    const [ signUpOpen, setSignUpOpen ] = useState(false);
-
-    const handleSignUpOpen = () => {
-        handleClose();
-    };
-
-    const handleSignUpClose = () => {
-        setSignUpOpen(false);
+    const checkForRegisterLocation = () => {
+        if (location.pathname === "/register") {
+            handleClose(); // Close the modal if already on /register
+        } else {
+            handleClose(); // Close the modal
+            navigate("/register"); // Navigate to /register if not already there
+        }
     };
 
     // Cookies for JWT authorization
@@ -199,22 +196,12 @@ export function SignIn(props) {
         }
     }; 
 
-    useEffect(() => {
-        const keyDownHandler = (event) => {
-            console.log('User pressed: ', event.key);
-            if (event.key === 'Enter') {
-                event.preventDefault();
-
-                handleSubmit();
-            }
-        };
-    
-        document.addEventListener('keydown', keyDownHandler);
-    
-        return () => {
-          document.removeEventListener('keydown', keyDownHandler);
-        };
-    }, []);
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault(); // Prevent the default action (form submission)
+            handleSubmit(e); // Call handleSubmit when Enter key is pressed
+        }
+    };
 
     const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
 
@@ -241,8 +228,7 @@ export function SignIn(props) {
                             <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChangeHandler} />
                         ))}
                         <DialogContentText>
-                            No account? Sign-up <a onClick={handleSignUpOpen} className="hover:text-paragraph hover:cursor-pointer">here!</a><span className="text-[#DA1E28]"> - Currently Unavailable</span>
-                            <SignUp signUpOpen={signUpOpen} handleSignUpClose={handleSignUpClose} />
+                            No account? Sign-up <a onClick={checkForRegisterLocation} className="hover:text-paragraph hover:cursor-pointer">here!</a>
                         </DialogContentText>
                         <DialogActions className="mt-4">
                             <Button theme="outline" text="Cancel" onClick={handleClose} />
@@ -271,13 +257,12 @@ export function SignIn(props) {
                     theme="colored"
                 />
 
-                <Form onSubmit={handleSubmit}> 
+                <Form onSubmit={handleSubmit} onKeyDown={handleKeyDown}> 
                     {inputs.map((input) => (
                         <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChangeHandler} />
                     ))}
                     <DialogContentText>
-                        No account? Sign-up <a onClick={handleSignUpOpen} className="hover:text-paragraph hover:cursor-pointer">here!</a><span className="text-[#DA1E28]"> - Currently Unavailable</span>
-                        <SignUp signUpOpen={signUpOpen} handleSignUpClose={handleSignUpClose} />
+                        No account? Sign-up <a onClick={checkForRegisterLocation} className="hover:text-paragraph hover:cursor-pointer">here!</a>
                     </DialogContentText>
                     <DialogActions className="m-3 mt-4">
                         <Button theme="outline" text="Cancel" onClick={handleClose} />

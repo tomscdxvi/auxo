@@ -19,8 +19,8 @@ import Visibility from "@material-ui/icons/Visibility";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
-import { SignIn } from '../sign-up';
-import { SignUp } from '../sign-up';
+import { SignIn } from '../client/src/app/components/sign-up';
+import { SignUp } from '../client/src/app/components/sign-up';
 import '../../styles/register/main.css';
 
 

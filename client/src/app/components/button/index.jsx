@@ -14,29 +14,18 @@ const BaseButton = styled.button`
         pb-2 
         outline-none
         rounded-md
-        text-white
         text-base
-        border-solid
-        border-transparent
-        border-2 
         focus:outline-none 
-        transition-all
-        duration-200
-        ease-in-out
         tracking-wider
     `}
 `;
 
 const FilledButton = styled(BaseButton)`
     ${tw`
-        text-white
-        bg-button
+        text-black
+        bg-white
         font-bold
-        hover:bg-white
-        hover:text-button
-        hover:border-button
-        hover:transition-all
-        hover:duration-300
+        shadow-md
     `}
 `;
 
@@ -73,6 +62,14 @@ const OutlinedWhiteButton = styled(BaseButton)`
         hover:duration-300
     `}
 `;
+
+const TextButton = styled(BaseButton)`
+    ${tw`
+        text-white
+        font-bold
+    `}
+`;
+
 
 const MobileBaseButton = styled.button`
     font-family: 'Montserrat', sans-serif;
@@ -139,6 +136,8 @@ export function Button(props) {
         return <OutlinedWhiteButton onClick={onClick} className={className} type={type}>{text}</OutlinedWhiteButton>
     } else if (theme == "disabled-filled") {
         return <DisabledButton className={className} onClick={onClick} type={type} disabled>{text}</DisabledButton>
+    } else if (theme == "text") {
+        return <TextButton className={className} onClick={onClick} type={type}>{text}</TextButton>
     } else {
         return <OutlinedButton onClick={onClick} className={className} type={type}>{text}</OutlinedButton>
     }

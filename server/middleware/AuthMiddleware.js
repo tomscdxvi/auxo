@@ -10,7 +10,7 @@ module.exports.checkUser = async (req, res, next) => {
             return res.json({ status: false });
         }
 
-        jwt.verify(token, "tommy", async (error, decodedToken) => {
+        jwt.verify(token, process.env.JWT_TOKEN, async (error, decodedToken) => {
             if (error) {
                 console.error("JWT verification failed:", error.message); // Log the error for debugging
                 return res.json({ status: false });

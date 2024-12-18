@@ -76,7 +76,7 @@ export function DarkLogo() {
     return (
         <LogoContainer>
             <ImageContainer>
-                <Link to="/home">
+                <Link to="/">
                     <img src={LogoImageDark} alt="" style={{ width: 261, height: 72 }} />
                 </Link>
             </ImageContainer> 
