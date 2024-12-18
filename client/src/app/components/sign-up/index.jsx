@@ -22,6 +22,7 @@ import { SCREENS } from '../responsive';
 import '../../styles/register/main.css'
 import '../../styles/form.css'
 import { SignIn } from '../sign-in';
+import { Checkbox } from '@mui/material';
 
 
 const Label = styled.h1`
@@ -33,12 +34,14 @@ const Label = styled.h1`
         text-headline
         tracking-wider
         font-bold
+        content-center
     `}
 `
 
 const SelectContainer = styled.div`
     ${tw`
         p-6
+        inline-flex
     `}
 `;
 
@@ -109,7 +112,6 @@ export function SignUp(props) {
         email: "",
         password: "",
         confirm_password: "",
-        level: ""
     });
 
     const initializeError = (error) => {
@@ -176,67 +178,137 @@ export function SignUp(props) {
         setUser({...user, [e.target.name]: e.target.value})
     };
 
+    // Handle Checkbox State
+    const [checked, setChecked] = useState(false);
+    const handleCheckbox = (e) => {
+        setChecked(e.target.checked);
+    } 
+
+    console.log(checked);
+
     const handleSubmitForm = async (e) => {
         e.preventDefault();
-
-        try {
-            const { data } = await axios.post("http://localhost:5000/register", {...user}, {withCredentials: true})
-
-            if(data) {
-                if(data.errors) {
-                    const { username, password } = data.errors;
-
-                    if(username) initializeError(username);
-                        else if(password) initializeError(password);
-                } else {
-                    if (user.username !== "" && user.email !== "" && user.password !== "" && user.confirm_password !== "") {
-                        toast.success(user.username + "'s account has been created and can now sign-in using your account details.", {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "colored"
-                        });
-                        
-                        await timeout(4000).then(() => {
-                            handleSignUpClose();
-                        })
+        
+        if(checked == false) { // If checked == false, that means this is a regular User account and not a Coach account.
+            try {
+                const { data } = await axios.post("http://localhost:5000/register", {...user}, {withCredentials: true})
+    
+                if(data) {
+                    if(data.errors) {
+                        const { username, password } = data.errors;
+    
+                        if(username) initializeError(username);
+                            else if(password) initializeError(password);
                     } else {
-                        toast.error("There was an error creating this account.", {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "colored",
-                            style: {
-                                background: "#CDFADC",
-                                color: '#333333' 
-                            }
-                        }); 
+                        if (user.username !== "" && user.email !== "" && user.password !== "" && user.confirm_password !== "") {
+                            toast.success(user.username + "'s account has been created and can now sign-in using your account details.", {
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme: "colored"
+                            });
+                            
+                            await timeout(4000).then(() => {
+                                handleSignUpClose();
+                            })
+                        } else {
+                            toast.error("There was an error creating this account.", {
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme: "colored",
+                                style: {
+                                    background: "#CDFADC",
+                                    color: '#333333' 
+                                }
+                            }); 
+                        }
                     }
                 }
+            } catch(error) {
+                toast.error("There was an error creating this account.", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    style: {
+                        background: "#CDFADC",
+                        color: '#333333' 
+                    }
+                }); 
             }
-        } catch(error) {
-            toast.error("There was an error creating this account.", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                style: {
-                    background: "#CDFADC",
-                    color: '#333333' 
+        } else { // Else (This means checked is true), that means this is a Coach account and not a regular User account.
+            try {
+                const { data } = await axios.post("http://localhost:5000/registerCoach", {...user}, {withCredentials: true})
+    
+                if(data) {
+                    if(data.errors) {
+                        const { username, password } = data.errors;
+    
+                        if(username) initializeError(username);
+                            else if(password) initializeError(password);
+                    } else {
+                        if (user.username !== "" && user.email !== "" && user.password !== "" && user.confirm_password !== "") {
+                            toast.success(user.username + "'s account has been created and can now sign-in using your account details.", {
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme: "colored"
+                            });
+                            
+                            await timeout(4000).then(() => {
+                                handleSignUpClose();
+                            })
+                        } else {
+                            toast.error("There was an error creating this account.", {
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme: "colored",
+                                style: {
+                                    background: "#CDFADC",
+                                    color: '#333333' 
+                                }
+                            }); 
+                        }
+                    }
                 }
-            }); 
+            } catch(error) {
+                toast.error("There was an error creating this account.", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    style: {
+                        background: "#CDFADC",
+                        color: '#333333' 
+                    }
+                }); 
+            }
         }
 
         /* try {
@@ -286,6 +358,7 @@ export function SignUp(props) {
                                 <FormInput key={input.id} {...input} value={user[input.name]} onChange={onChangeHandler} />
                             ))}
 
+                            {/* 
                             <MobileSelectContainer>
                                 <MobileSelectLabel>Select your Level</MobileSelectLabel>
                                 <select name="level" className="input-form !w-[250px]" onChange={onChangeHandler}>
@@ -294,8 +367,8 @@ export function SignUp(props) {
                                     <option value="intermediate">Intermediate</option>
                                     <option value="advanced">Advanced</option>
                                 </select>
-                            </MobileSelectContainer>
-                        </MobileFormContainer>
+                            </MobileSelectContainer> */}
+                        </MobileFormContainer> 
 
                         <DialogContentText>
                             Already have an account? Sign-in <a onClick={handleSignUpClose} className="hover:text-paragraph hover:cursor-pointer">here!</a>
@@ -331,7 +404,8 @@ export function SignUp(props) {
                         {inputs.map((input) => (
                             <FormInput key={input.id} {...input} value={user[input.name]} onChange={onChangeHandler} />
                         ))}
-
+                        
+                        {/* }
                         <SelectContainer>
                             <Label>Select your Level</Label>
                             <select name="level" className="input-form" onChange={onChangeHandler}>
@@ -340,6 +414,14 @@ export function SignUp(props) {
                                 <option value="intermediate">Intermediate</option>
                                 <option value="advanced">Advanced</option>
                             </select>
+                        </SelectContainer> */}
+                        <SelectContainer>
+                            <Label>Are you a Coach?</Label>
+                            <Checkbox 
+                                style={{marginBottom: 7 }}
+                                checked={checked}
+                                onChange={handleCheckbox}
+                            />
                         </SelectContainer>
                     </FormContainer>
 

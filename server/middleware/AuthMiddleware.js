@@ -1,3 +1,4 @@
+const Coach = require("../models/Coach");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 

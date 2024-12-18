@@ -154,9 +154,15 @@ export function SignIn(props) {
 
                         storeUserId(data);
 
-                        await timeout(2000).then(() => {
-                            navigate("/home");
-                        })
+                        if(values.username.includes("coach")) {
+                            await timeout(2000).then(() => {
+                                navigate("/coach");
+                            })
+                        } else {
+                            await timeout(2000).then(() => {
+                                navigate("/home");
+                            })
+                        }
                     } else {
                         toast.error("An error occured while trying to login to this account.", {
                             position: "top-right",

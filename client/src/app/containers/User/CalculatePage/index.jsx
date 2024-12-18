@@ -1,10 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import tw from 'twin.macro';
-import { NavbarLoggedIn } from '../../components/navbar';
+import { Navbar } from '../../../components/navbar';
 import { MainSection } from './mainSection';
 
 const PageContainer = styled.div`
+    background-color: #243763;
     ${tw`
         flex
         flex-col
@@ -15,7 +16,7 @@ const PageContainer = styled.div`
     `}
 `;
 
-export function WorkoutDetails() {
+export default function CalculatePage() {
     return (
         <PageContainer>
             <MainSection />

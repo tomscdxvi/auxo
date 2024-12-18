@@ -12,14 +12,14 @@ import { Chart as ChartJS } from 'chart.js/auto'
 // import { slide as Menu } from 'react-burger-menu';
 
 import TrackCard from './Card';
-import { FooterDark } from '../../components/footer';
-import { FormInputDark } from '../../components/form';
-import { DarkLogo } from '../../components/logo';
-import { SCREENS } from '../../components/responsive';
-import SignUpIllustration from '../../../assets/images/auth-illustration.png';
-import '../../styles/font.css';
-import '../../styles/authenticatedhome/main.css';
-import { DeleteButton } from '../../components/delete';
+import { FooterDark } from '../../../components/footer';
+import { FormInputDark } from '../../../components/form';
+import { DarkLogo } from '../../../components/logo';
+import { SCREENS } from '../../../components/responsive';
+import SignUpIllustration from '../../../../assets/images/auth-illustration.png';
+import '../../../styles/font.css';
+import '../../../styles/authenticatedhome/main.css';
+import { DeleteButton } from '../../../components/delete';
 import { Button } from 'src/app/components/button';
 import { Box, FormControl, InputLabel, Menu, MenuItem, Modal, Select, TextField, Typography, Pagination, Stack } from '@mui/material';
 import CustomBarChart from 'src/app/components/charts/bar-chart';
