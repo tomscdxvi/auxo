@@ -5,7 +5,7 @@ import "../../styles/form.css";
 import "../../styles/font.css";
 import { useMediaQuery } from 'react-responsive';
 import { SCREENS } from '../responsive';
-import { TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+
 
 const FormContainer = styled.div`
     ${tw`
@@ -26,10 +26,10 @@ const MobileLabel = styled.h1`
     line-height: 16px;
     ${tw`
         mt-6
-        text-white
+        text-headline
         font-bold
     `}
-`;
+`
 
 const Label = styled.h1`
     font-size: 16px;
@@ -37,11 +37,11 @@ const Label = styled.h1`
     letter-spacing: 0.15px;
     line-height: 24px;
     ${tw`
-        text-white
+        text-headline
         tracking-wider
         font-bold
     `}
-`;
+`
 
 const MobileSpan = styled.span`
     color: #DA1E28;
@@ -52,7 +52,7 @@ const MobileSpan = styled.span`
         items-center
         hidden
     `}
-`;
+`
 
 const Span = styled.span`
     color: #DA1E28;
@@ -63,141 +63,74 @@ const Span = styled.span`
         items-center
         hidden
     `}
-`;
+`
 
 export function FormInput(props) {
+
     const [focus, setFocus] = useState(false);
-    const { label, onChange, onClick, id, error, type, options, ...inputProps } = props;
-    const handleFocus = (e) => setFocus(true);
 
-    const isMobile = useMediaQuery({ maxWidth: SCREENS.small });
+    const { label, onChange, onClick, id, error, ...inputProps } = props;
 
-    if (isMobile) {
-        if (type === 'select') {
-            return (
-                <MobileFormContainer>
-                    <MobileLabel>{label}</MobileLabel>
-                    <FormControl fullWidth>
-                        <InputLabel>{label}</InputLabel>
-                        <Select
-                            onChange={onChange}
-                            value={inputProps.value}
-                            onBlur={handleFocus}
-                            {...inputProps}
-                            label={label}
-                        >
-                            {options?.map((option, idx) => (
-                                <MenuItem key={idx} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <MobileSpan>{error}</MobileSpan>
-                </MobileFormContainer>
-            );
-        } else {
-            return (
-                <MobileFormContainer>
-                    <MobileLabel>{label}</MobileLabel>
-                    <TextField
-                        fullWidth
-                        onChange={onChange}
-                        onBlur={handleFocus}
-                        value={inputProps.value}
-                        {...inputProps}
-                        error={!!error}
-                        helperText={error}
-                    />
-                </MobileFormContainer>
-            );
-        }
-    }
+    const handleFocus = (e) => {
+        setFocus(true);
+    };
 
-    // For larger screens
-    if (type === 'select') {
+    const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
+
+    if(isMobile) {
         return (
-            <FormContainer>
-                <Label>{label}</Label>
-                <FormControl fullWidth>
-                    <InputLabel>{label}</InputLabel>
-                    <Select
-                        onChange={onChange}
-                        value={inputProps.value}
-                        onBlur={handleFocus}
-                        {...inputProps}
-                        label={label}
-                    >
-                        {options?.map((option, idx) => (
-                            <MenuItem key={idx} value={option.value}>
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <Span>{error}</Span>
-            </FormContainer>
-        );
+            <MobileFormContainer>
+                <MobileLabel>{label}</MobileLabel>
+                <input 
+                    className="input-form !w-[250px] mt-1 mb-2" 
+                    onChange={onChange} 
+                    onBlur={handleFocus} 
+                    focus={focus.toString()} 
+                    {...inputProps} 
+                /> 
+                <MobileSpan>{error}</MobileSpan>
+            </MobileFormContainer>
+        )
     }
 
     return (
         <FormContainer>
             <Label>{label}</Label>
-            <TextField
-                fullWidth
-                onChange={onChange}
-                onBlur={handleFocus}
-                value={inputProps.value}
-                {...inputProps}
-                error={!!error}
-                helperText={error}
-            />
+            <input 
+                className="input-form" 
+                onChange={onChange} 
+                onBlur={handleFocus} 
+                focus={focus.toString()} 
+                {...inputProps} 
+            /> 
             <Span>{error}</Span>
         </FormContainer>
-    );
+    )
 }
 
 export function FormInputDark(props) {
     const [focus, setFocus] = useState(false);
-    const { label, onChange, id, error, type, options, ...inputProps } = props;
-    const handleFocus = (e) => setFocus(true);
+
+    const { label, onChange, id, error, ...inputProps } = props;
+
+    const handleFocus = (e) => {
+        setFocus(true);
+    };
 
     return (
         <FormContainer>
             <Label style={{ color: 'white' }}>{label}</Label>
-            {type === 'select' ? (
-                <FormControl fullWidth>
-                    <InputLabel>{label}</InputLabel>
-                    <Select
-                        onChange={onChange}
-                        value={inputProps.value}
-                        onBlur={handleFocus}
-                        {...inputProps}
-                        label={label}
-                    >
-                        {options?.map((option, idx) => (
-                            <MenuItem key={idx} value={option.value}>
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            ) : (
-                <TextField
-                    fullWidth
-                    onChange={onChange}
-                    onBlur={handleFocus}
-                    value={inputProps.value}
-                    {...inputProps}
-                    error={!!error}
-                    helperText={error}
-                />
-            )}
+            <input 
+                className="input-form" 
+                onChange={onChange} 
+                onBlur={handleFocus} 
+                focus={focus.toString()} 
+                {...inputProps} 
+            /> 
             <Span style={{ color: 'white' }}>{error}</Span>
         </FormContainer>
-    );
+    )
 }
-
 
 export function FormInputCalculate(props) {
     const [focus, setFocus] = useState(false);
