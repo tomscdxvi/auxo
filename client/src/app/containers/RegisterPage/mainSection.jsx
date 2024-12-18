@@ -5,6 +5,8 @@ import { useMediaQuery } from 'react-responsive';
 import tw from 'twin.macro';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import { TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { makeStyles } from "@mui/styles";
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Footer } from '../../components/footer';
@@ -39,8 +41,8 @@ const MainContainer = styled.div`
 const Title = styled.h1`
     ${tw`
         font-bold
-        text-headline
-        mb-4
+        text-white
+        p-4
         xlarge:text-xl 
         xlarge:leading-relaxed
     `}
@@ -52,7 +54,7 @@ const Label = styled.h1`
     letter-spacing: 0.15px;
     line-height: 24px;
     ${tw`
-        text-headline
+        text-white
         tracking-wider
         font-bold
     `}
@@ -102,7 +104,7 @@ const HorizontalLine = styled.hr`
     z-index: 1;
     visibility: hidden;
     ${tw`
-        text-headline
+        text-white
         xlarge:visible
     `}
 `
@@ -150,6 +152,69 @@ const FooterContainer = styled.div`
     `}
 ` */
 
+// Set the styles and classes for MUI inputs
+const useStyles = makeStyles({
+    root: {
+        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#ffffff"
+        },
+        "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#ffffff"
+        },
+        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#ffffff"
+        },
+        "& .MuiOutlinedInput-input": {
+            color: "#ffffff"
+        },
+        "&:hover .MuiOutlinedInput-input": {
+            color: "#ffffff"
+        },
+        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
+            color: "#ffffff"
+        },
+        "& .MuiInputLabel-outlined": {
+            color: "#ffffff"
+        },
+        "&:hover .MuiInputLabel-outlined": {
+            color: "#ffffff"
+        },
+        "& .MuiInputLabel-outlined.Mui-focused": {
+            color: "#ffffff"
+        },
+        "& .MuiSvgIcon-root": { 
+            color: "#ffffff" 
+        }
+    },
+    select: {
+        "& .MuiOutlinedInput-input": {
+            color: "#ffffff"
+        },  
+        "&.MuiOutlinedInput-root": {
+            "& fieldset": {
+                borderColor: "#ffffff"
+            },
+            "&:hover fieldset": {
+                borderColor: "#ffffff"
+            },
+            "&.Mui-focused fieldset": {
+                borderColor: "#ffffff"
+            }
+        },
+        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
+            color: "#ffffff"
+        },
+        "& .MuiInputLabel-outlined": {
+            color: "#ffffff"
+        },
+        "&:hover .MuiInputLabel-outlined": {
+            color: "#ffffff"
+        },
+        "& .MuiInputLabel-outlined.Mui-focused": {
+            color: "#ffffff"
+        }
+    }
+});
 
 export function MainSection() {
 
@@ -159,6 +224,7 @@ export function MainSection() {
         return new Promise(res => setTimeout(res, delay));
     }
 
+    const [step, setStep] = useState(1); // Track current step
     const [user, setUser] = useState({
         username: "",
         email: "",
@@ -166,6 +232,18 @@ export function MainSection() {
         confirm_password: "",
         level: ""
     });
+
+    const handleNext = () => {
+        if (step < 4) {
+            setStep(step + 1);
+        }
+    };
+    
+    const handlePrev = () => {
+        if (step > 1) {
+            setStep(step - 1);
+        }
+    };
 
     const initializeError = (error) => {
         toast.error(error, {
@@ -314,6 +392,8 @@ export function MainSection() {
         } */
     }; 
 
+    const classes = useStyles();
+
     console.log(user);
 
     return (
@@ -338,8 +418,98 @@ export function MainSection() {
                     theme="colored"
                 />
 
-                <Form onSubmit={handleSubmit}>
-                    <FormContainer>
+                <Form onSubmit={handleSubmit} className='p-3'>
+                    {step === 1 && (
+                        <div>
+                            <TextField
+                            label="Username"
+                            name="username"
+                            value={user.username}
+                            onChange={onChangeHandler}
+                            required
+                            fullWidth
+                            className={classes.root}
+                            />
+                        </div>
+                    )}
+                    {step === 2 && (
+                        <div>
+                            <TextField
+                            label="Email Address"
+                            name="email"
+                            value={user.email}
+                            onChange={onChangeHandler}
+                            required
+                            fullWidth
+                            className={classes.root}
+                            />
+                        </div>
+                    )}
+                    {step === 3 && (
+                        <div>
+                            <TextField
+                                label="Password"
+                                name="password"
+                                type="password"
+                                value={user.password}
+                                onChange={onChangeHandler}
+                                required
+                                fullWidth
+                                className={classes.root}
+                                sx={{
+                                    marginBottom: 3
+                                }}
+                            />
+                            <TextField
+                                label="Confirm Password"
+                                name="confirm_password"
+                                type="password"
+                                value={user.confirm_password}
+                                onChange={onChangeHandler}
+                                required
+                                fullWidth
+                                className={classes.root}
+                            />
+                        </div>
+                    )}
+                    {step === 4 && (
+                        <div>
+                            <TextField
+                                label="Select Level"
+                                name="level"
+                                value={user.level}
+                                onChange={onChangeHandler}
+                                required
+                                fullWidth
+                                select
+                                className={classes.root}
+                            >
+                                <MenuItem value={10}>Beginner</MenuItem>
+                                <MenuItem value={20}>Intermediate</MenuItem>
+                                <MenuItem value={30}>Advanced</MenuItem>
+                            </TextField>
+                        </div>
+                    )}
+
+                    <div className="d-flex justify-between align-middle mt-6">
+                        {step > 1 && <Button onClick={handlePrev} theme="filled" text="Back" />}
+                        {step < 4 ? (
+                            <Button onClick={handleNext} theme="filled" text="Next" />
+                        ) : (
+                            <Button type="submit" theme="filled" text="Create Account" />
+                        )}
+                    </div>
+                </Form>
+            </MainContainer>
+            {/* <FooterContainer>
+                <Footer />
+            </FooterContainer> */}
+        </PageContainer>
+    )
+}
+
+{/*
+                        <FormContainer>
                         {inputs.map((input) => (
                             <FormInput key={input.id} {...input} value={user[input.name]} onChange={onChangeHandler} />
                         ))}
@@ -362,11 +532,4 @@ export function MainSection() {
 
                         <Button theme="filled" text="Create" /> 
                     </ButtonsContainer>
-                </Form>
-            </MainContainer>
-            {/* <FooterContainer>
-                <Footer />
-            </FooterContainer> */}
-        </PageContainer>
-    )
-}
+*/}

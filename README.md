@@ -1,6 +1,6 @@
 # Auxo App
 
-Developed by Tommy
+Developed by Tommy Chiu
 
 ### Branch Creation
 

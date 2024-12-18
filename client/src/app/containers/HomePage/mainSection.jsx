@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Lottie from 'react-lottie';
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import { Button } from '../../components/button';
@@ -7,7 +8,8 @@ import { Footer } from '../../components/footer';
 import { useMediaQuery } from 'react-responsive'
 import { SCREENS } from '../../components/responsive';
 
-import BikerIllustration from '../../../assets/images/bikerillustration.png'
+import BikerIllustration from '../../../assets/images/bikerillustration.png';
+import HomeLottie from '../../../assets/lotties/HomeLottie.json';
 import { SignIn } from 'src/app/components/sign-in';
 import { SignUp } from 'src/app/components/sign-up';
 
@@ -54,7 +56,7 @@ const Slogan = styled.h1`
     ${tw`
         font-bold
         text-2xl
-        text-headline
+        text-white
         mb-4
         transition
         ease-in-out
@@ -76,7 +78,7 @@ const Description = styled.p`
         text-xs
         overflow-hidden
         max-h-12
-        text-paragraph
+        text-white
         small:max-h-full
         large:text-sm
         xlarge:text-lg
@@ -162,7 +164,6 @@ export function MainSection() {
 
     const [ isOpen, setIsOpen ] = useState(false);
 
-
     const [ open, setOpen ] = useState(false);
 
     const handleClose = () => {
@@ -173,6 +174,15 @@ export function MainSection() {
     
     const handleSignUpClose = () => {
         setSignUpOpen(false);
+    }
+
+    const lottieOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: HomeLottie,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice'
+        },
     }
 
     if(isMobile) {
@@ -220,20 +230,28 @@ export function MainSection() {
                 <Slogan>Track on the go.</Slogan>
 
                 <Description>
-                    Are you interested in<span style={{ fontWeight: "bold" }}> starting your journey in fitness</span> or are you a <span style={{ fontWeight: "bold" }}> hardened veteran</span> that has many years of experience in this space? 
-                    With <span style={{ fontWeight: "bold" }}> Auxo</span>, you are going to constantly grow due to our <span style={{ fontWeight: "bold" }}>planning and easy-to-use tracking technology.</span>
+                    Are you interested in<span style={{ fontWeight: "bold" }}> starting your journey</span> or are you <span style={{ fontWeight: "bold" }}>experienced </span> with many years in fitness? 
+                    With <span style={{ fontWeight: "bold" }}> Auxo</span>, you are going to elevate your training regardless of your level by utilizing our <span style={{ fontWeight: "bold" }}>planning and easy-to-use tracking technology.</span>
                 </Description>
 
                 <ButtonsContainer>
                     <a target="_blank" href="https://github.com/auxo-group">
-                        <Button theme="outline" text="Learn more about our company" /> 
+                        <Button theme="filled" text="Get started!" /> 
                     </a>
                 </ButtonsContainer>
             </LeftContainer>
 
             <RightContainer>
                 <BikerIllustrationContainer>
+                    {/*
                     <img src={BikerIllustration} title="Designed by Control Illustrations" alt="Illustration of someone riding a bike" />
+                    */}
+                    <Lottie 
+                        options={lottieOptions}
+                        height={400}
+                        width={400}
+                        isClickToPauseDisabled={true}
+                    />
                 </BikerIllustrationContainer>
             </RightContainer> 
 

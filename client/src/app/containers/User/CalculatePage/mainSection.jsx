@@ -3,20 +3,18 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import styled from 'styled-components';
 import { useMediaQuery } from 'react-responsive';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import tw from 'twin.macro';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-import { FooterDark } from '../../components/footer';
-import { FormInput, FormInputDark } from '../../components/form';
-import { Button }   from '../../components/button';
-import { DarkLogo } from '../../components/logo';
-import { SCREENS } from '../../components/responsive';
-import SignUpIllustration from '../../../assets/images/calculate-illustration.png'
-import '../../styles/authenticatedhome/main.css';
-import '../../styles/font.css'
+import { FooterDark } from '../../../components/footer';
+import { FormInput, FormInputDark } from '../../../components/form';
+import { Button }   from '../../../components/button';
+import { DarkLogo } from '../../../components/logo';
+import { SCREENS } from '../../../components/responsive';
+import SignUpIllustration from '../../../../assets/images/calculate-illustration.png'
+import '../../../styles/authenticatedhome/main.css';
+import '../../../styles/font.css'
 import DefaultToolTip from 'src/app/components/tooltip';
 import { Box, Modal, Typography } from '@mui/material';
 
@@ -277,28 +275,13 @@ export function MainSection() {
     useEffect(() => {
         const verifyUser = async () => {
             if(!cookies.jwt) {
-                navigate("/login");
+                navigate("/");
             } else {
                 const { data } = await axios.post(
-                    "http://localhost:5000/home",
+                    "http://localhost:5000/calculate",
                     {},
                     { withCredentials: true }
                 );
-                if(!data.status) {
-                    removeCookie("jwt");
-                    navigate("/login");
-                } else {
-                    /* toast("⭐ Welcome back, ", {
-                        position: "top-right",
-                        autoClose: 1500,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "colored"
-                    }); */
-                }
             }
         };
         verifyUser();

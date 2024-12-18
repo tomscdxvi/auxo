@@ -4,20 +4,8 @@ import styled from 'styled-components';
 import tw from 'twin.macro';
 import { useMediaQuery } from 'react-responsive';
 
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import IconButton from "@material-ui/core/IconButton";
-import InputLabel from "@material-ui/core/InputLabel";
-import Visibility from "@material-ui/icons/Visibility";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-
 import { SCREENS } from '../responsive';
-import '../../styles/font.css';
-import '../../styles/home/main.css'
+import '../../styles/home/main.css';
 
 import { SignIn } from '../sign-in';
 import { Button } from '../button';
@@ -46,28 +34,28 @@ const SignInItem = styled.li`
         font-medium
         medium:mr-12
         cursor-pointer
-        transition
-        duration-200
-        ease-in-out
-        hover:underline
+        hover:transition
+        hover:duration-200
+        hover:ease-in-out
+        hover:bg-gray-background
+        hover:no-underline
     `}
 `;
 
 const SignUpItem = styled.li`
     font-family: 'Montserrat', sans-serif;
     ${tw`
+        mt-3
         text-lg
         medium:text-xl
         text-paragraph
         font-medium
-        mr-1
         medium:mr-12
         cursor-pointer
-        transition
-        duration-200
-        ease-in-out
-        hover:underline
-        p-2
+        hover:transition
+        hover:duration-200
+        hover:ease-in-out
+        hover:no-underline
     `}
 `;
 
@@ -111,19 +99,42 @@ export function NavItems() {
 }
 
 export function NavItemsDark() {
+
+    const navigate = useNavigate();
+
+    const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
+
+    const [ open, setOpen ] = useState(false);
+
+    const handleClose = () => {
+        setOpen(false);
+    }
+
+    const [ signUpOpen, setSignUpOpen ] = useState(false);
+    
+    const handleSignUpClose = () => {
+        setSignUpOpen(false);
+    }
+
+    if(isMobile) {
+        return (
+            <ListContainerMobile>
+                <SignInItem>
+                </SignInItem>
+            </ListContainerMobile> 
+        )
+    }; 
+
     return (
         <ListContainer>
-            <SignUpItem style={{ color: 'white' }}>
-                <Link to="/register">Sign up</Link>
+            <SignUpItem>
+                <Button theme="text" text="Sign Up" className="font-bold" onClick={() => navigate("/register")} />
             </SignUpItem>
 
-            <SignInItem style={{ color: 'white' }}>
-                <Link to="/login">Sign in</Link>
+            <SignInItem>
+                <Button theme="filled" text="Sign In" className="font-bold mr-8" onClick={() => setOpen(true)} />
+                <SignIn open={open} handleClose={handleClose} />
             </SignInItem>
-
-            {/* <SignUpItem style={{ color: 'white' }}>
-                <Link to="/track">Track</Link>
-            </SignUpItem> */}
         </ListContainer>
     )
 }

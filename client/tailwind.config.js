@@ -12,8 +12,10 @@ module.exports = {
 
       transparent: 'transparent',
       black: 'black',
+      'home-background': '#1a1a1a',
       white: 'white',
       'background': '#F9F4EF',
+      'gray-background': '#C4C4C4',
       'headline': '#001858',
       'paragraph': '#172C66',
       'button': '#716040',

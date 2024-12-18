@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/styles";
 import styled from 'styled-components';
 import { useMediaQuery } from 'react-responsive';
 import tw from 'twin.macro';
@@ -130,7 +130,7 @@ const useStyles = makeStyles({
 
 export default function UserDetails({ nextStep, handleChange, track }) {
 
-    const [date, setDate] = useState("");
+    const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'));
     const [startTime, setStartTime] = useState();
     const [endTime, setEndTime] = useState();
 
@@ -157,14 +157,16 @@ export default function UserDetails({ nextStep, handleChange, track }) {
                             className={classes.root}
                         />
                     </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <div>
                         <div>
                             <Title>Date</Title>
                             <TextField
-                                placeholder="Date"
                                 label="Date"
-                                onChange={handleChange('date')}
-                                className={classes.root}
+                                type="date" // Use "date" type for the TextField
+                                value={date}
+                                InputLabelProps={{
+                                    shrink: true, // Ensures the label doesn't overlap the value
+                                }}
                             />
                             <DefaultToolTip
                                 content="You have the freedom to format the date to your preference."
@@ -173,16 +175,54 @@ export default function UserDetails({ nextStep, handleChange, track }) {
                                 tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
                                 buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
                             />
-                            {/*
-                            <DatePicker 
-                                onChange={(value) => {
-                                    setDate(dayjs(value).format("MM/DD/YYYY").toString());
-                                    
-                                    handleChange('date')
-                                }} 
+                        </div>
+    
+                        <div>
+                            <Title>Time</Title>
+                            <TextField
+                                placeholder="Start Time"
+                                label="Start Time"
+                                onChange={handleChange('start_time')}
                                 className={classes.root}
-                                sx={{ svg: { color: "#172C66" }, width: 180 }} 
-                            /> */}
+                                sx={{ marginBottom: 2.5, marginRight: 2.5 }}
+                            />
+                            <div>
+                                <TextField
+                                    placeholder="End Time"
+                                    label="End Time"
+                                    onChange={handleChange('end_time')}
+                                    className={classes.root}
+                                />
+                                <DefaultToolTip
+                                    content="You have the freedom to format the time to your preference."
+                                    text="Learn more"
+                                    placement="bottom"
+                                    tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
+                                    buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
+                                />
+                            </div>
+                        </div>
+                        
+                    </div>
+                    {/*
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <div>
+                            <Title>Date</Title>
+                            <TextField
+                                label="Date"
+                                type="date" // Use "date" type for the TextField
+                                value={date}
+                                InputLabelProps={{
+                                    shrink: true, // Ensures the label doesn't overlap the value
+                                }}
+                            />
+                            <DefaultToolTip
+                                content="You have the freedom to format the date to your preference."
+                                text="Learn more"
+                                placement="bottom"
+                                tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
+                                buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
+                            />
                         </div>
     
                         <div>
@@ -212,6 +252,7 @@ export default function UserDetails({ nextStep, handleChange, track }) {
                         </div>
                         
                     </LocalizationProvider>
+                    */}
                     <Box sx={{ minWidth: 60 }}>
                         <Title>Type</Title>
                         <FormControl style={{ minWidth: 180 }}>
@@ -246,14 +287,13 @@ export default function UserDetails({ nextStep, handleChange, track }) {
                             className={classes.root}
                         />
                     </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <div>
                         <div>
                             <Title>Date</Title>
                             <TextField
-                                placeholder="Date"
                                 label="Date"
-                                onChange={handleChange('date')}
-                                className={classes.root}
+                                value={date}
+                                variant="standard"
                             />
                             <DefaultToolTip
                                 content="You have the freedom to format the date to your preference."
@@ -262,16 +302,6 @@ export default function UserDetails({ nextStep, handleChange, track }) {
                                 tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
                                 buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
                             />
-                            {/*
-                            <DatePicker 
-                                onChange={(value) => {
-                                    setDate(dayjs(value).format("MM/DD/YYYY").toString());
-                                    
-                                    handleChange('date')
-                                }} 
-                                className={classes.root}
-                                sx={{ svg: { color: "#172C66" }, width: 180 }} 
-                            /> */}
                         </div>
     
                         <div>
@@ -283,42 +313,23 @@ export default function UserDetails({ nextStep, handleChange, track }) {
                                 className={classes.root}
                                 sx={{ marginBottom: 2.5, marginRight: 2.5 }}
                             />
-                            <TextField
-                                placeholder="End Time"
-                                label="End Time"
-                                onChange={handleChange('end_time')}
-                                className={classes.root}
-                            />
-                            <DefaultToolTip
-                                content="You have the freedom to format the time to your preference."
-                                text="Learn more"
-                                placement="bottom"
-                                tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
-                                buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
-                            />
-                            {/*
-                            <TimePicker
-                                label="Start Time"
-                                value={startTime}
-                                onChange={(value) => {
-                                    setStartTime(value)
-                                    handleChange('start_time')
-                                }}
-                                className={classes.root}
-                                sx={{ svg: { color: "#172C66" }, marginBottom: 3 }} 
-    
-                            />
-    
-                            <TimePicker
-                                label="End Time"
-                                defaultValue={dayjs('2022-04-17T15:30')}
-                                onChange={handleChange('end_time')}
-                                className={classes.root}
-                                sx={{ svg: { color: "#172C66" } }} 
-                            /> */}
+                            <div>
+                                <TextField
+                                    placeholder="End Time"
+                                    label="End Time"
+                                    onChange={handleChange('end_time')}
+                                    className={classes.root}
+                                />
+                                <DefaultToolTip
+                                    content="You have the freedom to format the time to your preference."
+                                    text="Learn more"
+                                    placement="bottom"
+                                    tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
+                                    buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
+                                />
+                            </div>
                         </div>
-                        
-                    </LocalizationProvider>
+                    </div>
                     <Box sx={{ minWidth: 60 }}>
                         <Title>Type</Title>
                         <FormControl style={{ minWidth: 180 }}>

@@ -1,7 +1,7 @@
 import { React, useState } from 'react'
 import styled from 'styled-components';
 import tw from 'twin.macro';
-import { AuthenticatedHomePage } from '../app/containers/AuthenticatedHomePage';
+import AuthenticatedHomePage from '../../app/containers/User/AuthenticatedHomePage';
 
 const HomeContainer = styled.div`
   background-color: #243763;
