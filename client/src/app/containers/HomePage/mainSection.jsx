@@ -244,7 +244,7 @@ export function MainSection() {
             <RightContainer>
                 <BikerIllustrationContainer>
                     {/*
-                    <img src={BikerIllustration} title="Designed by Control Illustrations" alt="Illustration of someone riding a bike" />
+                        <img src={BikerIllustration} title="Designed by Control Illustrations" alt="Illustration of someone riding a bike" />
                     */}
                     <Lottie 
                         options={lottieOptions}

@@ -7,6 +7,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import { TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { makeStyles } from "@mui/styles";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Footer } from '../../components/footer';
@@ -140,80 +141,57 @@ const ImageContainer = styled.div`
     `}
 `;
 
-/* Disabled for now due to styling issue
-const FooterContainer = styled.div`
-    width: 78%;
-    position: absolute;
-    top: 110.5%;
-    text-align: center;
-    ${tw`
-        text-sm
-        text-paragraph
-    `}
-` */
-
-// Set the styles and classes for MUI inputs
-const useStyles = makeStyles({
+const useStyles = makeStyles(() => ({
     root: {
-        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#ffffff"
-        },
-        "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#ffffff"
-        },
-        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#ffffff"
-        },
-        "& .MuiOutlinedInput-input": {
-            color: "#ffffff"
-        },
-        "&:hover .MuiOutlinedInput-input": {
-            color: "#ffffff"
-        },
-        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
-            color: "#ffffff"
-        },
-        "& .MuiInputLabel-outlined": {
-            color: "#ffffff"
-        },
-        "&:hover .MuiInputLabel-outlined": {
-            color: "#ffffff"
-        },
-        "& .MuiInputLabel-outlined.Mui-focused": {
-            color: "#ffffff"
-        },
-        "& .MuiSvgIcon-root": { 
-            color: "#ffffff" 
-        }
+        flexDirection: "column",
+        display: "flex"
     },
-    select: {
-        "& .MuiOutlinedInput-input": {
-            color: "#ffffff"
-        },  
-        "&.MuiOutlinedInput-root": {
-            "& fieldset": {
-                borderColor: "#ffffff"
-            },
-            "&:hover fieldset": {
-                borderColor: "#ffffff"
-            },
-            "&.Mui-focused fieldset": {
-                borderColor: "#ffffff"
-            }
-        },
-        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
-            color: "#ffffff"
-        },
-        "& .MuiInputLabel-outlined": {
-            color: "#ffffff"
-        },
-        "&:hover .MuiInputLabel-outlined": {
-            color: "#ffffff"
-        },
-        "& .MuiInputLabel-outlined.Mui-focused": {
-            color: "#ffffff"
-        }
+    input: {
+      color: "white"
     }
+}));
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: "#FFFFFF",
+        },
+    },
+    components: {
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    "& fieldset": {
+                        borderColor: "white", // Default border color
+                    },
+                    "&:hover fieldset": {
+                        borderColor: "white", // Hover border color
+                    },
+                    "&.Mui-focused fieldset": {
+                        borderColor: "transparent", // Remove blue focus border
+                    },
+                    "&.Mui-focused": {
+                        outline: "none", // Remove the blue glow from focus
+                    },
+                },
+            },
+        },
+        MuiInputLabel: {
+            styleOverrides: {
+                root: {
+                    color: "white", // Label color
+                },
+            },
+        },
+        MuiInputBase: {
+            styleOverrides: {
+                input: {
+                    color: "white", // Input text color
+                    outline: "none", // Suppress blue outline from focus
+                },
+            },
+        },
+    },
 });
 
 export function MainSection() {
@@ -371,25 +349,6 @@ export function MainSection() {
                 }
             }); 
         }
-
-        /* try {
-            const { data } = await axios.post("http://localhost:5000/register", {...user}, {withCredentials: true})
-
-            if(data) {
-                if(data.errors) {
-                    const { username, password } = data.errors;
-                    if(username) {
-                        initializeError(username);
-                    } else if(password) {
-                        initializeError(password);
-                    }
-                } else {
-                    navigate("/track")
-                }
-            }
-        } catch (error) {
-            console.log(error);
-        } */
     }; 
 
     const classes = useStyles();
@@ -419,117 +378,84 @@ export function MainSection() {
                 />
 
                 <Form onSubmit={handleSubmit} className='p-3'>
-                    {step === 1 && (
-                        <div>
+                    <ThemeProvider theme={theme}>
+                        {step === 1 && (
                             <TextField
-                            label="Username"
-                            name="username"
-                            value={user.username}
-                            onChange={onChangeHandler}
-                            required
-                            fullWidth
-                            className={classes.root}
-                            />
-                        </div>
-                    )}
-                    {step === 2 && (
-                        <div>
-                            <TextField
-                            label="Email Address"
-                            name="email"
-                            value={user.email}
-                            onChange={onChangeHandler}
-                            required
-                            fullWidth
-                            className={classes.root}
-                            />
-                        </div>
-                    )}
-                    {step === 3 && (
-                        <div>
-                            <TextField
-                                label="Password"
-                                name="password"
-                                type="password"
-                                value={user.password}
+                                label="Username"
+                                name="username"
+                                value={user.username}
                                 onChange={onChangeHandler}
                                 required
                                 fullWidth
-                                className={classes.root}
-                                sx={{
-                                    marginBottom: 3
-                                }}
+                                variant="outlined"
                             />
-                            <TextField
-                                label="Confirm Password"
-                                name="confirm_password"
-                                type="password"
-                                value={user.confirm_password}
-                                onChange={onChangeHandler}
-                                required
-                                fullWidth
-                                className={classes.root}
-                            />
-                        </div>
-                    )}
-                    {step === 4 && (
-                        <div>
-                            <TextField
-                                label="Select Level"
-                                name="level"
-                                value={user.level}
-                                onChange={onChangeHandler}
-                                required
-                                fullWidth
-                                select
-                                className={classes.root}
-                            >
-                                <MenuItem value={10}>Beginner</MenuItem>
-                                <MenuItem value={20}>Intermediate</MenuItem>
-                                <MenuItem value={30}>Advanced</MenuItem>
-                            </TextField>
-                        </div>
-                    )}
-
-                    <div className="d-flex justify-between align-middle mt-6">
-                        {step > 1 && <Button onClick={handlePrev} theme="filled" text="Back" />}
-                        {step < 4 ? (
-                            <Button onClick={handleNext} theme="filled" text="Next" />
-                        ) : (
-                            <Button type="submit" theme="filled" text="Create Account" />
                         )}
-                    </div>
+                        {step === 2 && (
+                            <div>
+                                <TextField
+                                label="Email Address"
+                                name="email"
+                                value={user.email}
+                                onChange={onChangeHandler}
+                                required
+                                fullWidth
+                                />
+                            </div>
+                        )}
+                        {step === 3 && (
+                            <div>
+                                <TextField
+                                    label="Password"
+                                    name="password"
+                                    type="password"
+                                    value={user.password}
+                                    onChange={onChangeHandler}
+                                    required
+                                    fullWidth
+                                    sx={{
+                                        marginBottom: 3
+                                    }}
+                                />
+                                <TextField
+                                    label="Confirm Password"
+                                    name="confirm_password"
+                                    type="password"
+                                    value={user.confirm_password}
+                                    onChange={onChangeHandler}
+                                    required
+                                    fullWidth
+                                />
+                            </div>
+                        )}
+                        {step === 4 && (
+                            <div>
+                                <TextField
+                                    label="Select Level"
+                                    name="level"
+                                    value={user.level}
+                                    onChange={onChangeHandler}
+                                    required
+                                    fullWidth
+                                    select
+                                >
+                                    <MenuItem value={10}>Beginner</MenuItem>
+                                    <MenuItem value={20}>Intermediate</MenuItem>
+                                    <MenuItem value={30}>Advanced</MenuItem>
+                                </TextField>
+                            </div>
+                        )}
+
+                        <div className="d-flex justify-between align-middle mt-6">
+                            {step > 1 && <Button onClick={handlePrev} theme="filled" text="Back" />}
+                            {step < 4 ? (
+                                <Button onClick={handleNext} theme="filled" text="Next" />
+                            ) : (
+                                <Button type="submit" theme="filled" text="Create Account" />
+                            )}
+                        </div>
+                    </ThemeProvider>
                 </Form>
             </MainContainer>
-            {/* <FooterContainer>
-                <Footer />
-            </FooterContainer> */}
         </PageContainer>
     )
 }
-
-{/*
-                        <FormContainer>
-                        {inputs.map((input) => (
-                            <FormInput key={input.id} {...input} value={user[input.name]} onChange={onChangeHandler} />
-                        ))}
-
-                        <SelectContainer>
-                            <Label>Select your Level</Label>
-                            <select name="level" className="input-form" onChange={onChangeHandler}>
-                                <option value="" disabled selected hidden>Choose a level...</option>
-                                <option value="beginner">Beginner</option>
-                                <option value="intermediate">Intermediate</option>
-                                <option value="advanced">Advanced</option>
-                            </select>
-                        </SelectContainer>
-                    </FormContainer>
-                    <ButtonsContainer>
-
-                        <Link to="/">
-                            <Button theme="outline" text="Cancel" />
-                        </Link>
-
-                        <Button theme="filled" text="Create" /> 
-                    </ButtonsContainer>
-*/}

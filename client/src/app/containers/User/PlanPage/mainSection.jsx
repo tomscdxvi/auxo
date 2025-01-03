@@ -10,16 +10,16 @@ import 'react-toastify/dist/ReactToastify.css';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 
-import { FormInputDark } from '../../components/form';
-import { DarkLogo } from '../../components/logo';
-import { Button }   from '../../components/button';
-import { SCREENS } from '../../components/responsive';
-import SignUpIllustration from '../../../assets/images/track-illustration.png';
-import PlusIcon from '../../../assets/images/plus-icon.png';
-import '../../styles/authenticatedhome/main.css';
-import '../../styles/font.css'
+import { FormInputDark } from '../../../components/form';
+import { DarkLogo } from '../../../components/logo';
+import { Button }   from '../../../components/button';
+import { SCREENS } from '../../../components/responsive';
+import SignUpIllustration from '../../../../assets/images/track-illustration.png';
+import PlusIcon from '../../../../assets/images/plus-icon.png';
+import '../../../styles/authenticatedhome/main.css';
+import '../../../styles/font.css'
 import TrackCard from '../PlanPage/Card';
 import { Modal, Pagination, Stack, Typography } from '@mui/material';
 
@@ -209,13 +209,69 @@ const FooterContainer = styled.div`
     `}
 `
 
-const useStyles = makeStyles(() => ({
-    ul: {
-        "& .MuiPaginationItem-root": {
-            color: "#fff"
+// Set the styles and classes for MUI inputs
+const useStyles = makeStyles({
+    root: {
+        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#ffffff"
+        },
+        "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#ffffff"
+        },
+        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#ffffff"
+        },
+        "& .MuiOutlinedInput-input": {
+            color: "#ffffff"
+        },
+        "&:hover .MuiOutlinedInput-input": {
+            color: "#ffffff"
+        },
+        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
+            color: "#ffffff"
+        },
+        "& .MuiInputLabel-outlined": {
+            color: "#ffffff"
+        },
+        "&:hover .MuiInputLabel-outlined": {
+            color: "#ffffff"
+        },
+        "& .MuiInputLabel-outlined.Mui-focused": {
+            color: "#ffffff"
+        },
+        "& .MuiSvgIcon-root": { 
+            color: "#ffffff" 
+        }
+    },
+    select: {
+        "& .MuiOutlinedInput-input": {
+            color: "#ffffff"
+        },  
+        "&.MuiOutlinedInput-root": {
+            "& fieldset": {
+                borderColor: "#ffffff"
+            },
+            "&:hover fieldset": {
+                borderColor: "#ffffff"
+            },
+            "&.Mui-focused fieldset": {
+                borderColor: "#ffffff"
+            }
+        },
+        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
+            color: "#ffffff"
+        },
+        "& .MuiInputLabel-outlined": {
+            color: "#ffffff"
+        },
+        "&:hover .MuiInputLabel-outlined": {
+            color: "#ffffff"
+        },
+        "& .MuiInputLabel-outlined.Mui-focused": {
+            color: "#ffffff"
         }
     }
-}));
+});
 
 const style = {
     position: 'absolute',
@@ -333,48 +389,28 @@ export function MainSection() {
                 // Now set loading to false to render the page which the data from the api
                 setLoading(false);
 
-
-                /* 
-                toast("⭐ Welcome back, " + res.data.username, {
-                    position: "top-right",
-                    autoClose: 1500,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored"
-                }); */
             });
         } catch(error) {
             console.log(error);
         }
     }
 
+    // Verify user when before page is rendered
     useEffect(() => {
         const verifyUser = async () => {
             if(!cookies.jwt) {
-                navigate("/login");
+                navigate("/");
             } else {
-                const { data } = await axios.post(
-                    "http://localhost:5000/home",
-                    {},
-                    { withCredentials: true }
-                );
-                if(!data.status) {
-                    removeCookie("jwt");
-                    navigate("/login");
-                } else {
-                    /* toast("⭐ Welcome back, ", {
-                        position: "top-right",
-                        autoClose: 1500,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "colored"
-                    }); */
+                try { 
+                    await axios.post(
+                        "http://localhost:5000/home",
+                        {},
+                        { withCredentials: true }
+                    );
+    
+                    await getUserData();
+                } catch(error) {
+                    console.error("Error verifying user", error);
                 }
             }
         };
@@ -524,12 +560,21 @@ export function MainSection() {
                         </TrackContainer>
                         <Stack spacing={2}>
                             <Pagination 
-                                classes={{ ul: classes.ul }}
                                 count={numberOfPages} 
-                                shape="rounded" 
                                 page={activePage} 
                                 onChange={(event, newPage) => {
                                     setActivePage(newPage)
+                                }}
+                                variant="outlined"
+                                shape="rounded" 
+                                sx={{
+                                    "& .MuiPaginationItem-root": {
+                                        color: "#fff !important", // Text color
+                                        borderColor: "#fff", // Border color if outlined
+                                    },
+                                    "& .Mui-selected": {
+                                        backgroundColor: "rgba(255, 255, 255, 0.2)", // Optional: background for the selected item
+                                    },
                                 }}
                             />
                         </Stack>    

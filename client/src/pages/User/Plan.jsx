@@ -1,10 +1,9 @@
 import { React, useState } from 'react'
 import styled from 'styled-components';
 import tw from 'twin.macro';
-import PlanPage from '../../app/containers/User/CalculatePage';
+import PlanPage from '../../app/containers/User/PlanPage';
 
 const TrackContainer = styled.div`
-  background-color: #243763;
   ${tw`
     w-full
     h-screen

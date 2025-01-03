@@ -354,15 +354,49 @@ module.exports.createWorkout = async(req, res, next) => {
     }
 }
 
-module.exports.deleteTrack = async(req, res, next) => {
-    const trackId = req.params._id
-    
-    await User.updateOne(
-        {},
-        { $pull: {history: trackId} },
-        {new: true}
-    );
-}
+module.exports.deleteWorkout = async (req, res, next) => {
+    // Retrieve the token from the cookies
+    const token = req.cookies.jwt;
+
+    if (!token) {
+        return res.status(401).json({ error: "Authentication required" });
+    }
+
+    try {
+        // Verify the token and extract the user's ID
+        const decoded = jwt.verify(token, process.env.JWT_TOKEN);
+        const userId = decoded.id;
+
+        // Find the user by their ID
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        // Get the workout ID from the request parameters
+        const workoutId = req.params.workoutId;
+
+        // Use the $pull operator to remove the workout from the history array
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $pull: { history: { _id: workoutId } } },
+            { new: true }
+        ).exec();
+
+        // Check if the workout was removed
+        if (!updatedUser) {
+            return res.status(404).json({ error: "Workout not found" });
+        }
+
+        // Respond with the updated user data (or a success message)
+        res.status(200).json({ message: "Workout deleted successfully", user: updatedUser });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "An error occurred while deleting the workout" });
+    }
+};
+
 
 
 

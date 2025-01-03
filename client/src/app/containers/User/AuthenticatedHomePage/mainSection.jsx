@@ -98,7 +98,7 @@ const SignUpItem = styled.li`
         transition
         duration-200
         ease-in-out
-        hover:bg-button
+        hover:bg-white
         rounded-md
         p-2
     `}
@@ -266,58 +266,95 @@ const FooterContainer = styled.div`
     `}
 `
 
-const useStyles = makeStyles(() => ({
-    ul: {
-        "& .MuiPaginationItem-root": {
-            color: "#fff"
-        }
-    },
+// Styled components using twin.macro
+const CardList = styled.div`
+    ${tw`
+        flex 
+        gap-4 
+        overflow-x-auto 
+        p-4`
+    }
+`;
+
+const Card = styled.div`
+    ${tw`
+        w-48 
+        h-40 
+        flex 
+        items-center 
+        justify-center 
+        text-white 
+        text-lg
+        font-bold
+        rounded-lg 
+        shadow-lg
+    `}
+    background-color: ${(props) => props.color};
+`;
+
+// Set the styles and classes for MUI inputs
+const useStyles = makeStyles({
     root: {
         "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-          borderColor: "#fff"
+            borderColor: "#ffffff"
         },
         "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-          borderColor: "#fff"
+            borderColor: "#ffffff"
         },
         "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-          borderColor: "#fff"
+            borderColor: "#ffffff"
         },
         "& .MuiOutlinedInput-input": {
-          color: "#fff"
+            color: "#ffffff"
         },
         "&:hover .MuiOutlinedInput-input": {
-          color: "#fff"
+            color: "#ffffff"
         },
         "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
-          color: "#fff"
+            color: "#ffffff"
         },
         "& .MuiInputLabel-outlined": {
-          color: "#fff"
+            color: "#ffffff"
         },
         "&:hover .MuiInputLabel-outlined": {
-          color: "#fff"
+            color: "#ffffff"
         },
         "& .MuiInputLabel-outlined.Mui-focused": {
-          color: "#fff"
-        }
+            color: "#ffffff"
+        },
+        "& .MuiSvgIcon-root": { 
+            color: "#ffffff" 
+        },
     },
     select: {
         "& .MuiOutlinedInput-input": {
-            color: "#fff"
+            color: "#ffffff"
         },  
         "&.MuiOutlinedInput-root": {
             "& fieldset": {
-            borderColor: "#fff"
+                borderColor: "#ffffff"
             },
             "&:hover fieldset": {
-            borderColor: "#fff"
+                borderColor: "#ffffff"
             },
             "&.Mui-focused fieldset": {
-            borderColor: "#fff"
+                borderColor: "#ffffff"
             }
+        },
+        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
+            color: "#ffffff"
+        },
+        "& .MuiInputLabel-outlined": {
+            color: "#ffffff"
+        },
+        "&:hover .MuiInputLabel-outlined": {
+            color: "#ffffff"
+        },
+        "& .MuiInputLabel-outlined.Mui-focused": {
+            color: "#ffffff"
         }
     }
-}));
+});
 
 const style = {
     position: 'absolute',
@@ -340,6 +377,8 @@ export function MainSection() {
 
     // Loading state to check for API call before rendering page.
     const [loading, setLoading] = useState(true);   
+
+    const [hasWelcomed, setHasWelcomed] = useState(false); // Track if the welcome toast has been shown
 
     // Data state to store response data from the api
     const [ data, setData ] = useState([]);
@@ -421,7 +460,7 @@ export function MainSection() {
                 // console.log(res.data.history[0].title);
 
                 // Set the data state to hold the response data which is the user's data
-                setData(res);
+                setData(res.data);
 
                 // Set an alternate state array with the returned user's history for easy and accessible workflow (i.e To sort and filter)
                 setTrackingHistory(res.data?.history)
@@ -429,19 +468,6 @@ export function MainSection() {
                 
                 // Now set loading to false to render the page which the data from the api
                 setLoading(false);
-
-
-                /* 
-                toast("⭐ Welcome back, " + res.data.username, {
-                    position: "top-right",
-                    autoClose: 1500,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored"
-                }); */
             });
         } catch(error) {
             console.log(error);
@@ -456,27 +482,54 @@ export function MainSection() {
             if(!cookies.jwt) {
                 navigate("/");
             } else {
-                const { data } = await axios.post(
-                    "http://localhost:5000/home",
-                    {},
-                    { withCredentials: true }
-                );
+                try { 
+                    await axios.post(
+                        "http://localhost:5000/home",
+                        {},
+                        { withCredentials: true }
+                    );
+    
+                    await getUserData();
+                } catch(error) {
+                    console.error("Error verifying user", error);
+                }
             }
         };
         verifyUser();
     }, [cookies, navigate, removeCookie]);
 
-    // Get user data before page is rendered
+    // Check for Welcome Back timer (Set to 24 hours in milliseconds)
     useEffect(() => {
-        try {
-            getUserData().then(() => {
-                // console.log(`The user's id is: ${userId}`);
-                //console.log(data); 
-            })
-        } catch(error) {
-            console.log(error);
-        } 
+        const hasBeenWelcomed = localStorage.getItem("lastWelcomeTime");
+        const now = Date.now();
+    
+        // Check if 24 hours (86400000 milliseconds) have passed
+        if (!hasBeenWelcomed || now - parseInt(hasBeenWelcomed, 10) >= 86400000) {
+            setHasWelcomed(false);
+        } else {
+            setHasWelcomed(true);
+        }
     }, []);
+    
+    useEffect(() => {
+        if (data.username && !hasWelcomed) {
+            toast("⭐ Welcome back, " + data.username, {
+                position: "top-right",
+                autoClose: 1500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored"
+            });
+    
+            setHasWelcomed(true);
+    
+            // Save the current timestamp to localStorage
+            localStorage.setItem("lastWelcomeTime", Date.now().toString());
+        }
+    }, [data, hasWelcomed]);
         
     // Handle logout function 
     const handleLogOut = () => {
@@ -486,25 +539,33 @@ export function MainSection() {
         navigate("/");
     };
 
+    // Card Data
+    const cardData = [
+        { id: 1, color: '#a29bfe', text: 'Level--' },
+        { id: 2, color: '#0984e3', text: 'Upcoming--' },
+        { id: 3, color: '#ff7675', text: 'Favourite Exercise--' },
+        { id: 4, color: '#e17055', text: '# of workouts/month' },
+    ];
+
     // Navigation items
     const NavItems = () => {
         return (
             <ListContainer>
                 <Link to="/home" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white' }} className='bg-button'>
+                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white' }} className='bg-white text-black font-bold'>
                         Home
                     </SignUpItem>
                 </Link>
 
                 <Link to="/track" className='auth-link'>
                     <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
-                        Track Workout
+                        Track
                     </SignUpItem>
                 </Link>
 
                 <Link to="/plan" className='auth-link'>
                     <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
-                        View Plans
+                        History
                     </SignUpItem>
                 </Link>
     
@@ -753,10 +814,6 @@ export function MainSection() {
                         <DarkLogo />
                         <NavItems />
                     </NavbarContainer>
-                    {/* <ImageContainer>
-                        <img src={SignUpIllustration} alt="" />
-                    </ImageContainer> 
-                    <HorizontalLine /> */}
                     <ToastContainer position="top-right"
                         autoClose={1500} 
                         hideProgressBar={false}
@@ -788,7 +845,13 @@ export function MainSection() {
                         </ul>
                     </ToggleContainer>
                     <MainContainer>
-                        <Title>Hi, {data.data.username}</Title>
+                        <CardList>
+                            {cardData.map((card) => (
+                                <Card key={card.id} color={card.color}>
+                                    {card.text}
+                                </Card>
+                            ))}
+                        </CardList>
                         <Title style={{ textDecoration: "underline", marginTop: '3rem' }}>Tracking History</Title>
                             {viewType === 1 && 
                                 <>
@@ -798,13 +861,12 @@ export function MainSection() {
                                                 <Box sx={{ minWidth: 60, marginRight: 12 }}>
                                                     <Title>Sort</Title>
                                                     <FormControl style={{ minWidth: 180 }}>
-                                                        <InputLabel id="demo-simple-select-label" style={{ color: "#fff" }}>Sort Options</InputLabel>
-                                                        <Select
-                                                            labelId="demo-simple-select-label"
-                                                            id="demo-simple-select"
+                                                        <TextField
                                                             label="Sort Options"
-                                                            defaultValue=""
+                                                            name="sort-options"
                                                             className={classes.select}
+                                                            fullWidth
+                                                            select
                                                             onChange={(e) => {
                                                                 setSortType(e.target.value)
                                                                 setActivePage(1)
@@ -812,22 +874,24 @@ export function MainSection() {
                                                         >
                                                             <MenuItem value={"SortASC"} onClick={handleAZSort}>Sort (ASC)</MenuItem>
                                                             <MenuItem value={"SortDESC"} onClick={handleZASort}>Sort (DESC)</MenuItem>
-                                                        </Select>
+                                                        </TextField>
                                                     </FormControl>
                                                 </Box>
                                             </li>
                                             <li>    
-                                                <Box sx={{ minWidth: 60 }}>
+                                                <div>
                                                     <Title>Search</Title>                        
                                                     <TextField
                                                         placeholder="Search"
                                                         label="Search"
+                                                        fullWidth
+                                                        required
                                                         onChange={(e) => {
                                                             setSearch(e.target.value)
                                                         }}
                                                         className={classes.root}
                                                     />
-                                                </Box>
+                                                </div>
                                             </li>
                                         </ul>
                                     </div>
@@ -854,12 +918,12 @@ export function MainSection() {
                                     </TrackContainer>
                                     <Stack spacing={2}>
                                         <Pagination 
-                                            variant="outlined"
-                                            color="primary"
                                             count={numberOfPages} 
                                             shape="rounded" 
                                             page={activePage} 
                                             onChange={handlePageChange}
+                                            variant="outlined"
+                                            shape="rounded" 
                                             sx={{
                                                 "& .MuiPaginationItem-root": {
                                                     color: "#fff !important", // Text color
