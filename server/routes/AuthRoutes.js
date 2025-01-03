@@ -13,7 +13,7 @@ router.post("/plan", checkUser);
 router.post("/calculate", checkUser);
 router.post("/user/:_id/track", track);
 
-router.delete('/delete/:_id', deleteTrack);
+// router.delete('/delete/:_id', deleteTrack);
 router.get("/user/:_id", getUserDetails);
     
 module.exports = router;

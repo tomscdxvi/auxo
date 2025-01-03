@@ -5,7 +5,6 @@ import { Navbar } from '../../../components/navbar';
 import { MainSection } from './mainSection';
 
 const PageContainer = styled.div`
-    background-color: #243763;
     ${tw`
         flex
         flex-col
@@ -13,6 +12,7 @@ const PageContainer = styled.div`
         h-full
         items-center
         overflow-x-hidden
+        bg-home-background
     `}
 `;
 

@@ -6,7 +6,11 @@ module.exports = {
   ],
   darkMode: false,
   theme: {
-    extend: {},
+    extend: {
+      ringWidth: {
+        DEFAULT: '0px', // Disable the default ring
+      },
+    },
     colors: {
       /* Auxo UX/UI Custom Colour Tokens */
 

@@ -4,7 +4,6 @@ import tw from 'twin.macro';
 import TrackPage from '../../app/containers/User/TrackPage';
 
 const TrackContainer = styled.div`
-  background-color: #243763;
   ${tw`
     w-full
     h-screen
