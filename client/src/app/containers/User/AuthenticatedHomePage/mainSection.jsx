@@ -9,8 +9,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { makeStyles } from '@mui/styles';
 import { Chart as ChartJS } from 'chart.js/auto'
+import { Box, FormControl, InputLabel, Menu, MenuItem, Modal, Select, TextField, Typography, Pagination, Stack } from '@mui/material';
 // import { slide as Menu } from 'react-burger-menu';
 
+import Sidebar from 'src/app/components/sidebar';
 import TrackCard from './Card';
 import { FooterDark } from '../../../components/footer';
 import { FormInputDark } from '../../../components/form';
@@ -21,35 +23,55 @@ import '../../../styles/font.css';
 import '../../../styles/authenticatedhome/main.css';
 import { DeleteButton } from '../../../components/delete';
 import { Button } from 'src/app/components/button';
-import { Box, FormControl, InputLabel, Menu, MenuItem, Modal, Select, TextField, Typography, Pagination, Stack } from '@mui/material';
 import CustomBarChart from 'src/app/components/charts/bar-chart';
 import Loading from 'src/app/components/loading';
+import { NavItemsLoggedIn } from 'src/app/components/navbar/navitems';
 
 const PageContainer = styled.div`
     min-height: 100vh;
     ${tw`
         flex
+        relative
     `}
 `;
 
 const MainContainer = styled.div`
-    width: 1605px;
+    width: 1400px;
     ${tw`
         flex
         flex-col
-        justify-center
-        items-center
+        p-12
+        mx-auto
     `}
 `;
 
+// Navbar stays on the left side of the screen, fixed
 const NavbarContainer = styled.div`
     ${tw`
         pt-10
-        max-w-screen-2xlarge
         flex
         flex-col
         items-center
-        ml-0
+        fixed
+        left-0
+        top-0
+        h-full
+        bg-white
+        z-10
+        p-4
+    `}
+`;
+
+// Sidebar stays on the right side of the screen, fixed
+const SidebarContainer = styled.div`
+    ${tw`
+        fixed
+        right-0
+        top-0
+        h-full
+        bg-gray-800
+        text-white
+        p-6
     `}
 `;
 
@@ -67,13 +89,14 @@ const MobileListContainer = styled.ul`
     `}
 `;
 
-const SignInItem = styled.li`
+const LogOutItem = styled.li`
     font-family: 'Montserrat', sans-serif;
+    margin-top: 24px;
     ${tw`
         text-lg
         medium:text-xl
         text-paragraph
-        font-medium
+        font-bold
         mr-1
         medium:mr-12
         cursor-pointer
@@ -86,13 +109,14 @@ const SignInItem = styled.li`
     `}
 `;
 
-const SignUpItem = styled.li`
+const NavItem = styled.li`
     font-family: 'Montserrat', sans-serif;
+    margin-top: 24px;
     ${tw`
         text-lg
         medium:text-xl
         text-paragraph
-        font-medium
+        font-bold
         mr-1
         medium:mr-12
         cursor-pointer
@@ -212,61 +236,6 @@ const ButtonsContainer = styled.div`
     `}
 `;
 
-const HorizontalLine = styled.hr`
-    width: 23%;
-    position: absolute;
-    top: 57%;
-    left: 0;
-    z-index: 1;
-    visibility: hidden;
-    ${tw`
-        text-white
-        xlarge:visible
-    `}
-`
-
-const ImageContainer = styled.div`
-    width: auto;
-    height: 20em;
-    left: 12em;
-    top: 16em;
-    position: absolute;
-    visibility: hidden;
-    z-index: 2;
-    img {
-        width: auto;
-        height: 100%;
-        max-width: fit-content;
-    }
-
-    @media (min-width: ${SCREENS.lg}) {
-        height: 16 em;
-        right: -4em;
-        top: -6em;
-    }
-
-    @media (min-width: ${SCREENS.xl}) {
-        height: 26em;
-        right: 2em;
-        top: -6em;
-    }
-
-    ${tw`
-        medium:visible
-    `}
-`;
-
-const FooterContainer = styled.div`
-    width: 78%;
-    position: absolute;
-    top: 97.5%;
-    text-align: center;
-    ${tw`
-        text-sm
-        text-paragraph
-    `}
-`
-
 // Styled components using twin.macro
 const CardList = styled.div`
     ${tw`
@@ -382,6 +351,12 @@ export function MainSection() {
     const [loadingProgress, setLoadingProgress] = useState(0);
 
     const [hasWelcomed, setHasWelcomed] = useState(false); // Track if the welcome toast has been shown
+
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
 
     // Data state to store response data from the api
     const [ data, setData ] = useState([]);
@@ -570,32 +545,32 @@ export function MainSection() {
         return (
             <ListContainer>
                 <Link to="/home" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white' }} className='bg-white text-black font-bold'>
+                    <NavItem>
                         Home
-                    </SignUpItem>
+                    </NavItem>
                 </Link>
 
                 <Link to="/track" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
+                    <NavItem>
                         Track
-                    </SignUpItem>
+                    </NavItem>
                 </Link>
 
                 <Link to="/plan" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
+                    <NavItem>
                         History
-                    </SignUpItem>
+                    </NavItem>
                 </Link>
     
                 <Link to="/calculate" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
+                    <NavItem>
                         Calculate
-                    </SignUpItem>
+                    </NavItem>
                 </Link>
     
-                <SignInItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }} onClick={handleLogOutModal}>
+                <LogOutItem onClick={handleLogOutModal}>
                     Log Out
-                </SignInItem>
+                </LogOutItem>
 
                 <Modal
                     open={logOutModalOpen}
@@ -617,9 +592,9 @@ export function MainSection() {
                     </Box>
                 </Modal>
     
-                {/* <SignUpItem style={{ color: 'white' }}>
+                {/* <NavItem style={{ color: 'white' }}>
                     <Link to="/track">Track</Link>
-                </SignUpItem> */}
+                </NavItem> */}
             </ListContainer>
         )
     }
@@ -675,9 +650,9 @@ export function MainSection() {
                     </Box>
                 </Modal>
     
-                {/* <SignUpItem style={{ color: 'white' }}>
+                {/* <NavItem style={{ color: 'white' }}>
                     <Link to="/track">Track</Link>
-                </SignUpItem> */}
+                </NavItem> */}
             </MobileListContainer>
         )
     }
@@ -783,7 +758,6 @@ export function MainSection() {
                     </Menu> */}
                 </NavbarContainer>
                 <PageContainer>
-                    <HorizontalLine /> 
                     <ToastContainer position="top-right"
                         autoClose={1500} 
                         hideProgressBar={false}
@@ -825,8 +799,7 @@ export function MainSection() {
             <>
                 <PageContainer>
                     <NavbarContainer>
-                        <DarkLogo />
-                        <NavItems />
+                        <NavItemsLoggedIn />
                     </NavbarContainer>
                     <ToastContainer position="top-right"
                         autoClose={1500} 
@@ -838,7 +811,8 @@ export function MainSection() {
                         draggable
                         pauseOnHover
                         theme="colored"
-                    />
+                    /> 
+                    {/*
                     <ToggleContainer>
                         <ul>
                             <li>
@@ -855,9 +829,10 @@ export function MainSection() {
                                 <ToggleItem style={{ color: 'white', marginTop: '24px' }} onClick={handleExtraView}>
                                     Extra
                                 </ToggleItem>
-                            </li> */}
+                            </li> 
                         </ul>
-                    </ToggleContainer>
+                    </ToggleContainer> 
+                    */}
                     <MainContainer>
                         <CardList>
                             {cardData.map((card) => (
@@ -962,6 +937,9 @@ export function MainSection() {
                             */}
                             {/* {viewType === 3 && <h1 className='text-white'>Extra</h1>} */}
                     </MainContainer>
+                    <SidebarContainer>
+                        <Sidebar />
+                    </SidebarContainer>
                 </PageContainer>
             </>
         )               

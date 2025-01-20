@@ -17,83 +17,62 @@ import '../../../styles/authenticatedhome/main.css';
 import '../../../styles/font.css'
 import DefaultToolTip from 'src/app/components/tooltip';
 import { Box, Modal, Typography } from '@mui/material';
+import Loading from 'src/app/components/loading';
+import { NavItemsLoggedIn } from 'src/app/components/navbar/navitems';
+import Sidebar from 'src/app/components/sidebar';
 
 const PageContainer = styled.div`
     min-height: 100vh;
     ${tw`
         flex
+        relative
     `}
 `;
 
 const MainContainer = styled.div`
-    width: 1605px;
+    width: 1000px;
     ${tw`
         flex
         flex-col
-        justify-center
-        items-center
+        mt-12
     `}
 `;
 
 const NavbarContainer = styled.div`
     ${tw`
         pt-10
-        max-w-screen-2xlarge
         flex
         flex-col
         items-center
-        ml-0
+        fixed
+        left-0
+        top-0
+        h-full
+        bg-white
+        z-10
+        p-4
     `}
 `;
 
-const ListContainer = styled.ul`
+// Sidebar stays on the right side of the screen, fixed
+const SidebarContainer = styled.div`
     ${tw`
-        mt-32
-        list-none
-    `}
-`;
-
-const SignInItem = styled.li`
-    font-family: 'Montserrat', sans-serif;
-    ${tw`
-        text-lg
-        medium:text-xl
-        text-paragraph
-        font-medium
-        mr-1
-        medium:mr-12
-        cursor-pointer
-        transition
-        duration-200
-        ease-in-out
-        hover:bg-button
-        rounded-md
-        p-2
-    `}
-`;
-
-const SignUpItem = styled.li`
-    font-family: 'Montserrat', sans-serif;
-    ${tw`
-        text-lg
-        medium:text-xl
-        text-paragraph
-        font-medium
-        mr-1
-        medium:mr-12
-        cursor-pointer
-        transition
-        duration-200
-        ease-in-out
-        hover:bg-button
-        rounded-md
-        p-2
+        fixed
+        right-0
+        top-0
+        h-full
+        bg-gray-800
+        text-white
+        p-6
     `}
 `;
 
 const Title = styled.h1`
     font-family: 'Montserrat', sans-serif;
     ${tw`
+        flex
+        justify-center
+        items-center
         text-white
         mb-4
         tracking-wider
@@ -102,15 +81,11 @@ const Title = styled.h1`
     `}
 `;
 
-const Form = styled.form`
-    z-index: 100;
+const CalculationContainer = styled.div`
     ${tw`
-        text-xs
-        overflow-hidden
-        max-h-full
-        xlarge:text-lg
+        flex
     `}
-`;
+`
 
 const FormContainer = styled.div`
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -124,64 +99,11 @@ const FormContainer = styled.div`
 const ButtonsContainer = styled.div`
     ${tw`
         flex
+        justify-start
+        items-center
         mt-6
     `}
 `;
-
-const HorizontalLine = styled.hr`
-    width: 30%;
-    position: absolute;
-    top: 70.3%;
-    right: 70%;
-    z-index: 1;
-    visibility: hidden;
-    ${tw`
-        text-white
-        xlarge:visible
-    `}
-`
-
-const ImageContainer = styled.div`
-    width: auto;
-    height: 23em;
-    left: 23em;
-    top: 21em;
-    position: absolute;
-    visibility: hidden;
-    z-index: 2;
-    img {
-        width: auto;
-        height: 100%;
-        max-width: fit-content;
-    }
-
-    @media (min-width: ${SCREENS.lg}) {
-        height: 16 em;
-        right: -4em;
-        top: -6em;
-    }
-
-    @media (min-width: ${SCREENS.xl}) {
-        height: 26em;
-        right: 2em;
-        top: -6em;
-    }
-
-    ${tw`
-        medium:visible
-    `}
-`;
-
-const FooterContainer = styled.div`
-    width: 78%;
-    position: absolute;
-    top: 97.5%;
-    text-align: center;
-    ${tw`
-        text-sm
-        text-paragraph
-    `}
-`
 
 const style = {
     position: 'absolute',
@@ -299,12 +221,6 @@ export function MainSection() {
         } 
     }, []);
 
-    const handleLogOut = () => {
-        removeCookie("jwt");
-        
-        navigate("/");
-    };
-
     const onChangeHandlerWeight = (e) => {
         setWeight(e.target.value)
         setCalculation((prevState) => {
@@ -323,67 +239,6 @@ export function MainSection() {
                 rep: e.target.value
             })
         });
-    }
-
-    const NavItems = () => {
-        return (
-            <ListContainer>
-
-                <Link to="/home" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white' }}>
-                        Home
-                    </SignUpItem>
-                </Link>
-
-
-                <Link to="/track" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
-                        Track Workout
-                    </SignUpItem>
-                </Link>
-
-    
-                <Link to="/plan" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
-                        View Plans
-                    </SignUpItem>
-                </Link>
-    
-                <Link to="/calculate" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }} className='bg-button'>
-                        Calculate
-                    </SignUpItem>
-                </Link>
-    
-                <SignInItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }} onClick={handleLogOutModal}>
-                    Log Out
-                </SignInItem>
-
-                <Modal
-                    open={logOutModalOpen}
-                    onClose={handleLogOutModalClose}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Log Out
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                            Do you wish to log out of this account?
-                        </Typography>
-                        <div className="flex mt-12">
-                            <Button theme="outline-white" text="Back" onClick={handleLogOutModalClose} className="mr-9" /> 
-                            <Button theme="filled" text="Confirm" className="mr-9" onClick={handleLogOut} /> 
-                        </div>
-                    </Box>
-                </Modal>
-    
-                {/* <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/track">Track</Link>
-                </SignUpItem> */}
-            </ListContainer>
-        )
     }
 
     // Calculates One Rep Max using Brzycki Equation (Formula taken from NFPT)
@@ -405,33 +260,25 @@ export function MainSection() {
     // console.log(getCookie("jwt"));
 
     if(loading) {
-        return (
-            <>
-                <h1>Loading</h1>
-            </>
-        )
+        return <Loading />
     } else {
         return (
             <>
                 <PageContainer>
                     <NavbarContainer>
-                        <DarkLogo />
-                        <NavItems />
+                        <NavItemsLoggedIn />
                     </NavbarContainer>
-                    {/*<ImageContainer>
-                        <img src={SignUpIllustration} alt="" />
-                    </ImageContainer> 
-                    <HorizontalLine /> */}
                     <MainContainer>
                         <Title style={{ fontSize: 30, marginTop: '6%' }}>Calculate your one rep max (1RM) for any lift!</Title>
-                        <Title style={{ fontSize: 28 }}>Formula from NFPT (Brzycki Equation)</Title>
-                        <DefaultToolTip
-                            content=" RM is your max weight that you can lift for a single rep for any exercise. (Please calculate before saving)"
-                            text="Learn more"
-                            placement="right"
-                            tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
-                            buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-6 mb-4"
-                        />
+                        <div className="flex justify-center items-center">
+                            <DefaultToolTip
+                                content=" RM is your max weight that you can lift for a single rep for any exercise. The formula is from NFPT (Brzycki Equation)."
+                                text="Learn more"
+                                placement="right"
+                                tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
+                                buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-6 mb-4"
+                            />
+                        </div>
                         <Title>{OneRepMaxCalculation() == 0 ? "_" : OneRepMaxCalculation() + "lbs for 1 Rep"}</Title>
     
                         <ToastContainer
@@ -446,102 +293,107 @@ export function MainSection() {
                             pauseOnHover
                             theme="colored"
                         />
-                        <div>
-                            <div className="flex">
-                                <FormContainer>
-                                    <FormInput
-                                        key={1} 
-                                        name="weight" 
-                                        type="number" 
-                                        placeholder="Enter the weight for the lift" 
-                                        label="Weight" 
-                                        required={true} 
-                                        min="1" 
-                                        onChange={onChangeHandlerWeight} 
-                                        onKeyPress={(event) => { // Prevent negative values from being entered at the start(If the key is not 1-9, do not allow it) !Need to fix
-                                            if (!/[1-9]/.test(event.key)) { 
-                                                event.preventDefault();
-                                            }
-                                        }}
-                                    />
-
-                                    <FormInput
-                                        key={2} 
-                                        name="rep" 
-                                        type="number"
-                                        placeholder="Enter the number of reps" 
-                                        label="Repetitions"
-                                        min="1" 
-                                        required={true} 
-                                        onChange={onChangeHandlerRep} 
-                                        onKeyPress={(event) => { // Prevent negative values from being entered (If the key is not 1-9, do not allow it)
-                                            if (!/[1-9]/.test(event.key)) {
-                                                event.preventDefault();
-                                            }
-                                        }}
-                                    />
-                                </FormContainer>
-                                <div style={{ marginLeft: 40 }}>
-                                    <Title style={{ textDecoration: 'underline' }}>History</Title>
-                                    {listOfCalculations.map((item, index) => {
-                                        if(listOfCalculations === null) {
-                                            return (
-                                                <Title>There are currently 0 calculations saved.</Title>
-                                            )
-                                        } else {
-                                            return (
-                                                <Title key={index}>Rep: {item.rep} | Weight: {item.weight} = {item.orm} for 1 Rep</Title>
-                                            )
-                                        }
-                                    })}
-                                </div>
-                            </div>
+                        <div className="flex justify-center items-center">
                             <div>
-                                <ButtonsContainer>
-                                    <Button 
-                                        theme="filled" 
-                                        text="Calculate"
-                                        className="mr-[150px]"
-                                        onClick={(e) => {
-                                            e.preventDefault();
+                                <CalculationContainer>
+                                    <FormContainer>
+                                        <FormInput
+                                            key={1} 
+                                            name="weight" 
+                                            type="number" 
+                                            placeholder="Enter the weight for the lift" 
+                                            label="Weight" 
+                                            required={true} 
+                                            min="0" 
+                                            onChange={onChangeHandlerWeight} 
+                                            onKeyPress={(event) => { // Prevent negative values from being entered at the start(If the key is not 1-9, do not allow it) !Need to fix
+                                                if (!/[0-9]/.test(event.key)) { 
+                                                    event.preventDefault();
+                                                }
+                                            }}
+                                        />
 
-                                            console.log(calculation.orm);
-                                            console.log(calculation.weight);
-                                            console.log(calculation.rep);
+                                        <FormInput
+                                            key={2} 
+                                            name="rep" 
+                                            type="number"
+                                            placeholder="Enter the number of reps" 
+                                            label="Repetitions"
+                                            min="0" 
+                                            required={true} 
+                                            onChange={onChangeHandlerRep} 
+                                            onKeyPress={(event) => { // Prevent negative values from being entered (If the key is not 1-9, do not allow it)
+                                                if (!/[0-9]/.test(event.key)) {
+                                                    event.preventDefault();
+                                                }
+                                            }}
+                                        />
+                                    </FormContainer>
+                                    <div style={{ marginLeft: 40 }}>
+                                        <Title style={{ textDecoration: 'underline' }}>History</Title>
+                                        {listOfCalculations.map((item, index) => {
+                                            if(listOfCalculations === null) {
+                                                return (
+                                                    <Title>There are currently 0 calculations saved.</Title>
+                                                )
+                                            } else {
+                                                return (
+                                                    <Title key={index}>Rep: {item.rep} | Weight: {item.weight} = {item.orm} for 1 Rep</Title>
+                                                )
+                                            }
+                                        })}
+                                    </div>
+                                </CalculationContainer>
+                                <div>
+                                    <ButtonsContainer>
+                                        <Button 
+                                            theme="filled" 
+                                            text="Calculate"
+                                            className="mr-[150px]"
+                                            onClick={(e) => {
+                                                e.preventDefault();
 
-                                            setCalculation((prevState) => {
-                                                return({
-                                                    ...prevState, 
-                                                    orm: OneRepMaxCalculation()
-                                                })
-                                            });
-                                        }} 
-                                    /> 
-                                    {calculation.orm === 0 ? 
-                                        <Button theme="disabled-filled" text="Save" />
-                                        :   <Button theme="filled" text="Save"
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    {/* Push object into the start of the array*/}
-                                                    {/* setListOfCalculations(prevState => [calculation, ...prevState]) */}
+                                                console.log(calculation.orm);
+                                                console.log(calculation.weight);
+                                                console.log(calculation.rep);
 
-                                                    {/* Push object into the end of the array */}
+                                                setCalculation((prevState) => {
+                                                    return({
+                                                        ...prevState, 
+                                                        orm: OneRepMaxCalculation()
+                                                    })
+                                                });
+                                            }} 
+                                        /> 
+                                        {calculation.orm === 0 ? 
+                                            <Button theme="disabled-filled" text="Save" />
+                                            :   <Button theme="filled" text="Save"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        {/* Push object into the start of the array*/}
+                                                        {/* setListOfCalculations(prevState => [calculation, ...prevState]) */}
 
-                                                    setListOfCalculations(prevState => [...prevState, calculation])
+                                                        {/* Push object into the end of the array */}
 
-                                                    setCalculation((prevState) => {
-                                                        return({
-                                                            ...prevState, 
-                                                            orm: 0
-                                                        })
-                                                    }) 
-                                                }} 
-                                            /> 
-                                    } 
-                                </ButtonsContainer>
+                                                        setListOfCalculations(prevState => [...prevState, calculation])
+
+                                                        setCalculation((prevState) => {
+                                                            return({
+                                                                ...prevState, 
+                                                                orm: 0
+                                                            })
+                                                        }) 
+                                                    }} 
+                                                /> 
+                                        } 
+                                    </ButtonsContainer>
+                                </div>
                             </div>
                         </div>
                     </MainContainer>
+                    <SidebarContainer>
+                        <Sidebar />
+                    </SidebarContainer>
                 </PageContainer>
             </>
         )
