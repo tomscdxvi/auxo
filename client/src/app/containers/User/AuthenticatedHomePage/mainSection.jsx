@@ -23,6 +23,7 @@ import { DeleteButton } from '../../../components/delete';
 import { Button } from 'src/app/components/button';
 import { Box, FormControl, InputLabel, Menu, MenuItem, Modal, Select, TextField, Typography, Pagination, Stack } from '@mui/material';
 import CustomBarChart from 'src/app/components/charts/bar-chart';
+import Loading from 'src/app/components/loading';
 
 const PageContainer = styled.div`
     min-height: 100vh;
@@ -378,6 +379,8 @@ export function MainSection() {
     // Loading state to check for API call before rendering page.
     const [loading, setLoading] = useState(true);   
 
+    const [loadingProgress, setLoadingProgress] = useState(0);
+
     const [hasWelcomed, setHasWelcomed] = useState(false); // Track if the welcome toast has been shown
 
     // Data state to store response data from the api
@@ -452,6 +455,14 @@ export function MainSection() {
             // Initially set Loading to true to ensure that the page is loading at the moment
             setLoading(true);
 
+            // Start the loading progress
+            const progressInterval = setInterval(() => {
+                setLoadingProgress(prev => {
+                    if (prev < 100) return prev + 2; // Increase by 2% every interval
+                    return prev;
+                });
+            }, 100); // Adjust this interval for the desired speed
+
             // Get user id from local storage when it is initially stored when the user logs in
             const userId = localStorage.getItem('@storage_user');
 
@@ -466,11 +477,18 @@ export function MainSection() {
                 setTrackingHistory(res.data?.history)
 
                 
-                // Now set loading to false to render the page which the data from the api
-                setLoading(false);
+                // Once data is received, stop the progress update
+                clearInterval(progressInterval);
+                setLoadingProgress(100);  // Ensure progress is set to 100% when done
+                // Set a slight delay before setting loading to false, just to allow the animation to finish
+                setTimeout(() => {
+                    setLoading(false);  // Data is loaded, and now set loading to false
+                }, 1250);  // Optional delay before transitioning (adjust as needed)
+                
             });
         } catch(error) {
             console.log(error);
+            setLoading(false);
         }
     }
 
@@ -725,12 +743,8 @@ export function MainSection() {
     const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
  
     if(loading) {
-        return (
-            <>
-                <h1>Loading</h1>
-            </>
-        )
-    } else if(isMobile) {
+        return <Loading loadingProgress={loadingProgress} />
+    } else if(!loading && isMobile) {
         return (
             <>
                 <NavbarContainer>  
@@ -854,7 +868,8 @@ export function MainSection() {
                         </CardList>
                         <Title style={{ textDecoration: "underline", marginTop: '3rem' }}>Tracking History</Title>
                             {viewType === 1 && 
-                                <>
+                                <>  
+                                    {/* 
                                     <div>
                                         <ul className='flex'>
                                             <li>
@@ -895,6 +910,7 @@ export function MainSection() {
                                             </li>
                                         </ul>
                                     </div>
+                                    */}
                                     <TrackContainer>
                                         {/* slice is used for pagination, filter is used to search, and map is used to list out the array of objects. */}
                                         {trackingHistory
