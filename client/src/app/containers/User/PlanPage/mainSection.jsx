@@ -22,6 +22,8 @@ import '../../../styles/authenticatedhome/main.css';
 import '../../../styles/font.css'
 import TrackCard from '../PlanPage/Card';
 import { Modal, Pagination, Stack, Typography } from '@mui/material';
+import { NavItemsLoggedIn } from 'src/app/components/navbar/navitems';
+import Sidebar from 'src/app/components/sidebar';
 
 // TODO: Fix NavBar padding later
 
@@ -29,72 +31,47 @@ const PageContainer = styled.div`
     min-height: 100vh;
     ${tw`
         flex
+        relative
     `}
 `;
 
 const MainContainer = styled.div`
-    width: 1605px;
+    width: 1400px;
     ${tw`
         flex
         flex-col
-        justify-center
-        items-center
+        p-12
+        mx-auto
     `}
 `;
 
+// Navbar stays on the left side of the screen, fixed
 const NavbarContainer = styled.div`
     ${tw`
         pt-10
-        max-w-screen-2xlarge
         flex
         flex-col
         items-center
-        ml-0
+        fixed
+        left-0
+        top-0
+        h-full
+        bg-white
+        z-10
+        p-4
     `}
 `;
 
-const ListContainer = styled.ul`
+// Sidebar stays on the right side of the screen, fixed
+const SidebarContainer = styled.div`
     ${tw`
-        mt-32
-        list-none
-    `}
-`;
-
-const SignInItem = styled.li`
-    font-family: 'Montserrat', sans-serif;
-    ${tw`
-        text-lg
-        medium:text-xl
-        text-paragraph
-        font-medium
-        mr-1
-        medium:mr-12
-        cursor-pointer
-        transition
-        duration-200
-        ease-in-out
-        hover:bg-button
-        rounded-md
-        p-2
-    `}
-`;
-
-const SignUpItem = styled.li`
-    font-family: 'Montserrat', sans-serif;
-    ${tw`
-        text-lg
-        medium:text-xl
-        text-paragraph
-        font-medium
-        mr-1
-        medium:mr-12
-        cursor-pointer
-        transition
-        duration-200
-        ease-in-out
-        hover:bg-button
-        rounded-md
-        p-2
+        fixed
+        right-0
+        top-0
+        h-full
+        bg-gray-800
+        text-white
+        p-6
     `}
 `;
 
@@ -441,73 +418,6 @@ export function MainSection() {
         `}
     `;
 
-    const handleLogOut = () => {
-        removeCookie("jwt");
-        
-        navigate("/");
-    };
-
-    const NavItems = () => {
-        return (
-            <ListContainer>
-
-                <Link to="/home" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white' }}>
-                        Home
-                    </SignUpItem>
-                </Link>
-
-
-                <Link to="/track" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
-                        Track Workout
-                    </SignUpItem>
-                </Link>
-
-    
-                <Link to="/plan" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }} className='bg-button'>
-                        View Plans
-                    </SignUpItem>
-                </Link>
-    
-                <Link to="/calculate" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
-                        Calculate
-                    </SignUpItem>
-                </Link>
-    
-                <SignInItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }} onClick={handleLogOutModal}>
-                    Log Out
-                </SignInItem>
-
-                <Modal
-                    open={logOutModalOpen}
-                    onClose={handleLogOutModalClose}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Log Out
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                            Do you wish to log out of this account?
-                        </Typography>
-                        <div className="flex mt-12">
-                            <Button theme="outline-white" text="Back" onClick={handleLogOutModalClose} className="mr-9" /> 
-                            <Button theme="filled" text="Confirm" className="mr-9" onClick={handleLogOut} /> 
-                        </div>
-                    </Box>
-                </Modal>
-    
-                {/* <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/track">Track</Link>
-                </SignUpItem> */}
-            </ListContainer>
-        )
-    }
-
     if(loading) {
         return (
             <>
@@ -519,13 +429,8 @@ export function MainSection() {
             <>
                 <PageContainer>
                     <NavbarContainer>
-                        <DarkLogo />
-                        <NavItems />
+                        <NavItemsLoggedIn />
                     </NavbarContainer>
-                    {/* <ImageContainer>
-                        <img src={SignUpIllustration} alt="" />
-                    </ImageContainer> 
-                    <HorizontalLine /> */}
                     <MainContainer>
                         
                         <ToastContainer
@@ -579,6 +484,9 @@ export function MainSection() {
                             />
                         </Stack>    
                     </MainContainer>
+                    <SidebarContainer>
+                        <Sidebar />
+                    </SidebarContainer>
                 </PageContainer>
             </>
         )

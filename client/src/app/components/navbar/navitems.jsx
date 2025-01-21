@@ -233,7 +233,7 @@ export function NavItemsLoggedIn() {
         <ListContainerLoggedIn>
             <Link to="/home" className='auth-link'>
                 <NavItem>
-                    Home
+                    Dashboard
                 </NavItem>
             </Link>
 
@@ -245,7 +245,7 @@ export function NavItemsLoggedIn() {
 
             <Link to="/plan" className='auth-link'>
                 <NavItem>
-                    History
+                    Playbook
                 </NavItem>
             </Link>
 

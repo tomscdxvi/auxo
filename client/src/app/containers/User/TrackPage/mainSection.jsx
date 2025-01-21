@@ -18,6 +18,8 @@ import PlusIcon from '../../../../assets/images/plus-icon.png';
 import '../../../styles/authenticatedhome/main.css';
 import '../../../styles/font.css'
 import TrackForm from 'src/app/components/track';
+import { NavItemsLoggedIn } from 'src/app/components/navbar/navitems';
+import Sidebar from 'src/app/components/sidebar';
 
 const PageContainer = styled.div`
     min-height: 100vh;
@@ -27,7 +29,7 @@ const PageContainer = styled.div`
 `;
 
 const MainContainer = styled.div`
-    width: 1605px;
+    width: 1400px;
     ${tw`
         flex
         flex-col
@@ -39,18 +41,29 @@ const MainContainer = styled.div`
 const NavbarContainer = styled.div`
     ${tw`
         pt-10
-        max-w-screen-2xlarge
         flex
         flex-col
         items-center
-        ml-0
+        fixed
+        left-0
+        top-0
+        h-full
+        bg-white
+        z-10
+        p-4
     `}
 `;
 
-const ListContainer = styled.ul`
+// Sidebar stays on the right side of the screen, fixed
+const SidebarContainer = styled.div`
     ${tw`
-        mt-32
-        list-none
+        fixed
+        right-0
+        top-0
+        h-full
+        bg-gray-800
+        text-white
+        p-6
     `}
 `;
 
@@ -58,44 +71,6 @@ const MobileListContainer = styled.ul`
     ${tw`
         mt-6
         list-none
-    `}
-`;
-
-const SignInItem = styled.li`
-    font-family: 'Montserrat', sans-serif;
-    ${tw`
-        text-lg
-        medium:text-xl
-        text-paragraph
-        font-medium
-        mr-1
-        medium:mr-12
-        cursor-pointer
-        transition
-        duration-200
-        ease-in-out
-        hover:bg-button
-        rounded-md
-        p-2
-    `}
-`;
-
-const SignUpItem = styled.li`
-    font-family: 'Montserrat', sans-serif;
-    ${tw`
-        text-lg
-        medium:text-xl
-        text-paragraph
-        font-medium
-        mr-1
-        medium:mr-12
-        cursor-pointer
-        transition
-        duration-200
-        ease-in-out
-        hover:bg-button
-        rounded-md
-        p-2
     `}
 `;
 
@@ -539,125 +514,6 @@ export function MainSection() {
         setWorkout({...workout, [e.target.name]: e.target.value})
     }; 
 
-    const NavItems = () => {
-        return (
-            <ListContainer>
-
-                <Link to="/home" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white' }}>
-                        Home
-                    </SignUpItem>
-                </Link>
-
-
-                <Link to="/track" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }} className='bg-button'>
-                        Track Workout
-                    </SignUpItem>
-                </Link>
-
-    
-                <Link to="/plan" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
-                        View Plans
-                    </SignUpItem>
-                </Link>
-    
-                <Link to="/calculate" className='auth-link'>
-                    <SignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}>
-                        Calculate
-                    </SignUpItem>
-                </Link>
-    
-                <SignInItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }} onClick={handleLogOutModal}>
-                    Log Out
-                </SignInItem>
-
-                <Modal
-                    open={logOutModalOpen}
-                    onClose={handleLogOutModalClose}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Log Out
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                            Do you wish to log out of this account?
-                        </Typography>
-                        <div className="flex mt-12">
-                            <Button theme="outline-white" text="Back" onClick={handleLogOutModalClose} className="mr-9" /> 
-                            <Button theme="filled" text="Confirm" className="mr-9" onClick={handleLogOut} /> 
-                        </div>
-                    </Box>
-                </Modal>
-    
-                {/* <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/track">Track</Link>
-                </SignUpItem> */}
-            </ListContainer>
-        )
-    }
-
-    const MobileNavItems = () => {
-        return (
-            <MobileListContainer>
-                <Link to="/home" className='auth-link'>
-                    <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white' }}>
-                        Home
-                    </MobileSignUpItem>
-                </Link>
-
-                <Link to="/track" className='auth-link'>
-                    <MobileSignUpItem style={{ color: 'white', borderBottom: '2px solid white', marginTop: '24px' }}  className='bg-button'>
-                        Track Workout
-                    </MobileSignUpItem>
-                </Link>
-
-                <Link to="/plan" className='auth-link'>
-                    <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white', marginTop: '24px' }}>
-                        View Plans
-                    </MobileSignUpItem>
-                </Link>
-    
-                <Link to="/calculate" className='auth-link'>
-                    <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white', marginTop: '24px' }}>
-                        Calculate
-                    </MobileSignUpItem>
-                </Link>
-    
-                <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white', marginTop: '24px' }} onClick={handleLogOutModal}>
-                    Log Out
-                </MobileSignUpItem>
-
-                <Modal
-                    open={logOutModalOpen}
-                    onClose={handleLogOutModalClose}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Log Out
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                            Do you wish to log out of this account?
-                        </Typography>
-                        <div className="flex mt-12">
-                            <Button theme="outline-white" text="Back" onClick={handleLogOutModalClose} className="mr-9" /> 
-                            <Button theme="filled" text="Confirm" className="mr-9" onClick={handleLogOut} /> 
-                        </div>
-                    </Box>
-                </Modal>
-    
-                {/* <SignUpItem style={{ color: 'white' }}>
-                    <Link to="/track">Track</Link>
-                </SignUpItem> */}
-            </MobileListContainer>
-        )
-    }
-
     const TabPanel = (props) => {
         const { children, tabValue, index, ...other } = props;
       
@@ -704,7 +560,7 @@ export function MainSection() {
                     >
                         =
                     </Title>
-
+                {/*
                     <Menu
                         id="demo-positioned-menu"
                         aria-labelledby="demo-positioned-button"
@@ -723,7 +579,7 @@ export function MainSection() {
                         <MobileNavItems />
                     </Menu>
 
-                    {/* <Menu>
+                    <Menu>
                         <DarkLogo />
                         <MobileNavItems />
                     </Menu> */}
@@ -731,7 +587,6 @@ export function MainSection() {
                 <PageContainer>
                     <NavbarContainer>
                         <DarkLogo />
-                        <NavItems />
                     </NavbarContainer>
                     <ImageContainer>
                         <img src={SignUpIllustration} alt="" />
@@ -815,13 +670,8 @@ export function MainSection() {
             <>
                 <PageContainer>
                     <NavbarContainer>
-                        <DarkLogo />
-                        <NavItems />
+                        <NavItemsLoggedIn />
                     </NavbarContainer>
-                    <ImageContainer>
-                        <img src={SignUpIllustration} alt="" />
-                    </ImageContainer>
-                    {/* <HorizontalLine /> */}
                     <MainContainer>
                         
                         <ToastContainer
@@ -859,39 +709,10 @@ export function MainSection() {
                         />  
     
                         <TrackForm />
-    
-                        {/*
-                        <Form onSubmit={handleSubmit}> 
-                            <TabPanel tabValue={value} index={0}>
-                                <Title>Date/Time</Title>    
-                                <FormContainer>
-                                    {inputs1.map((input) => (
-                                        <FormInputDark key={input.id} {...input} value={track[input.name]} onChange={onChangeHandler1} />
-                                    ))}
-                                </FormContainer>
-                            </TabPanel>
-                        
-                            <TabPanel tabValue={value} index={1}>
-                                <Title>Workout Details</Title>
-                                <FormContainer>
-                                    {inputs2.map((input) => (
-                                        <FormInputDark key={input.id} {...input} value={workout[input.name]} onChange={onChangeHandler2} />
-                                    ))}
-                                </FormContainer>
-                                <button className="text-white text-xl">
-                                    +
-                                </button>
-                            </TabPanel> 
-    
-                            <ButtonsContainer>
-                                <Link to="/">
-                                    <Button theme="outline" text="Cancel" />
-                                </Link>
-    
-                                <Button theme="filled" text="Submit" /> 
-                            </ButtonsContainer>
-                        </Form>  */}
                     </MainContainer>
+                    <SidebarContainer>
+                        <Sidebar />
+                    </SidebarContainer>
                 </PageContainer>
             </>
         )

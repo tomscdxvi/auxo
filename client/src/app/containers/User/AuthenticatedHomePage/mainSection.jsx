@@ -193,6 +193,7 @@ const Title = styled.h1`
         text-white
         mb-4
         tracking-wider
+        font-bold
         xlarge:text-xl 
         xlarge:leading-relaxed
     `}
@@ -841,7 +842,7 @@ export function MainSection() {
                                 </Card>
                             ))}
                         </CardList>
-                        <Title style={{ textDecoration: "underline", marginTop: '3rem' }}>Tracking History</Title>
+                        <Title style={{ marginTop: '3rem' }}>Past Workouts</Title>
                             {viewType === 1 && 
                                 <>  
                                     {/* 
@@ -886,6 +887,18 @@ export function MainSection() {
                                         </ul>
                                     </div>
                                     */}
+                                    <div className='mb-6'>                       
+                                        <TextField
+                                            placeholder="Search"
+                                            label="Search"
+                                            fullWidth
+                                            required
+                                            onChange={(e) => {
+                                                setSearch(e.target.value)
+                                            }}
+                                            className={classes.root}
+                                        />
+                                    </div>
                                     <TrackContainer>
                                         {/* slice is used for pagination, filter is used to search, and map is used to list out the array of objects. */}
                                         {trackingHistory
@@ -907,7 +920,7 @@ export function MainSection() {
                                             })
                                         } 
                                     </TrackContainer>
-                                    <Stack spacing={2}>
+                                    <Stack spacing={2} className='flex justify-center items-center'>
                                         <Pagination 
                                             count={numberOfPages} 
                                             shape="rounded" 
