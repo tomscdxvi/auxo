@@ -9,6 +9,7 @@ import { Box, FormControl, InputLabel, Menu, MenuItem, Modal, Select, TextField,
 import { SCREENS } from '../responsive';
 import '../../styles/home/main.css';
 
+import { Logo, DarkLogo, SideBarLogo } from '../logo';
 import { SignIn } from '../sign-in';
 import { Button } from '../button';
 import { SignUp } from '../sign-up';
@@ -230,58 +231,61 @@ export function NavItemsLoggedIn() {
     };
 
     return (
-        <ListContainerLoggedIn>
-            <Link to="/home" className='auth-link'>
-                <NavItem>
-                    Dashboard
-                </NavItem>
-            </Link>
+        <>
+            <SideBarLogo />
+            <ListContainerLoggedIn>
+                <Link to="/home" className='auth-link'>
+                    <NavItem>
+                        Dashboard
+                    </NavItem>
+                </Link>
 
-            <Link to="/track" className='auth-link'>
-                <NavItem>
-                    Track
-                </NavItem>
-            </Link>
+                <Link to="/track" className='auth-link'>
+                    <NavItem>
+                        Track
+                    </NavItem>
+                </Link>
 
-            <Link to="/plan" className='auth-link'>
-                <NavItem>
-                    Playbook
-                </NavItem>
-            </Link>
+                <Link to="/plan" className='auth-link'>
+                    <NavItem>
+                        Programs
+                    </NavItem>
+                </Link>
 
-            <Link to="/calculate" className='auth-link'>
-                <NavItem>
-                    Calculate
-                </NavItem>
-            </Link>
+                <Link to="/calculate" className='auth-link'>
+                    <NavItem>
+                        Calculate
+                    </NavItem>
+                </Link>
 
-            <LogOutItem onClick={handleLogOutModal}>
-                Log Out
-            </LogOutItem>
+                <LogOutItem onClick={handleLogOutModal}>
+                    Log Out
+                </LogOutItem>
 
-            <Modal
-                open={logOutModalOpen}
-                onClose={handleLogOutModalClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Log Out
-                    </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        Do you wish to log out of this account?
-                    </Typography>
-                    <div className="flex mt-12">
-                        <Button theme="outline-white" text="Back" onClick={handleLogOutModalClose} className="mr-9" /> 
-                        <Button theme="filled" text="Confirm" className="mr-9" onClick={handleLogOut} /> 
-                    </div>
-                </Box>
-            </Modal>
+                <Modal
+                    open={logOutModalOpen}
+                    onClose={handleLogOutModalClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Log Out
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            Do you wish to log out of this account?
+                        </Typography>
+                        <div className="flex mt-12">
+                            <Button theme="outline-white" text="Back" onClick={handleLogOutModalClose} className="mr-9" /> 
+                            <Button theme="filled" text="Confirm" className="mr-9" onClick={handleLogOut} /> 
+                        </div>
+                    </Box>
+                </Modal>
 
-            {/* <NavItem style={{ color: 'white' }}>
-                <Link to="/track">Track</Link>
-            </NavItem> */}
-        </ListContainerLoggedIn>
+                {/* <NavItem style={{ color: 'white' }}>
+                    <Link to="/track">Track</Link>
+                </NavItem> */}
+            </ListContainerLoggedIn>
+        </>
     )
 }

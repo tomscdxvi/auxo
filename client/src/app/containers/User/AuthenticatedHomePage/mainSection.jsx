@@ -243,25 +243,47 @@ const CardList = styled.div`
         flex 
         gap-4 
         overflow-x-auto 
-        p-4`
-    }
+        p-4
+    `}
 `;
 
 const Card = styled.div`
     ${tw`
         w-48 
-        h-40 
+        h-24
+        rounded-lg 
+        shadow-lg
+    `}
+    background-color: ${(props) => props.color};
+`;
+
+const CardContent = styled.div`
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+`;
+
+const CardHeader = styled.div`
+    ${tw`
+        flex 
+        items-center 
+        justify-center 
+        text-white 
+        text-lg
+        font-semibold
+    `}
+`;
+
+const CardText = styled.div`
+    ${tw`
         flex 
         items-center 
         justify-center 
         text-white 
         text-lg
         font-bold
-        rounded-lg 
-        shadow-lg
     `}
-    background-color: ${(props) => props.color};
-`;
+`
 
 // Set the styles and classes for MUI inputs
 const useStyles = makeStyles({
@@ -535,10 +557,10 @@ export function MainSection() {
 
     // Card Data
     const cardData = [
-        { id: 1, color: '#a29bfe', text: 'Level--' },
-        { id: 2, color: '#0984e3', text: 'Upcoming--' },
-        { id: 3, color: '#ff7675', text: 'Favourite Exercise--' },
-        { id: 4, color: '#e17055', text: '# of workouts/month' },
+        { id: 1, color: '#a29bfe', header: 'Level', text: 'Beginner' },
+        { id: 2, color: '#0984e3', header: 'Upcoming', text: 'Legs' },
+        { id: 3, color: '#ff7675', header: 'Favorite Exercise', text: 'Bench Press' },
+        { id: 4, color: '#e17055', header: 'Workouts in April', text: '3' },
     ];
 
     // Navigation items
@@ -838,7 +860,14 @@ export function MainSection() {
                         <CardList>
                             {cardData.map((card) => (
                                 <Card key={card.id} color={card.color}>
-                                    {card.text}
+                                    <CardContent>
+                                        <CardHeader>
+                                            {card.header}
+                                        </CardHeader>
+                                        <CardText>
+                                            {card.text}
+                                        </CardText>
+                                    </CardContent>
                                 </Card>
                             ))}
                         </CardList>
@@ -889,10 +918,9 @@ export function MainSection() {
                                     */}
                                     <div className='mb-6'>                       
                                         <TextField
-                                            placeholder="Search"
+                                            placeholder="Search..."
                                             label="Search"
                                             fullWidth
-                                            required
                                             onChange={(e) => {
                                                 setSearch(e.target.value)
                                             }}

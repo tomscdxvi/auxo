@@ -15,6 +15,14 @@ const LogoContainer = styled.div`
     `}
 `;
 
+const SideBarLogoContainer = styled.div`
+    ${tw`
+        flex
+        items-center
+    `}
+`;
+
+
 const LogoContainerMobile = styled.div`
     ${tw`
         w-[150px] 
@@ -81,5 +89,31 @@ export function DarkLogo() {
                 </Link>
             </ImageContainer> 
         </LogoContainer> 
+    )
+}
+
+export function SideBarLogo() {
+    const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
+
+    if(isMobile) {
+        return (
+            <LogoContainerMobile>
+                <ImageContainer>
+                    <Link to="/">
+                        <img src={LogoImage} alt="" style={{ width: 130.5, height: 36 }} />
+                    </Link>
+                </ImageContainer> 
+            </LogoContainerMobile> 
+        )
+    }
+
+    return (
+        <SideBarLogoContainer>
+            <ImageContainer>
+                <Link to="/">
+                    <img src={LogoImage} alt="" style={{ width: 130.5, height: 36 }} />
+                </Link>
+            </ImageContainer> 
+        </SideBarLogoContainer> 
     )
 }

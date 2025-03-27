@@ -262,7 +262,9 @@ export function SignIn(props) {
                         <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChangeHandler} />
                     ))}
                     <DialogContentText>
-                        No account? Sign-up <a onClick={checkForRegisterLocation} className="hover:text-paragraph hover:cursor-pointer">here!</a>
+                        <div>
+                            No account? Sign-up <a onClick={checkForRegisterLocation} className="hover:text-paragraph hover:cursor-pointer">here!</a>
+                        </div>
                     </DialogContentText>
                     <DialogActions className="m-3 mt-4">
                         <Button theme="outline" text="Cancel" onClick={handleClose} />
