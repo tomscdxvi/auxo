@@ -12,7 +12,7 @@ import { Chart as ChartJS } from 'chart.js/auto'
 import { Box, FormControl, InputLabel, Menu, MenuItem, Modal, Select, TextField, Typography, Pagination, Stack } from '@mui/material';
 // import { slide as Menu } from 'react-burger-menu';
 
-import Sidebar from 'src/app/components/sidebar';
+import Chatbot from 'src/app/components/chatbot';
 import TrackCard from './Card';
 import { FooterDark } from '../../../components/footer';
 import { FormInputDark } from '../../../components/form';
@@ -190,7 +190,7 @@ const ToggleList = styled.li`
 const Title = styled.h1`
     font-family: 'Montserrat', sans-serif;
     ${tw`
-        text-white
+        text-headline
         mb-4
         tracking-wider
         font-bold
@@ -248,9 +248,9 @@ const CardList = styled.div`
 `;
 
 const Card = styled.div`
+    height: 150px;
+    width: 250px;
     ${tw`
-        w-48 
-        h-24
         rounded-lg 
         shadow-lg
     `}
@@ -258,16 +258,19 @@ const Card = styled.div`
 `;
 
 const CardContent = styled.div`
-    width: 100%;
-    height: 100%;
-    margin: 0 auto;
+    ${tw`
+        h-full
+        w-full
+        flex 
+        flex-col  /* Makes items stack vertically */
+        items-center 
+        justify-center 
+        text-center /* Ensures text is centered */
+    `}
 `;
 
 const CardHeader = styled.div`
     ${tw`
-        flex 
-        items-center 
-        justify-center 
         text-white 
         text-lg
         font-semibold
@@ -276,9 +279,6 @@ const CardHeader = styled.div`
 
 const CardText = styled.div`
     ${tw`
-        flex 
-        items-center 
-        justify-center 
         text-white 
         text-lg
         font-bold
@@ -821,9 +821,6 @@ export function MainSection() {
         return (
             <>
                 <PageContainer>
-                    <NavbarContainer>
-                        <NavItemsLoggedIn />
-                    </NavbarContainer>
                     <ToastContainer position="top-right"
                         autoClose={1500} 
                         hideProgressBar={false}
@@ -919,12 +916,10 @@ export function MainSection() {
                                     <div className='mb-6'>                       
                                         <TextField
                                             placeholder="Search..."
-                                            label="Search"
                                             fullWidth
                                             onChange={(e) => {
                                                 setSearch(e.target.value)
                                             }}
-                                            className={classes.root}
                                         />
                                     </div>
                                     <TrackContainer>
@@ -951,20 +946,11 @@ export function MainSection() {
                                     <Stack spacing={2} className='flex justify-center items-center'>
                                         <Pagination 
                                             count={numberOfPages} 
-                                            shape="rounded" 
                                             page={activePage} 
                                             onChange={handlePageChange}
                                             variant="outlined"
                                             shape="rounded" 
-                                            sx={{
-                                                "& .MuiPaginationItem-root": {
-                                                    color: "#fff !important", // Text color
-                                                    borderColor: "#fff", // Border color if outlined
-                                                },
-                                                "& .Mui-selected": {
-                                                    backgroundColor: "rgba(255, 255, 255, 0.2)", // Optional: background for the selected item
-                                                },
-                                            }}
+                                            color="primary"
                                         />
                                     </Stack>
                                 </>
@@ -978,9 +964,7 @@ export function MainSection() {
                             */}
                             {/* {viewType === 3 && <h1 className='text-white'>Extra</h1>} */}
                     </MainContainer>
-                    <SidebarContainer>
-                        <Sidebar />
-                    </SidebarContainer>
+                    <Chatbot />
                 </PageContainer>
             </>
         )               

@@ -23,9 +23,7 @@ import '../../../styles/font.css'
 import TrackCard from '../PlanPage/Card';
 import { Modal, Pagination, Stack, Typography } from '@mui/material';
 import { NavItemsLoggedIn } from 'src/app/components/navbar/navitems';
-import Sidebar from 'src/app/components/sidebar';
-
-// TODO: Fix NavBar padding later
+import Sidebar from 'src/app/components/chatbot';
 
 const PageContainer = styled.div`
     min-height: 100vh;
@@ -40,25 +38,7 @@ const MainContainer = styled.div`
     ${tw`
         flex
         flex-col
-        p-12
         mx-auto
-    `}
-`;
-
-// Navbar stays on the left side of the screen, fixed
-const NavbarContainer = styled.div`
-    ${tw`
-        pt-10
-        flex
-        flex-col
-        items-center
-        fixed
-        left-0
-        top-0
-        h-full
-        bg-white
-        z-10
-        p-4
     `}
 `;
 
@@ -428,9 +408,6 @@ export function MainSection() {
         return (
             <>
                 <PageContainer>
-                    <NavbarContainer>
-                        <NavItemsLoggedIn />
-                    </NavbarContainer>
                     <MainContainer>
                         
                         <ToastContainer
@@ -472,21 +449,11 @@ export function MainSection() {
                                 }}
                                 variant="outlined"
                                 shape="rounded" 
-                                sx={{
-                                    "& .MuiPaginationItem-root": {
-                                        color: "#fff !important", // Text color
-                                        borderColor: "#fff", // Border color if outlined
-                                    },
-                                    "& .Mui-selected": {
-                                        backgroundColor: "rgba(255, 255, 255, 0.2)", // Optional: background for the selected item
-                                    },
-                                }}
+                                color="primary"
                             />
                         </Stack>    
                     </MainContainer>
-                    <SidebarContainer>
-                        <Sidebar />
-                    </SidebarContainer>
+                    <Sidebar />
                 </PageContainer>
             </>
         )

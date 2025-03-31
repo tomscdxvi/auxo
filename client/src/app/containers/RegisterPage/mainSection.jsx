@@ -41,10 +41,22 @@ const MainContainer = styled.div`
 
 const Title = styled.h1`
     ${tw`
-        font-bold
-        text-white
-        p-4
-        xlarge:text-xl 
+        font-semibold
+        text-paragraph
+        pt-4
+        pl-12
+        pr-4
+        pb-0
+        xlarge:text-3xl 
+        xlarge:leading-relaxed
+    `}
+`;
+
+const Description = styled.p`
+    ${tw`
+        font-normal
+        text-paragraph
+        xlarge:text-lg
         xlarge:leading-relaxed
     `}
 `;
@@ -90,10 +102,13 @@ const FormContainer = styled.div`
 const ButtonsContainer = styled.div`
     ${tw`
         flex
-        flex-wrap
-        mt-6
-        items-center
-        justify-center
+        justify-end
+        pt-4
+        hover:transition
+        hover:duration-200
+        hover:ease-in-out
+        hover:bg-gray-background
+        hover:text-white
     `}
 `;
 
@@ -210,18 +225,6 @@ export function MainSection() {
         confirm_password: "",
         level: ""
     });
-
-    const handleNext = () => {
-        if (step < 4) {
-            setStep(step + 1);
-        }
-    };
-    
-    const handlePrev = () => {
-        if (step > 1) {
-            setStep(step - 1);
-        }
-    };
 
     const initializeError = (error) => {
         toast.error(error, {
@@ -360,7 +363,6 @@ export function MainSection() {
             <ImageContainer>
                 <img src={SignUpIllustration} alt="" />
             </ImageContainer>
-            <HorizontalLine />
             <MainContainer>
                 <Title>Create User Account</Title>
 
@@ -377,83 +379,148 @@ export function MainSection() {
                     theme="colored"
                 />
 
-                <Form onSubmit={handleSubmit} className='p-3'>
-                    <ThemeProvider theme={theme}>
-                        {step === 1 && (
-                            <TextField
-                                label="Username"
-                                name="username"
-                                value={user.username}
-                                onChange={onChangeHandler}
-                                required
-                                fullWidth
-                                variant="outlined"
-                            />
-                        )}
-                        {step === 2 && (
-                            <div>
-                                <TextField
-                                label="Email Address"
-                                name="email"
-                                value={user.email}
-                                onChange={onChangeHandler}
-                                required
-                                fullWidth
-                                />
-                            </div>
-                        )}
-                        {step === 3 && (
-                            <div>
-                                <TextField
-                                    label="Password"
-                                    name="password"
-                                    type="password"
-                                    value={user.password}
-                                    onChange={onChangeHandler}
-                                    required
-                                    fullWidth
-                                    sx={{
-                                        marginBottom: 3
-                                    }}
-                                />
-                                <TextField
-                                    label="Confirm Password"
-                                    name="confirm_password"
-                                    type="password"
-                                    value={user.confirm_password}
-                                    onChange={onChangeHandler}
-                                    required
-                                    fullWidth
-                                />
-                            </div>
-                        )}
-                        {step === 4 && (
-                            <div>
-                                <TextField
-                                    label="Select Level"
-                                    name="level"
-                                    value={user.level}
-                                    onChange={onChangeHandler}
-                                    required
-                                    fullWidth
-                                    select
-                                >
-                                    <MenuItem value={10}>Beginner</MenuItem>
-                                    <MenuItem value={20}>Intermediate</MenuItem>
-                                    <MenuItem value={30}>Advanced</MenuItem>
-                                </TextField>
-                            </div>
-                        )}
+                <Form onSubmit={handleSubmit} className='p-12'>
+                    <TextField
+                        label="Username"
+                        name="username"
+                        value={user.username}
+                        onChange={onChangeHandler}
+                        required
+                        fullWidth
+                        variant="standard"
+                        sx={{
+                            marginBottom: 2
+                        }}
+                    />
 
-                        <div className="d-flex justify-between align-middle mt-6">
-                            {step > 1 && <Button onClick={handlePrev} theme="filled" text="Back" />}
-                            {step < 4 ? (
-                                <Button onClick={handleNext} theme="filled" text="Next" />
-                            ) : (
-                                <Button type="submit" theme="filled" text="Create Account" />
-                            )}
-                        </div>
+                    <TextField
+                        label="Email Address"
+                        name="email"
+                        value={user.email}
+                        onChange={onChangeHandler}
+                        required
+                        fullWidth
+                        variant="standard"
+                        sx={{
+                            marginBottom: 2
+                        }}
+                    />
+
+                    <TextField
+                        label="Password"
+                        name="password"
+                        type="password"
+                        value={user.password}
+                        onChange={onChangeHandler}
+                        required
+                        fullWidth
+                        variant="standard"
+                        sx={{
+                            marginBottom: 2
+                        }} 
+                    />
+
+                    <TextField
+                        label="Confirm Password"
+                        name="confirm_password"
+                        type="password"
+                        value={user.confirm_password}
+                        onChange={onChangeHandler}
+                        required
+                        fullWidth
+                        variant="standard"
+                        sx={{
+                            marginBottom: 2
+                        }}
+                    />
+
+                    <TextField
+                        label="Select Level"
+                        name="level"
+                        value={user.level}
+                        onChange={onChangeHandler}
+                        required
+                        fullWidth
+                        variant="standard"
+                        select
+                        sx={{
+                            marginBottom: 4
+                        }}
+                    >
+                        <MenuItem value={10}>Beginner</MenuItem>
+                        <MenuItem value={20}>Intermediate</MenuItem>
+                        <MenuItem value={30}>Advanced</MenuItem>
+                    </TextField>
+
+                    <Description>
+                        Joining us as a Coach? Sign up <a className="font-semibold hover:text-paragraph hover:cursor-pointer">here!</a>
+                    </Description>
+                    
+                    <ButtonsContainer>
+                        <Button type="submit" theme="filled" text="Create Account" />
+                    </ButtonsContainer>
+
+                    {/* 
+                    <ThemeProvider theme={theme}>
+                        <TextField
+                            label="Username"
+                            name="username"
+                            value={user.username}
+                            onChange={onChangeHandler}
+                            required
+                            fullWidth
+                            variant="outlined"
+                        />
+
+                        <TextField
+                        label="Email Address"
+                        name="email"
+                        value={user.email}
+                        onChange={onChangeHandler}
+                        required
+                        fullWidth
+                        />
+
+                        <TextField
+                            label="Password"
+                            name="password"
+                            type="password"
+                            value={user.password}
+                            onChange={onChangeHandler}
+                            required
+                            fullWidth
+                            sx={{
+                                marginBottom: 3
+                            }} 
+                        />
+
+                        <TextField
+                            label="Confirm Password"
+                            name="confirm_password"
+                            type="password"
+                            value={user.confirm_password}
+                            onChange={onChangeHandler}
+                            required
+                            fullWidth
+                        />
+
+                        <TextField
+                            label="Select Level"
+                            name="level"
+                            value={user.level}
+                            onChange={onChangeHandler}
+                            required
+                            fullWidth
+                            select
+                        >
+                            <MenuItem value={10}>Beginner</MenuItem>
+                            <MenuItem value={20}>Intermediate</MenuItem>
+                            <MenuItem value={30}>Advanced</MenuItem>
+                        </TextField>
+
+                        <Button type="submit" theme="filled" text="Create Account" />
                     </ThemeProvider>
+                    */}
                 </Form>
             </MainContainer>
         </PageContainer>

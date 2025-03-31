@@ -12,13 +12,13 @@ const PageContainer = styled.div`
         h-full
         items-center
         overflow-x-hidden
-        bg-home-background
     `}
 `;
 
 export default function PlanPage() {
     return (
         <PageContainer>
+            <NavbarLoggedIn />
             <MainSection />
         </PageContainer>
     )

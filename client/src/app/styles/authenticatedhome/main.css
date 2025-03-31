@@ -23,8 +23,13 @@
     margin: 24px !important;
 }
 
+input {
+    --tw-ring-shadow: 0 0 #000 !important;
+}
+
+/*
 .MuiPagination-root {
     button {
         color: red !important;
     }
-}
+} */

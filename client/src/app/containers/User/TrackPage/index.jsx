@@ -12,13 +12,13 @@ const PageContainer = styled.div`
         h-full
         items-center
         overflow-x-hidden
-        bg-home-background
     `}
 `;
 
 export default function TrackPage() {
     return (
         <PageContainer>
+            <NavbarLoggedIn />
             <MainSection />
         </PageContainer>
     )

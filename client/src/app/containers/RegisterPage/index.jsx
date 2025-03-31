@@ -21,7 +21,7 @@ const PageContainer = styled.div`
 export default function RegisterPage() {
     return (
         <PageContainer>
-            <NavbarDark />
+            <Navbar />
             <MainSection />
         </PageContainer>
     )

@@ -6,9 +6,10 @@ import CalculatePage from '../../app/containers/User/CalculatePage';
 const HomeContainer = styled.div`
   ${tw`
     w-full
-    h-screen
+    h-full
     flex
     flex-col
+    bg-white
   `}
 `;
 

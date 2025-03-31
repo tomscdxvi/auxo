@@ -18,8 +18,9 @@ import '../../../styles/font.css'
 import DefaultToolTip from 'src/app/components/tooltip';
 import { Box, Modal, Typography } from '@mui/material';
 import Loading from 'src/app/components/loading';
-import { NavItemsLoggedIn } from 'src/app/components/navbar/navitems';
-import Sidebar from 'src/app/components/sidebar';
+import Sidebar from 'src/app/components/chatbot';
+
+// TODO: Save calculations in user DB for persistance
 
 const PageContainer = styled.div`
     min-height: 100vh;
@@ -38,44 +39,16 @@ const MainContainer = styled.div`
     `}
 `;
 
-const NavbarContainer = styled.div`
-    ${tw`
-        pt-10
-        flex
-        flex-col
-        items-center
-        fixed
-        left-0
-        top-0
-        h-full
-        bg-white
-        z-10
-        p-4
-    `}
-`;
-
-// Sidebar stays on the right side of the screen, fixed
-const SidebarContainer = styled.div`
-    ${tw`
-        fixed
-        right-0
-        top-0
-        h-full
-        bg-gray-800
-        text-white
-        p-6
-    `}
-`;
-
 const Title = styled.h1`
     font-family: 'Montserrat', sans-serif;
     ${tw`
         flex
         justify-center
         items-center
-        text-white
+        text-paragraph
         mb-4
         tracking-wider
+        font-semibold
         xlarge:text-xl 
         xlarge:leading-relaxed
     `}
@@ -92,7 +65,7 @@ const FormContainer = styled.div`
     border-radius: 8px;
     z-index: 100;
     ${tw`
-        bg-white
+        bg-gray-background
     `}
 `;
 
@@ -265,9 +238,6 @@ export function MainSection() {
         return (
             <>
                 <PageContainer>
-                    <NavbarContainer>
-                        <NavItemsLoggedIn />
-                    </NavbarContainer>
                     <MainContainer>
                         <Title style={{ fontSize: 30, marginTop: '6%' }}>Calculate your one rep max (1RM) for any lift!</Title>
                         <div className="flex justify-center items-center">
@@ -275,8 +245,8 @@ export function MainSection() {
                                 content=" RM is your max weight that you can lift for a single rep for any exercise. The formula is from NFPT (Brzycki Equation)."
                                 text="Learn more"
                                 placement="right"
-                                tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
-                                buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-6 mb-4"
+                                tooltipClass="medium:w-[290px] xlarge:w-[300px] cursor-default text-paragraph"
+                                buttonClass="text-white font-semibold rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-6 mb-4"
                             />
                         </div>
                         <Title>{OneRepMaxCalculation() == 0 ? "_" : OneRepMaxCalculation() + "lbs for 1 Rep"}</Title>
@@ -293,6 +263,7 @@ export function MainSection() {
                             pauseOnHover
                             theme="colored"
                         />
+                        
                         <div className="flex justify-center items-center">
                             <div>
                                 <CalculationContainer>
@@ -391,9 +362,7 @@ export function MainSection() {
                             </div>
                         </div>
                     </MainContainer>
-                    <SidebarContainer>
-                        <Sidebar />
-                    </SidebarContainer>
+                    <Sidebar />
                 </PageContainer>
             </>
         )

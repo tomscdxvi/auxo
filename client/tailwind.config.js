@@ -19,7 +19,7 @@ module.exports = {
       'home-background': '#1a1a1a',
       white: 'white',
       'background': '#F9F4EF',
-      'gray-background': '#C4C4C4',
+      'gray-background': '#7f8fa6',
       'headline': '#001858',
       'paragraph': '#172C66',
       'button': '#716040',

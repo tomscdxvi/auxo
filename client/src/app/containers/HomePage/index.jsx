@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import tw from 'twin.macro';
-import { NavbarDark } from '../../components/navbar';
+import { Navbar, NavbarDark } from '../../components/navbar';
 import { MainSection } from './mainSection';
 
 
@@ -19,7 +19,7 @@ const PageContainer = styled.div`
 export default function HomePage() {
     return (
         <PageContainer>
-            <NavbarDark />
+            <Navbar />
             <MainSection />
         </PageContainer>
     )

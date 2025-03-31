@@ -49,6 +49,7 @@ const SignInItem = styled.li`
         hover:ease-in-out
         hover:bg-gray-background
         hover:no-underline
+        hover:text-white
     `}
 `;
 
@@ -65,6 +66,26 @@ const SignUpItem = styled.li`
         hover:transition
         hover:duration-200
         hover:ease-in-out
+        hover:bg-gray-background
+        hover:no-underline
+        hover:text-white
+    `}
+`;
+
+const HomeNavItem = styled.li`
+    font-family: 'Montserrat', sans-serif;
+    ${tw`
+        mt-3 
+        text-lg
+        medium:text-xl
+        text-paragraph
+        font-medium
+        medium:mr-12
+        cursor-pointer
+        hover:transition
+        hover:duration-200
+        hover:ease-in-out
+        hover:bg-gray-background
         hover:no-underline
     `}
 `;
@@ -88,6 +109,25 @@ const LogOutItem = styled.li`
     `}
 `;
 
+const LogoutConfirmItem = styled.li`
+    font-family: 'Montserrat', sans-serif;
+    ${tw`
+        mt-3
+        text-lg
+        medium:text-xl
+        text-paragraph
+        font-medium
+        medium:mr-12
+        cursor-pointer
+        hover:transition
+        hover:duration-200
+        hover:ease-in-out
+        hover:bg-gray-background
+        hover:no-underline
+        hover:text-white
+    `}
+`
+
 const NavItem = styled.li`
     font-family: 'Montserrat', sans-serif;
     margin-top: 24px;
@@ -109,6 +149,8 @@ const NavItem = styled.li`
 
 
 export function NavItems() {
+
+    const navigate = useNavigate();
 
     const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
 
@@ -135,12 +177,13 @@ export function NavItems() {
 
     return (
         <ListContainer>
+            <SignUpItem>
+                <Button theme="filled" text="Sign Up" className="font-bold" onClick={() => navigate("/register")} />
+            </SignUpItem>
 
             <SignInItem>
-                <Button theme="filled" text="Sign In" className="font-bold mr-8" onClick={() => setOpen(true)} />
+                <Button theme="text" text="Sign In" className="font-bold mr-8" onClick={() => setOpen(true)} />
                 <SignIn open={open} handleClose={handleClose} />
-                <Button theme="outline" text="Sign Up" className="font-bold" onClick={() => setSignUpOpen(true)} />
-                <SignUp open={signUpOpen} handleSignUpClose={handleSignUpClose} />
             </SignInItem>
         </ListContainer>
     )
@@ -224,68 +267,70 @@ export function NavItemsLoggedIn() {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 400,
+        width: 425,
         bgcolor: 'background.paper',
         boxShadow: 24,
         p: 4,
+        borderRadius: 4
     };
 
     return (
-        <>
-            <SideBarLogo />
-            <ListContainerLoggedIn>
-                <Link to="/home" className='auth-link'>
-                    <NavItem>
-                        Dashboard
-                    </NavItem>
-                </Link>
+        <ListContainer>
+            <Link to="/home" className='auth-link'>
+                <NavItem>
+                    Dashboard
+                </NavItem>
+            </Link>
 
-                <Link to="/track" className='auth-link'>
-                    <NavItem>
-                        Track
-                    </NavItem>
-                </Link>
+            <Link to="/track" className='auth-link'>
+                <NavItem>
+                    Track
+                </NavItem>
+            </Link>
 
-                <Link to="/plan" className='auth-link'>
-                    <NavItem>
-                        Programs
-                    </NavItem>
-                </Link>
+            <Link to="/plan" className='auth-link'>
+                <NavItem>
+                    Programs
+                </NavItem>
+            </Link>
 
-                <Link to="/calculate" className='auth-link'>
-                    <NavItem>
-                        Calculate
-                    </NavItem>
-                </Link>
+            <Link to="/calculate" className='auth-link'>
+                <NavItem>
+                    Calculate
+                </NavItem>
+            </Link>
 
-                <LogOutItem onClick={handleLogOutModal}>
-                    Log Out
-                </LogOutItem>
+            <LogOutItem onClick={handleLogOutModal}>
+                Log Out
+            </LogOutItem>
 
-                <Modal
-                    open={logOutModalOpen}
-                    onClose={handleLogOutModalClose}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Log Out
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                            Do you wish to log out of this account?
-                        </Typography>
-                        <div className="flex mt-12">
-                            <Button theme="outline-white" text="Back" onClick={handleLogOutModalClose} className="mr-9" /> 
-                            <Button theme="filled" text="Confirm" className="mr-9" onClick={handleLogOut} /> 
-                        </div>
-                    </Box>
-                </Modal>
+            <Modal
+                open={logOutModalOpen}
+                onClose={handleLogOutModalClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Log Out
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        Do you wish to log out of this account?
+                    </Typography>
+                    <div className="flex mt-12 list-none">
+                        <LogoutConfirmItem>
+                            <Button theme="outline-white" text="Back" onClick={handleLogOutModalClose} /> 
+                        </LogoutConfirmItem>
+                        <LogoutConfirmItem>
+                            <Button theme="filled" text="Confirm" onClick={handleLogOut} /> 
+                        </LogoutConfirmItem>
+                    </div>
+                </Box>
+            </Modal>
 
-                {/* <NavItem style={{ color: 'white' }}>
-                    <Link to="/track">Track</Link>
-                </NavItem> */}
-            </ListContainerLoggedIn>
-        </>
+            {/* <NavItem style={{ color: 'white' }}>
+                <Link to="/track">Track</Link>
+            </NavItem> */}
+        </ListContainer>
     )
 }

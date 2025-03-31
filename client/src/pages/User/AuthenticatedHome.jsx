@@ -9,6 +9,7 @@ const HomeContainer = styled.div`
     h-full
     flex
     flex-col
+    bg-white
   `}
 `;
 

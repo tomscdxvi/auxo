@@ -6,9 +6,10 @@ import PlanPage from '../../app/containers/User/PlanPage';
 const TrackContainer = styled.div`
   ${tw`
     w-full
-    h-screen
+    h-full
     flex
     flex-col
+    bg-white
   `}
 `;
 

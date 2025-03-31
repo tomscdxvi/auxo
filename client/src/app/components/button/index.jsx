@@ -22,7 +22,7 @@ const BaseButton = styled.button`
 
 const FilledButton = styled(BaseButton)`
     ${tw`
-        text-black
+        text-paragraph
         bg-white
         font-bold
         shadow-md
@@ -52,20 +52,14 @@ const OutlinedButton = styled(BaseButton)`
 
 const OutlinedWhiteButton = styled(BaseButton)`
     ${tw`
-        text-button
-        border-button
+        text-paragraph
         font-bold
-        bg-white
-        hover:bg-button
-        hover:text-white
-        hover:transition-all
-        hover:duration-300
     `}
 `;
 
 const TextButton = styled(BaseButton)`
     ${tw`
-        text-white
+        text-paragraph
         font-bold
     `}
 `;

@@ -9,7 +9,7 @@ const RegisterContainer = styled.div`
     h-screen
     flex
     flex-col
-    bg-home-background
+    bg-white
   `}
 `;
 

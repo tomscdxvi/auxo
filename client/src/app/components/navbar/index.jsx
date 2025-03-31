@@ -43,7 +43,7 @@ export function NavbarDark() {
 export function NavbarLoggedIn() {
     return (
         <NavbarContainer>
-            <DarkLogo />
+            <Logo />
             <NavItemsLoggedIn />
         </NavbarContainer>
     )

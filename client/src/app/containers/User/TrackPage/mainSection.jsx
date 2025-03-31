@@ -19,12 +19,13 @@ import '../../../styles/authenticatedhome/main.css';
 import '../../../styles/font.css'
 import TrackForm from 'src/app/components/track';
 import { NavItemsLoggedIn } from 'src/app/components/navbar/navitems';
-import Sidebar from 'src/app/components/sidebar';
+import Sidebar from 'src/app/components/chatbot';
 
 const PageContainer = styled.div`
     min-height: 100vh;
     ${tw`
         flex
+        relative
     `}
 `;
 
@@ -33,8 +34,8 @@ const MainContainer = styled.div`
     ${tw`
         flex
         flex-col
-        justify-center
-        items-center
+        p-12
+        mx-auto
     `}
 `;
 
@@ -669,24 +670,8 @@ export function MainSection() {
         return (
             <>
                 <PageContainer>
-                    <NavbarContainer>
-                        <NavItemsLoggedIn />
-                    </NavbarContainer>
                     <MainContainer>
                         
-                        <ToastContainer
-                            position="top-right"
-                            autoClose={5000}
-                            hideProgressBar={false}
-                            newestOnTop={false}
-                            closeOnClick
-                            rtl={false}
-                            pauseOnFocusLoss
-                            draggable
-                            pauseOnHover
-                            theme="colored"
-                        />  
-    
                         {/* 
                         <Box sx={{ width: '50%', bgcolor: 'background.paper' }} className="rounded-md">
                             <Tabs value={value} onChange={handleTabChange} centered>
@@ -710,9 +695,8 @@ export function MainSection() {
     
                         <TrackForm />
                     </MainContainer>
-                    <SidebarContainer>
-                        <Sidebar />
-                    </SidebarContainer>
+
+                    <Sidebar />
                 </PageContainer>
             </>
         )

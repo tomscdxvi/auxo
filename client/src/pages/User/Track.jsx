@@ -6,9 +6,10 @@ import TrackPage from '../../app/containers/User/TrackPage';
 const TrackContainer = styled.div`
   ${tw`
     w-full
-    h-screen
+    h-full
     flex
     flex-col
+    bg-white
   `}
 `;
 
