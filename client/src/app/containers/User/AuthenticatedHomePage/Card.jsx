@@ -16,7 +16,7 @@ export default function TrackCard({ track, handleDelete }) {
                     <div className="w-full">
                         <Card.Title>
                             {track.title} 
-                            <DeleteButton onClick={handleDelete} />
+                            <DeleteButton onClick={() => handleDelete(track._id)} />
                         </Card.Title>
                         <Card.Subtitle className="text-muted mt-2 mb-2">
                             Date: {track.date} 

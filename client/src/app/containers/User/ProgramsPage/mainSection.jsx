@@ -20,7 +20,7 @@ import SignUpIllustration from '../../../../assets/images/track-illustration.png
 import PlusIcon from '../../../../assets/images/plus-icon.png';
 import '../../../styles/authenticatedhome/main.css';
 import '../../../styles/font.css'
-import TrackCard from '../PlanPage/Card';
+import TrackCard from './Card';
 import { Modal, Pagination, Stack, Typography } from '@mui/material';
 import { NavItemsLoggedIn } from 'src/app/components/navbar/navitems';
 import Sidebar from 'src/app/components/chatbot';
@@ -288,7 +288,7 @@ export function MainSection() {
 
     const [ activePage, setActivePage ] = useState(1);
     const itemsPerPage = 6;
-    const numberOfPages = Math.ceil(data.data?.history.length / itemsPerPage)
+    const numberOfPages = Math.ceil(data.length / itemsPerPage)
 
     const [ logOutModalOpen, setLogOutModalOpen ] = useState(false);
     const handleLogOutModal = (e) => {

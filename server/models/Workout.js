@@ -3,29 +3,17 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const WorkoutSchema = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    intensity: {
-        type: String,
-    },
-    sets: {
-        type: Number,
-        required: true
-    },
-    reps: {
-        type: Number,
-        required: true
-    },
-    weight: {
-        type: Number,
-        required: true
-    },
-    track: {
-        type: Schema.Types.ObjectId,
-        ref: 'Tracks',
-    }, 
+    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // ✅ Reference to user
+    title: String,
+    date: String,
+    start_time: String,
+    end_time: String,
+    type: String,
+    name: String,
+    intensity: String,
+    sets: Number,
+    reps: Number,
+    weight: Number
 });
 
 module.exports = mongoose.model("Workout", WorkoutSchema);

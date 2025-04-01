@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Badge, Button, Collapse } from 'react-bootstrap';
 import axios from 'axios';
-import CenteredModal from './';
+import CenteredModal from '.';
 import { DeleteButton } from '../../../components/delete';
 
 export default function TrackCard({ track, handleDelete, count }) {

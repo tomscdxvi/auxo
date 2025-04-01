@@ -15,7 +15,7 @@ const PageContainer = styled.div`
     `}
 `;
 
-export default function PlanPage() {
+export default function ProgramsPage() {
     return (
         <PageContainer>
             <NavbarLoggedIn />

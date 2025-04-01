@@ -263,7 +263,7 @@ const CardContent = styled.div`
         w-full
         flex 
         flex-col  /* Makes items stack vertically */
-        items-center 
+        items-center  
         justify-center 
         text-center /* Ensures text is centered */
     `}
@@ -472,7 +472,7 @@ export function MainSection() {
                 setData(res.data);
 
                 // Set an alternate state array with the returned user's history for easy and accessible workflow (i.e To sort and filter)
-                setTrackingHistory(res.data?.history)
+                setTrackingHistory(res.data || []);
 
                 
                 // Once data is received, stop the progress update
@@ -490,7 +490,7 @@ export function MainSection() {
         }
     }
 
-    console.log(trackingHistory)
+    console.log(data);
 
     // Verify user when before page is rendered
     useEffect(() => {
@@ -680,23 +680,30 @@ export function MainSection() {
         )
     }
     
-    // Handle delete function
-    const handleDelete = (e) => {
-
-        e.preventDefault();
-
-        console.log(data.data);
-
-        /* 
-        var array = [...data.data.history];
-
-        array.splice(-1);
-
-        setData(array);
-
-        console.log(data); */
-    }
-
+    const handleDelete = async (workoutId) => {
+        try {
+            // Send the DELETE request using axios
+            const { data } = await axios.delete(`http://localhost:5000/api/delete-workout/${workoutId}`, {
+                withCredentials: true, // Ensures cookies (JWT) are sent
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            // Handle the response data
+            if (data.error) {
+                throw new Error(data.error || "Failed to delete workout");
+            }
+    
+            // Remove the workout from the state to update the UI
+            setTrackingHistory((prevHistory) => prevHistory.filter((track) => track._id !== workoutId));
+    
+            console.log("Workout deleted:", data.message);
+        } catch (error) {
+            console.error("Error deleting workout:", error.message);
+        }
+    };
+    
     // Handles chart view type 
     const handleChartView = (e) => {
         e.preventDefault();
@@ -924,24 +931,21 @@ export function MainSection() {
                                     </div>
                                     <TrackContainer>
                                         {/* slice is used for pagination, filter is used to search, and map is used to list out the array of objects. */}
-                                        {trackingHistory
-                                            .filter((track) => {
-                                                return search?.toLowerCase() === "" ? track : track.title?.toLowerCase().includes(search)})
-                                            .slice(pagesVisited, pagesVisited + itemsPerPage)
-                                            .map((track) => {
-                                                if(track === null) {
-                                                    return (
-                                                        <Title style={{ fontSize: '16px' }}>Your tracking history is empty, enter your first workout to see your history!</Title>
-                                                    )
-                                                } else {
-                                                    return (
-                                                        <div>
-                                                            <TrackCard key={track._id} track={track} handleDelete={handleDelete} />
-                                                        </div>
-                                                    )
-                                                }
-                                            })
-                                        } 
+                                        {trackingHistory && trackingHistory.length > 0 ? (
+                                            trackingHistory
+                                                .filter((track) => track.title?.toLowerCase().includes(search.toLowerCase() || ""))
+                                                .slice(pagesVisited, pagesVisited + itemsPerPage)
+                                                .map((track) => (
+                                                    <div key={track._id}>
+                                                        <TrackCard track={track} handleDelete={handleDelete} />
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <Title style={{ fontSize: '16px' }}>
+                                                    Your tracking history is empty, enter your first workout to see your history!
+                                                </Title>
+                                            )
+                                        }
                                     </TrackContainer>
                                     <Stack spacing={2} className='flex justify-center items-center'>
                                         <Pagination 

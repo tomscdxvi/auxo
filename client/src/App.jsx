@@ -8,7 +8,7 @@ import AuthenticatedHome from './pages/User/AuthenticatedHome';
 import AuthenticatedCoach from './pages/Coach/AuthenticatedCoach';
 import Calculate from './pages/User/Calculate';
 import WorkoutDetails from './pages/User/WorkoutDetails';
-import Plan from './pages/User/Plan';
+import Programs from './pages/User/Programs';
 
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
         <Route exact path='/coach' element={<AuthenticatedCoach />} />
         <Route exact path="/calculate" element={<Calculate />} />
         <Route exact path="/track" element={<Track />} />
-        <Route exact path="/plan" element={<Plan />} />
+        <Route exact path="/programs" element={<Programs />} />
         <Route exact path="/details/{id}" element={<WorkoutDetails />} />
       </Routes>
     </BrowserRouter>

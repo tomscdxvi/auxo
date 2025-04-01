@@ -1,7 +1,7 @@
 import { React, useState } from 'react'
 import styled from 'styled-components';
 import tw from 'twin.macro';
-import PlanPage from '../../app/containers/User/PlanPage';
+import ProgramsPage from '../../app/containers/User/ProgramsPage';
 
 const TrackContainer = styled.div`
   ${tw`
@@ -13,10 +13,10 @@ const TrackContainer = styled.div`
   `}
 `;
 
-export default function Plan() {
+export default function Programs() {
   return (
     <TrackContainer>
-        <PlanPage />
+        <ProgramsPage />
     </TrackContainer>
   )
 }

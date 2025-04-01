@@ -27,9 +27,12 @@ const UserSchema = new Schema({
         description: String,
         completion: Boolean
     }],
-    history: [{
-        type: Schema.Types.Mixed
+    history: [{ 
+        type: Schema.Types.ObjectId, ref: 'Workout' // ✅ Reference to Workout collection
     }],
+    programs: [{
+        type: Schema.Types.ObjectId, ref: 'Program'
+    }]
 });
 
 // Encrypt password with BCrypt 
