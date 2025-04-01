@@ -226,6 +226,14 @@ export function MainSection() {
         level: ""
     });
 
+    const storeUserId = (value) => {
+        try {
+            localStorage.setItem('@storage_user', value);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const initializeError = (error) => {
         toast.error(error, {
             position: "top-right",
@@ -315,9 +323,43 @@ export function MainSection() {
                             theme: "colored"
                         });
 
-                        await timeout(4000).then(() => {
-                            navigate("/login");
-                        })
+                        // Wait for 3 seconds before trying to log in
+                        await timeout(3000);
+
+                        // Now, try logging in the user after registration
+                        try {
+                            const loginResponse = await axios.post("http://localhost:5000/login", { username: user.username, password: user.password }, { withCredentials: true });
+
+                            if (loginResponse.data) {
+                                // Store the user ID or token as necessary
+                                storeUserId(loginResponse.data);
+
+                                // Redirect to the home page after successful login
+                                navigate("/home");
+                            } else {
+                                toast.error("Error during login. Please try again.", {
+                                    position: "top-right",
+                                    autoClose: 5000,
+                                    hideProgressBar: false,
+                                    closeOnClick: true,
+                                    pauseOnHover: true,
+                                    draggable: true,
+                                    progress: undefined,
+                                    theme: "colored"
+                                });
+                            }
+                        } catch (error) {
+                            toast.error("Error during login. Please try again.", {
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme: "colored"
+                            });
+                        }
                     } else {
                         toast.error("There was an error creating this account.", {
                             position: "top-right",
@@ -447,9 +489,9 @@ export function MainSection() {
                             marginBottom: 4
                         }}
                     >
-                        <MenuItem value={10}>Beginner</MenuItem>
-                        <MenuItem value={20}>Intermediate</MenuItem>
-                        <MenuItem value={30}>Advanced</MenuItem>
+                        <MenuItem value="beginner">Beginner</MenuItem>
+                        <MenuItem value="intermediate">Intermediate</MenuItem>
+                        <MenuItem value="advanced">Advanced</MenuItem>
                     </TextField>
 
                     <Description>

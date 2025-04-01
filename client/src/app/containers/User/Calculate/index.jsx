@@ -15,7 +15,7 @@ const PageContainer = styled.div`
     `}
 `;
 
-export default function ProgramsPage() {
+export default function Calculate() {
     return (
         <PageContainer>
             <NavbarLoggedIn />

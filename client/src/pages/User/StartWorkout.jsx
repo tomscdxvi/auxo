@@ -1,7 +1,7 @@
 import { React, useState } from 'react'
 import styled from 'styled-components';
 import tw from 'twin.macro';
-import StartWorkoutPage from '../app/containers/StartWorkoutPage';
+import StartWorkout from '../app/containers/StartWorkoutPage';
 
 const StartWorkoutContainer = styled.div`
   background-color: #243763;
@@ -13,10 +13,10 @@ const StartWorkoutContainer = styled.div`
   `}
 `;
 
-export default function StartWorkoutContainer() {
+export default function StartWorkoutPage() {
   return (
     <StartWorkoutContainer>
-        <StartWorkoutkPage />
+        <StartWorkout />
     </StartWorkoutContainer>
   )
 }

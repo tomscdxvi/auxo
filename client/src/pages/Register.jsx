@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
 import tw from 'twin.macro';
-import RegisterPage from '../app/containers/RegisterPage';
+import Register from '../app/containers/Register';
 
 const RegisterContainer = styled.div`
   ${tw`
@@ -13,10 +13,10 @@ const RegisterContainer = styled.div`
   `}
 `;
 
-export default function Register() {
+export default function RegisterPage() {
   return (
     <RegisterContainer>
-        <RegisterPage />
+        <Register />
     </RegisterContainer>
   )
 }

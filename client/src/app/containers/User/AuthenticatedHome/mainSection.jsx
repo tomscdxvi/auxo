@@ -464,26 +464,26 @@ export function MainSection() {
             // Get user id from local storage when it is initially stored when the user logs in
             const userId = localStorage.getItem('@storage_user');
 
-            // Axios get from api route which will find a user by id and return the user's data
-            await axios.get(`http://localhost:5000/user/${userId}`).then((res) => {
-                // console.log(res.data.history[0].title);
+            const [userDetailsResponse, userWorkoutsResponse] = await Promise.all([
+                axios.get(`http://localhost:5000/user/${userId}`),
+                axios.get(`http://localhost:5000/user/workouts/${userId}`)
+            ]);
 
-                // Set the data state to hold the response data which is the user's data
-                setData(res.data);
+            if(userDetailsResponse.data) {
+                setData(userDetailsResponse.data );
+            }
 
-                // Set an alternate state array with the returned user's history for easy and accessible workflow (i.e To sort and filter)
-                setTrackingHistory(res.data || []);
+            if(userWorkoutsResponse.data) {
+                setTrackingHistory(userWorkoutsResponse.data || []);
+            }
 
-                
-                // Once data is received, stop the progress update
-                clearInterval(progressInterval);
-                setLoadingProgress(100);  // Ensure progress is set to 100% when done
-                // Set a slight delay before setting loading to false, just to allow the animation to finish
-                setTimeout(() => {
-                    setLoading(false);  // Data is loaded, and now set loading to false
-                }, 1250);  // Optional delay before transitioning (adjust as needed)
-                
-            });
+            // Once data is received, stop the progress update
+            clearInterval(progressInterval);
+            setLoadingProgress(100);  // Ensure progress is set to 100% when done
+            // Set a slight delay before setting loading to false, just to allow the animation to finish
+            setTimeout(() => {
+                setLoading(false);  // Data is loaded, and now set loading to false
+            }, 1250);  // Optional delay before transitioning (adjust as needed)
         } catch(error) {
             console.log(error);
             setLoading(false);
@@ -555,12 +555,51 @@ export function MainSection() {
         navigate("/");
     };
 
+    console.log(trackingHistory);
+
+    const getFavoriteExercise = () => {
+        // Check if trackingHistory is empty or undefined
+        if (!trackingHistory || trackingHistory.length === 0) {
+            return '-';
+        }
+    
+        // Create an object to store the frequency of each workout by name
+        const workoutFrequency = {};
+    
+        // Loop through the tracking history and count occurrences of each workout by name
+        trackingHistory.forEach((workout) => {
+            const workoutName = workout.name;  // workout name (e.g., "Bench Press")
+    
+            // Increase the count of this workout name in the workoutFrequency object
+            if (workoutFrequency[workoutName]) {
+                workoutFrequency[workoutName] += 1;
+            } else {
+                workoutFrequency[workoutName] = 1;  // First occurrence of this workout
+            }
+        });
+    
+        // Find the workout with the highest frequency
+        let favoriteWorkout = '';
+        let maxCount = 0;
+    
+        for (const workoutName in workoutFrequency) {
+            if (workoutFrequency[workoutName] > maxCount) {
+                maxCount = workoutFrequency[workoutName];
+                favoriteWorkout = workoutName;
+            }
+        }
+    
+        // Return the favorite workout or '-' if no favorite is found
+        return favoriteWorkout || '-';
+    };
+    
+
     // Card Data
     const cardData = [
-        { id: 1, color: '#a29bfe', header: 'Level', text: 'Beginner' },
-        { id: 2, color: '#0984e3', header: 'Upcoming', text: 'Legs' },
-        { id: 3, color: '#ff7675', header: 'Favorite Exercise', text: 'Bench Press' },
-        { id: 4, color: '#e17055', header: 'Workouts in April', text: '3' },
+        { id: 1, color: '#a29bfe', header: 'Level', text: data.level == "beginner" ? "Beginner" : data.level == "intermediate" ? "Intermediate" : data.level == "advanced" ? "Advanced" : "" },
+        { id: 2, color: '#0984e3', header: 'Upcoming', text: '-' },
+        { id: 3, color: '#ff7675', header: 'Favorite Exercise', text: getFavoriteExercise() },
+        { id: 4, color: '#e17055', header: 'Workouts in April', text: trackingHistory.length },
     ];
 
     // Navigation items
@@ -683,7 +722,7 @@ export function MainSection() {
     const handleDelete = async (workoutId) => {
         try {
             // Send the DELETE request using axios
-            const { data } = await axios.delete(`http://localhost:5000/api/delete-workout/${workoutId}`, {
+            const { data } = await axios.delete(`http://localhost:5000/workout/delete/${workoutId}`, {
                 withCredentials: true, // Ensures cookies (JWT) are sent
                 headers: {
                     "Content-Type": "application/json",
@@ -839,27 +878,6 @@ export function MainSection() {
                         pauseOnHover
                         theme="colored"
                     /> 
-                    {/*
-                    <ToggleContainer>
-                        <ul>
-                            <li>
-                                <ToggleItem style={{ color: 'white', marginTop: '24px' }} onClick={handleListView}>
-                                    List
-                                </ToggleItem>
-                            </li>
-                            <li>                            
-                                <ToggleItem style={{ color: 'white', marginTop: '24px' }} onClick={handleChartView}>
-                                    Chart
-                                </ToggleItem>
-                            </li>
-                            {/* <li>                            
-                                <ToggleItem style={{ color: 'white', marginTop: '24px' }} onClick={handleExtraView}>
-                                    Extra
-                                </ToggleItem>
-                            </li> 
-                        </ul>
-                    </ToggleContainer> 
-                    */}
                     <MainContainer>
                         <CardList>
                             {cardData.map((card) => (
@@ -878,48 +896,6 @@ export function MainSection() {
                         <Title style={{ marginTop: '3rem' }}>Past Workouts</Title>
                             {viewType === 1 && 
                                 <>  
-                                    {/* 
-                                    <div>
-                                        <ul className='flex'>
-                                            <li>
-                                                <Box sx={{ minWidth: 60, marginRight: 12 }}>
-                                                    <Title>Sort</Title>
-                                                    <FormControl style={{ minWidth: 180 }}>
-                                                        <TextField
-                                                            label="Sort Options"
-                                                            name="sort-options"
-                                                            className={classes.select}
-                                                            fullWidth
-                                                            select
-                                                            onChange={(e) => {
-                                                                setSortType(e.target.value)
-                                                                setActivePage(1)
-                                                            }}
-                                                        >
-                                                            <MenuItem value={"SortASC"} onClick={handleAZSort}>Sort (ASC)</MenuItem>
-                                                            <MenuItem value={"SortDESC"} onClick={handleZASort}>Sort (DESC)</MenuItem>
-                                                        </TextField>
-                                                    </FormControl>
-                                                </Box>
-                                            </li>
-                                            <li>    
-                                                <div>
-                                                    <Title>Search</Title>                        
-                                                    <TextField
-                                                        placeholder="Search"
-                                                        label="Search"
-                                                        fullWidth
-                                                        required
-                                                        onChange={(e) => {
-                                                            setSearch(e.target.value)
-                                                        }}
-                                                        className={classes.root}
-                                                    />
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    */}
                                     <div className='mb-6'>                       
                                         <TextField
                                             placeholder="Search..."
@@ -939,23 +915,24 @@ export function MainSection() {
                                                     <div key={track._id}>
                                                         <TrackCard track={track} handleDelete={handleDelete} />
                                                     </div>
-                                                ))
-                                            ) : (
-                                                <Title style={{ fontSize: '16px' }}>
-                                                    Your tracking history is empty, enter your first workout to see your history!
+                                                ))) : (
+                                                <Title style={{ fontSize: '16px', width: 600 }}>
+                                                    Enter or start your first workout to begin tracking!
                                                 </Title>
                                             )
                                         }
                                     </TrackContainer>
                                     <Stack spacing={2} className='flex justify-center items-center'>
-                                        <Pagination 
-                                            count={numberOfPages} 
-                                            page={activePage} 
-                                            onChange={handlePageChange}
-                                            variant="outlined"
-                                            shape="rounded" 
-                                            color="primary"
-                                        />
+                                        {trackingHistory && trackingHistory.length > 0 ? (
+                                            <Pagination 
+                                                count={numberOfPages} 
+                                                page={activePage} 
+                                                onChange={handlePageChange}
+                                                variant="outlined"
+                                                shape="rounded" 
+                                                color="primary"
+                                            /> ) : ""
+                                        }
                                     </Stack>
                                 </>
                             }

@@ -1,22 +1,22 @@
 import React from 'react'
 import styled from 'styled-components';
 import tw from 'twin.macro';
-import Home from '../app/containers/Home';
+import Profile from '../../app/containers/User/Profile';
 
 const HomeContainer = styled.div`
   ${tw`
     w-full
-    h-screen
+    h-full
     flex
     flex-col
     bg-white
   `}
 `;
 
-export default function HomePage() {
+export default function ProfilePage() {
   return (
     <HomeContainer>
-        <Home />
+        <Profile />
     </HomeContainer>
   )
 }

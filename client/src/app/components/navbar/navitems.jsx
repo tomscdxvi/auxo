@@ -34,6 +34,26 @@ const ListContainerLoggedIn = styled.ul`
     `}
 `;
 
+const LinkContainer = styled.div`
+    margin-top: 24px;
+    ${tw`
+        cursor-pointer
+        transition
+        duration-200
+        ease-in-out
+        p-2
+        mr-1
+        medium:mr-12
+        hover:transition
+        hover:duration-200
+        hover:ease-in-out
+        hover:bg-gray-background
+        hover:no-underline
+        hover:text-white
+    `}
+`;
+
+
 const SignInItem = styled.li`
     font-family: 'Montserrat', sans-serif;
     ${tw`
@@ -92,20 +112,13 @@ const HomeNavItem = styled.li`
 
 const LogOutItem = styled.li`
     font-family: 'Montserrat', sans-serif;
-    margin-top: 24px;
     ${tw`
         text-lg
         medium:text-xl
-        text-black
+        text-paragraph
         font-bold
-        mr-1
-        medium:mr-12
-        cursor-pointer
-        transition
-        duration-200
-        ease-in-out
-        rounded-md
         p-2
+        rounded-md
     `}
 `;
 
@@ -130,20 +143,13 @@ const LogoutConfirmItem = styled.li`
 
 const NavItem = styled.li`
     font-family: 'Montserrat', sans-serif;
-    margin-top: 24px;
     ${tw`
         text-lg
         medium:text-xl
-        text-black
+        text-paragraph
         font-bold
-        mr-1
-        medium:mr-12
-        cursor-pointer
-        transition
-        duration-200
-        ease-in-out
-        rounded-md
         p-2
+        rounded-md
     `}
 `;
 
@@ -276,33 +282,52 @@ export function NavItemsLoggedIn() {
 
     return (
         <ListContainer>
-            <Link to="/home" className='auth-link'>
-                <NavItem>
-                    Dashboard
-                </NavItem>
-            </Link>
+            <LinkContainer>
+                <Link to="/home" className='auth-link'>
+                    <NavItem>
+                        Dashboard
+                    </NavItem>
+                </Link>
+            </LinkContainer>
 
-            <Link to="/track" className='auth-link'>
-                <NavItem>
-                    Track
-                </NavItem>
-            </Link>
+            <LinkContainer>
+                <Link to="/track" className='auth-link'>
+                    <NavItem>
+                        Track
+                    </NavItem>
+                </Link>
+            </LinkContainer>
 
-            <Link to="/plan" className='auth-link'>
-                <NavItem>
-                    Programs
-                </NavItem>
-            </Link>
+            <LinkContainer>
+                <Link to="/programs" className='auth-link'>
+                    <NavItem>
+                        Programs
+                    </NavItem>
+                </Link>
+            </LinkContainer>
 
-            <Link to="/calculate" className='auth-link'>
-                <NavItem>
-                    Calculate
-                </NavItem>
-            </Link>
+            <LinkContainer>
+                <Link to="/calculate" className='auth-link'>
+                    <NavItem>
+                        Calculate
+                    </NavItem>
+                </Link>
+            </LinkContainer>
 
-            <LogOutItem onClick={handleLogOutModal}>
-                Log Out
-            </LogOutItem>
+            
+            <LinkContainer>
+                <Link to="/profile" className='auth-link'>
+                    <NavItem>
+                        Profile
+                    </NavItem>
+                </Link>
+            </LinkContainer>
+
+            <LinkContainer>
+                <LogOutItem onClick={handleLogOutModal}>
+                    Log Out
+                </LogOutItem>
+            </LinkContainer>
 
             <Modal
                 open={logOutModalOpen}

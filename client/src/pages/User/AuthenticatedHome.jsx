@@ -1,7 +1,7 @@
 import { React, useState } from 'react'
 import styled from 'styled-components';
 import tw from 'twin.macro';
-import AuthenticatedHomePage from '../../app/containers/User/AuthenticatedHomePage';
+import AuthenticatedHome from '../../app/containers/User/AuthenticatedHome';
 
 const HomeContainer = styled.div`
   ${tw`
@@ -13,10 +13,10 @@ const HomeContainer = styled.div`
   `}
 `;
 
-export default function AuthenticatedHome() {
+export default function AuthenticatedHomePage() {
   return (
     <HomeContainer>
-      <AuthenticatedHomePage />
+      <AuthenticatedHome />
     </HomeContainer>
   )
 }

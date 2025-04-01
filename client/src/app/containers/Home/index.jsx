@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import tw from 'twin.macro';
-import { NavbarLoggedIn } from '../../../components/navbar';
+import { Navbar, NavbarDark } from '../../components/navbar';
 import { MainSection } from './mainSection';
+
 
 const PageContainer = styled.div`
     ${tw`
@@ -15,10 +16,10 @@ const PageContainer = styled.div`
     `}
 `;
 
-export default function TrackPage() {
+export default function Home() {
     return (
         <PageContainer>
-            <NavbarLoggedIn />
+            <Navbar />
             <MainSection />
         </PageContainer>
     )

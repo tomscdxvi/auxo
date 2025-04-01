@@ -143,6 +143,18 @@ module.exports.login = async(req, res, next) => {
 
 module.exports.getUserDetails = async(req, res, next) => {
     try {
+        const user = await User.findById(req.params._id); // ✅ Fetch User details
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        res.json(user); // ✅ Send User Details
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error fetching workouts" });
+    }
+}
+
+module.exports.getUserWorkoutHistory = async(req, res, next) => {
+    try {
         const user = await User.findById(req.params._id).populate('history'); // ✅ Fetch workouts
         if (!user) return res.status(404).json({ error: "User not found" });
 

@@ -15,7 +15,7 @@ const PageContainer = styled.div`
     `}
 `;
 
-export default function AuthenticatedHomePage() {
+export default function Profile() {
     return (
         <PageContainer>
             <NavbarLoggedIn />

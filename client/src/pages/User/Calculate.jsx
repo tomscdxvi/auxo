@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
 import tw from 'twin.macro';
-import CalculatePage from '../../app/containers/User/CalculatePage';
+import Calculate from '../../app/containers/User/Calculate';
 
 const HomeContainer = styled.div`
   ${tw`
@@ -13,10 +13,10 @@ const HomeContainer = styled.div`
   `}
 `;
 
-export default function Calculate() {
+export default function CalculatePage() {
   return (
     <HomeContainer>
-        <CalculatePage />
+        <Calculate />
     </HomeContainer>
   )
 }
