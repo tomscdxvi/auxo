@@ -20,7 +20,6 @@ import SignUpIllustration from '../../../../assets/images/track-illustration.png
 import PlusIcon from '../../../../assets/images/plus-icon.png';
 import '../../../styles/authenticatedhome/main.css';
 import '../../../styles/font.css'
-import TrackCard from './Card';
 import { Modal, Pagination, Stack, Typography } from '@mui/material';
 import { NavItemsLoggedIn } from 'src/app/components/navbar/navitems';
 import Sidebar from 'src/app/components/chatbot';
@@ -310,7 +309,7 @@ export function MainSection() {
     ])
 
     // Loading state to check for API call before rendering page.
-    const [loading, setLoading] = useState(false);   
+    const [loading, setLoading] = useState(true);   
 
     // Data state to store response data from the api
     const [ data, setData ] = useState([]);
@@ -380,6 +379,29 @@ export function MainSection() {
             console.log(error);
         }
     }
+
+    // Verify user when before page is rendered
+    useEffect(() => {
+        const verifyUser = async () => {
+            if(!cookies.jwt) {
+                navigate("/");
+            } else {
+                try { 
+                    await axios.post(
+                        "http://localhost:5000/home",
+                        {},
+                        { withCredentials: true }
+                    );
+    
+                    await getUserData();
+                } catch(error) {
+                    console.error("Error verifying user", error);
+                }
+            }
+        };
+        verifyUser();
+    }, [cookies, navigate, removeCookie]);
+
     
     useEffect(() => {
         try {
@@ -394,65 +416,39 @@ export function MainSection() {
 
     const classes = useStyles();
 
-    return (
-        <>
-            <PageContainer>
-                <MainContainer>
-                    
-                    <ToastContainer
-                        position="top-right"
-                        autoClose={5000}
-                        hideProgressBar={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        theme="colored"
-                    />  
+    if(loading) {
+        return (
+            <>
+                <h1>Loading</h1>
+            </>
+        )
+    } else {
+        return (
+            <>
+                <PageContainer>
+                    <MainContainer>
+                        
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            theme="colored"
+                        />  
 
-                    <div className="flex items-center justify-between mt-16">
-                        <Title>Choose from a variety of different programs!</Title>
-                        <LinkContainer>
-                            <Link to="/create-program" className='auth-link'>
-                                <NavItem>
-                                    New
-                                </NavItem>
-                            </Link>
-                        </LinkContainer>
-                    </div>
-                
-                    <TrackContainer>
-                        {plans.slice((activePage - 1) * itemsPerPage, activePage * itemsPerPage).map((track) => {
-                            if(track === null) {
-                                return (
-                                    <Title style={{ fontSize: '16px' }}>Your tracking history is empty, enter your first workout to see your history!</Title>
-                                )
-                            } else {
-                                return (
-                                    <div>
-                                        <TrackCard key={track._id} track={track} count={count} />
-                                    </div>
-                                )
-                            }
-                        })} 
-                    </TrackContainer>
-                    <Stack spacing={2}>
-                        <Pagination 
-                            count={numberOfPages} 
-                            page={activePage} 
-                            onChange={(event, newPage) => {
-                                setActivePage(newPage)
-                            }}
-                            variant="outlined"
-                            shape="rounded" 
-                            color="primary"
-                        />
-                    </Stack>    
-                </MainContainer>
-                <Sidebar />
-            </PageContainer>
-        </>
-    )
+                        <div className="flex items-center justify-between mt-16">
+                            <Title>Program Creation</Title>
+                        </div>
+ 
+                    </MainContainer>
+                    <Sidebar />
+                </PageContainer>
+            </>
+        )
+    }
 }

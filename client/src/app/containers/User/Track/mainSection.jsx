@@ -322,21 +322,6 @@ export function MainSection() {
         }); 
     }
 
-    useEffect(() => {
-        const verifyUser = async () => {
-            if(!cookies.jwt) {
-                navigate("/");
-            } else {
-                const { data } = await axios.post(
-                    "http://localhost:5000/track", 
-                    {}, 
-                    {withCredentials: true}
-                );
-            }
-        };
-        verifyUser();
-    }, [cookies, navigate, removeCookie]);
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 

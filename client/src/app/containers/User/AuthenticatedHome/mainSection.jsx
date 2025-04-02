@@ -243,7 +243,6 @@ const CardList = styled.div`
         flex 
         gap-4 
         overflow-x-auto 
-        p-4
     `}
 `;
 
@@ -369,7 +368,7 @@ export function MainSection() {
     const [ cookies, setCookies, removeCookie ] = useCookies([]);
 
     // Loading state to check for API call before rendering page.
-    const [loading, setLoading] = useState(true);   
+    const [loading, setLoading] = useState(false);   
 
     const [loadingProgress, setLoadingProgress] = useState(0);
 
@@ -447,72 +446,53 @@ export function MainSection() {
         setActivePage(value);
     }
 
-    // Get user data async function
     const getUserData = async () => {
         try {
-            // Initially set Loading to true to ensure that the page is loading at the moment
-            setLoading(true);
-
+            // setLoading(true);
+    
             // Start the loading progress
             const progressInterval = setInterval(() => {
                 setLoadingProgress(prev => {
-                    if (prev < 100) return prev + 2; // Increase by 2% every interval
+                    if (prev < 100) return prev + 2;
                     return prev;
                 });
-            }, 100); // Adjust this interval for the desired speed
-
-            // Get user id from local storage when it is initially stored when the user logs in
-            const userId = localStorage.getItem('@storage_user');
-
-            const [userDetailsResponse, userWorkoutsResponse] = await Promise.all([
-                axios.get(`http://localhost:5000/user/${userId}`),
-                axios.get(`http://localhost:5000/user/workouts/${userId}`)
-            ]);
-
-            if(userDetailsResponse.data) {
-                setData(userDetailsResponse.data );
+            }, 100);
+    
+            // Fetch user data from the backend
+            const response = await axios.get("http://localhost:5000/user/data", { withCredentials: true });
+            
+            console.log(response.data);  // Check the response in the console
+    
+            // Assuming response.data.userDetails contains the user data you want
+            if (response.data.userDetails) {
+                setData(response.data.user); // Store user details
+                setTrackingHistory(response.data.workouts)
             }
-
-            if(userWorkoutsResponse.data) {
-                setTrackingHistory(userWorkoutsResponse.data || []);
-            }
-
+    
             // Once data is received, stop the progress update
             clearInterval(progressInterval);
-            setLoadingProgress(100);  // Ensure progress is set to 100% when done
-            // Set a slight delay before setting loading to false, just to allow the animation to finish
+            setLoadingProgress(100);
             setTimeout(() => {
-                setLoading(false);  // Data is loaded, and now set loading to false
-            }, 1250);  // Optional delay before transitioning (adjust as needed)
-        } catch(error) {
+                setLoading(false);
+            }, 1250);
+    
+        } catch (error) {
             console.log(error);
             setLoading(false);
         }
-    }
+    };
 
-    console.log(data);
-
-    // Verify user when before page is rendered
+    // Get User data on page load
     useEffect(() => {
-        const verifyUser = async () => {
-            if(!cookies.jwt) {
-                navigate("/");
-            } else {
-                try { 
-                    await axios.post(
-                        "http://localhost:5000/home",
-                        {},
-                        { withCredentials: true }
-                    );
-    
-                    await getUserData();
-                } catch(error) {
-                    console.error("Error verifying user", error);
-                }
-            }
-        };
-        verifyUser();
-    }, [cookies, navigate, removeCookie]);
+        try {
+            getUserData().then(() => {
+                // console.log(`The user's id is: ${userId}`);
+                // console.log(data); 
+            })
+        } catch(error) {
+            console.log(error);
+        } 
+    }, []);
 
     // Check for Welcome Back timer (Set to 24 hours in milliseconds)
     useEffect(() => {
@@ -555,8 +535,6 @@ export function MainSection() {
         navigate("/");
     };
 
-    console.log(trackingHistory);
-
     const getFavoriteExercise = () => {
         // Check if trackingHistory is empty or undefined
         if (!trackingHistory || trackingHistory.length === 0) {
@@ -596,8 +574,8 @@ export function MainSection() {
 
     // Card Data
     const cardData = [
-        { id: 1, color: '#a29bfe', header: 'Level', text: data.level == "beginner" ? "Beginner" : data.level == "intermediate" ? "Intermediate" : data.level == "advanced" ? "Advanced" : "" },
-        { id: 2, color: '#0984e3', header: 'Upcoming', text: '-' },
+        { id: 1, color: '#a29bfe', header: 'Level', text: data.level == "beginner" ? "Beginner" : data.level == "intermediate" ? "Intermediate" : data.level == "advanced" ? "Advanced" : "-" },
+        { id: 2, color: '#0984e3', header: 'Upcoming', text: "-" },
         { id: 3, color: '#ff7675', header: 'Favorite Exercise', text: getFavoriteExercise() },
         { id: 4, color: '#e17055', header: 'Workouts in April', text: trackingHistory.length },
     ];

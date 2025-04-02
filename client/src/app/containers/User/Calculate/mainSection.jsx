@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useMediaQuery } from 'react-responsive';
 import tw from 'twin.macro';
 import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FooterDark } from '../../../components/footer';
@@ -130,57 +131,29 @@ export function MainSection() {
         setLogOutModalOpen(false);
     }
 
-    // Get user data async function
     const getUserData = async () => {
         try {
-            // Initially set Loading to true to ensure that the page is loading at the moment
             setLoading(true);
-
-            // Get user id from local storage when it is initially stored when the user logs in
-            const userId = localStorage.getItem('@storage_user');
-
-            // Axios get from api route which will find a user by id and return the user's data
-            await axios.get(`http://localhost:5000/user/${userId}`).then((res) => {
-                // console.log(res);
-
-                // Set the data state to hold the response data which is the user's data
-                setData(res);
-                
-                // Now set loading to false to render the page which the data from the api
-                setLoading(false);
-
-                /* 
-                toast("⭐ Welcome back, " + res.data.username, {
-                    position: "top-right",
-                    autoClose: 1500,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored"
-                }); */
-            });
-        } catch(error) {
-            console.log(error);
-        }
-    }
-
-    // Verify User on page load
-    useEffect(() => {
-        const verifyUser = async () => {
-            if(!cookies.jwt) {
-                navigate("/");
-            } else {
-                const { data } = await axios.post(
-                    "http://localhost:5000/calculate",
-                    {},
-                    { withCredentials: true }
-                );
+    
+            // Fetch user data and workouts (no need to decode JWT on frontend)
+            const response = await axios.get("http://localhost:5000/user/data", { withCredentials: true });
+            
+            if (response.data) {
+                setData(response.data.userDetails);
             }
-        };
-        verifyUser();
-    }, [cookies, navigate, removeCookie]);
+    
+            setTimeout(() => {
+                setLoading(false);
+            }, 1250);
+    
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    };
+    
+
+    console.log(data);
 
     // Get User data on page load
     useEffect(() => {
@@ -232,139 +205,135 @@ export function MainSection() {
     // console.log(cookies.jwt);
     // console.log(getCookie("jwt"));
 
-    if(loading) {
-        return <Loading />
-    } else {
-        return (
-            <>
-                <PageContainer>
-                    <MainContainer>
-                        <Title style={{ fontSize: 30, marginTop: '6%' }}>Calculate your one rep max (1RM) for any lift!</Title>
-                        <div className="flex justify-center items-center">
-                            <DefaultToolTip
-                                content=" RM is your max weight that you can lift for a single rep for any exercise. The formula is from NFPT (Brzycki Equation)."
-                                text="Learn more"
-                                placement="right"
-                                tooltipClass="medium:w-[290px] xlarge:w-[300px] cursor-default text-paragraph"
-                                buttonClass="text-white font-semibold rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-6 mb-4"
-                            />
-                        </div>
-                        <Title>{OneRepMaxCalculation() == 0 ? "_" : OneRepMaxCalculation() + "lbs for 1 Rep"}</Title>
-    
-                        <ToastContainer
-                            position="top-right"
-                            autoClose={1500}
-                            hideProgressBar={false}
-                            newestOnTop={false}
-                            closeOnClick
-                            rtl={false}
-                            pauseOnFocusLoss
-                            draggable
-                            pauseOnHover
-                            theme="colored"
+    return (
+        <>
+            <PageContainer>
+                <MainContainer>
+                    <Title style={{ fontSize: 30, marginTop: '6%' }}>Calculate your one rep max (1RM) for any lift!</Title>
+                    <div className="flex justify-center items-center">
+                        <DefaultToolTip
+                            content=" RM is your max weight that you can lift for a single rep for any exercise. The formula is from NFPT (Brzycki Equation)."
+                            text="Learn more"
+                            placement="right"
+                            tooltipClass="medium:w-[290px] xlarge:w-[300px] cursor-default text-paragraph"
+                            buttonClass="text-white font-semibold rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-6 mb-4"
                         />
-                        
-                        <div className="flex justify-center items-center">
-                            <div>
-                                <CalculationContainer>
-                                    <FormContainer>
-                                        <FormInput
-                                            key={1} 
-                                            name="weight" 
-                                            type="number" 
-                                            placeholder="Enter the weight for the lift" 
-                                            label="Weight" 
-                                            required={true} 
-                                            min="0" 
-                                            onChange={onChangeHandlerWeight} 
-                                            onKeyPress={(event) => { // Prevent negative values from being entered at the start(If the key is not 1-9, do not allow it) !Need to fix
-                                                if (!/[0-9]/.test(event.key)) { 
-                                                    event.preventDefault();
-                                                }
-                                            }}
-                                        />
+                    </div>
+                    <Title>{OneRepMaxCalculation() == 0 ? "_" : OneRepMaxCalculation() + "lbs for 1 Rep"}</Title>
 
-                                        <FormInput
-                                            key={2} 
-                                            name="rep" 
-                                            type="number"
-                                            placeholder="Enter the number of reps" 
-                                            label="Repetitions"
-                                            min="0" 
-                                            required={true} 
-                                            onChange={onChangeHandlerRep} 
-                                            onKeyPress={(event) => { // Prevent negative values from being entered (If the key is not 1-9, do not allow it)
-                                                if (!/[0-9]/.test(event.key)) {
-                                                    event.preventDefault();
-                                                }
-                                            }}
-                                        />
-                                    </FormContainer>
-                                    <div style={{ marginLeft: 40 }}>
-                                        <Title style={{ textDecoration: 'underline' }}>History</Title>
-                                        {listOfCalculations.map((item, index) => {
-                                            if(listOfCalculations === null) {
-                                                return (
-                                                    <Title>There are currently 0 calculations saved.</Title>
-                                                )
-                                            } else {
-                                                return (
-                                                    <Title key={index}>Rep: {item.rep} | Weight: {item.weight} = {item.orm} for 1 Rep</Title>
-                                                )
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={1500}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="colored"
+                    />
+                    
+                    <div className="flex justify-center items-center">
+                        <div>
+                            <CalculationContainer>
+                                <FormContainer>
+                                    <FormInput
+                                        key={1} 
+                                        name="weight" 
+                                        type="number" 
+                                        placeholder="Enter the weight for the lift" 
+                                        label="Weight" 
+                                        required={true} 
+                                        min="0" 
+                                        onChange={onChangeHandlerWeight} 
+                                        onKeyPress={(event) => { // Prevent negative values from being entered at the start(If the key is not 1-9, do not allow it) !Need to fix
+                                            if (!/[0-9]/.test(event.key)) { 
+                                                event.preventDefault();
                                             }
-                                        })}
-                                    </div>
-                                </CalculationContainer>
-                                <div>
-                                    <ButtonsContainer>
-                                        <Button 
-                                            theme="filled" 
-                                            text="Calculate"
-                                            className="mr-[150px]"
-                                            onClick={(e) => {
-                                                e.preventDefault();
+                                        }}
+                                    />
 
-                                                console.log(calculation.orm);
-                                                console.log(calculation.weight);
-                                                console.log(calculation.rep);
-
-                                                setCalculation((prevState) => {
-                                                    return({
-                                                        ...prevState, 
-                                                        orm: OneRepMaxCalculation()
-                                                    })
-                                                });
-                                            }} 
-                                        /> 
-                                        {calculation.orm === 0 ? 
-                                            <Button theme="disabled-filled" text="Save" />
-                                            :   <Button theme="filled" text="Save"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        {/* Push object into the start of the array*/}
-                                                        {/* setListOfCalculations(prevState => [calculation, ...prevState]) */}
-
-                                                        {/* Push object into the end of the array */}
-
-                                                        setListOfCalculations(prevState => [...prevState, calculation])
-
-                                                        setCalculation((prevState) => {
-                                                            return({
-                                                                ...prevState, 
-                                                                orm: 0
-                                                            })
-                                                        }) 
-                                                    }} 
-                                                /> 
-                                        } 
-                                    </ButtonsContainer>
+                                    <FormInput
+                                        key={2} 
+                                        name="rep" 
+                                        type="number"
+                                        placeholder="Enter the number of reps" 
+                                        label="Repetitions"
+                                        min="0" 
+                                        required={true} 
+                                        onChange={onChangeHandlerRep} 
+                                        onKeyPress={(event) => { // Prevent negative values from being entered (If the key is not 1-9, do not allow it)
+                                            if (!/[0-9]/.test(event.key)) {
+                                                event.preventDefault();
+                                            }
+                                        }}
+                                    />
+                                </FormContainer>
+                                <div style={{ marginLeft: 40 }}>
+                                    <Title style={{ textDecoration: 'underline' }}>History</Title>
+                                    {listOfCalculations.map((item, index) => {
+                                        if(listOfCalculations === null) {
+                                            return (
+                                                <Title>There are currently 0 calculations saved.</Title>
+                                            )
+                                        } else {
+                                            return (
+                                                <Title key={index}>Rep: {item.rep} | Weight: {item.weight} = {item.orm} for 1 Rep</Title>
+                                            )
+                                        }
+                                    })}
                                 </div>
+                            </CalculationContainer>
+                            <div>
+                                <ButtonsContainer>
+                                    <Button 
+                                        theme="filled" 
+                                        text="Calculate"
+                                        className="mr-[150px]"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+
+                                            console.log(calculation.orm);
+                                            console.log(calculation.weight);
+                                            console.log(calculation.rep);
+
+                                            setCalculation((prevState) => {
+                                                return({
+                                                    ...prevState, 
+                                                    orm: OneRepMaxCalculation()
+                                                })
+                                            });
+                                        }} 
+                                    /> 
+                                    {calculation.orm === 0 ? 
+                                        <Button theme="disabled-filled" text="Save" />
+                                        :   <Button theme="filled" text="Save"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    {/* Push object into the start of the array*/}
+                                                    {/* setListOfCalculations(prevState => [calculation, ...prevState]) */}
+
+                                                    {/* Push object into the end of the array */}
+
+                                                    setListOfCalculations(prevState => [...prevState, calculation])
+
+                                                    setCalculation((prevState) => {
+                                                        return({
+                                                            ...prevState, 
+                                                            orm: 0
+                                                        })
+                                                    }) 
+                                                }} 
+                                            /> 
+                                    } 
+                                </ButtonsContainer>
                             </div>
                         </div>
-                    </MainContainer>
-                    <Sidebar />
-                </PageContainer>
-            </>
-        )
-    }
+                    </div>
+                </MainContainer>
+                <Sidebar />
+            </PageContainer>
+        </>
+    )
 }

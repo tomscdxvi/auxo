@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useMediaQuery } from 'react-responsive';
 import tw from 'twin.macro';
 import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { makeStyles } from '@mui/styles';
@@ -468,72 +469,35 @@ export function MainSection() {
         setActivePage(value);
     }
 
-    // Get user data async function
     const getUserData = async () => {
         try {
-            // Initially set Loading to true to ensure that the page is loading at the moment
-            setLoading(true);
-
-            // Start the loading progress
-            const progressInterval = setInterval(() => {
-                setLoadingProgress(prev => {
-                    if (prev < 100) return prev + 2; // Increase by 2% every interval
-                    return prev;
-                });
-            }, 100); // Adjust this interval for the desired speed
-
-            // Get user id from local storage when it is initially stored when the user logs in
-            const userId = localStorage.getItem('@storage_user');
-
-            const [userDetailsResponse, userWorkoutsResponse] = await Promise.all([
-                axios.get(`http://localhost:5000/user/${userId}`),
-                axios.get(`http://localhost:5000/user/workouts/${userId}`)
-            ]);
-
-            if(userDetailsResponse.data) {
-                setData(userDetailsResponse.data );
+    
+            // Fetch user data from the backend
+            const response = await axios.get("http://localhost:5000/user/data", { withCredentials: true });
+            
+            console.log(response.data);  // Check the response in the console
+    
+            // Assuming response.data.userDetails contains the user data you want
+            if (response.data) {
+                setData(response.data.user); // Store user details
             }
+    
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-            if(userWorkoutsResponse.data) {
-                setTrackingHistory(userWorkoutsResponse.data || []);
-            }
-
-            // Once data is received, stop the progress update
-            clearInterval(progressInterval);
-            setLoadingProgress(100);  // Ensure progress is set to 100% when done
-            // Set a slight delay before setting loading to false, just to allow the animation to finish
-            setTimeout(() => {
-                setLoading(false);  // Data is loaded, and now set loading to false
-            }, 1250);  // Optional delay before transitioning (adjust as needed)
+    // Get User data on page load
+    useEffect(() => {
+        try {
+            getUserData().then(() => {
+                // console.log(`The user's id is: ${userId}`);
+                // console.log(data); 
+            })
         } catch(error) {
             console.log(error);
-            setLoading(false);
-        }
-    }
-
-    console.log(data);
-
-    // Verify user when before page is rendered
-    useEffect(() => {
-        const verifyUser = async () => {
-            if(!cookies.jwt) {
-                navigate("/");
-            } else {
-                try { 
-                    await axios.post(
-                        "http://localhost:5000/home",
-                        {},
-                        { withCredentials: true }
-                    );
-    
-                    await getUserData();
-                } catch(error) {
-                    console.error("Error verifying user", error);
-                }
-            }
-        };
-        verifyUser();
-    }, [cookies, navigate, removeCookie]);
+        } 
+    }, []);
 
     // Check for Welcome Back timer (Set to 24 hours in milliseconds)
     useEffect(() => {
@@ -709,21 +673,6 @@ export function MainSection() {
     const classes = useStyles();
     const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
  
-    {/*
-    if(loading) {
-        return (
-            <>
-            </>
-        )
-         <Loading loadingProgress={loadingProgress} /> 
-    } else if(!loading && isMobile) {
-        return (
-            <>
-            </>
-        )
-    } else {          
-    }
-        */}
     return (
         <>
             <PageContainer>

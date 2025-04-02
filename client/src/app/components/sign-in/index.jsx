@@ -114,88 +114,27 @@ export function SignIn(props) {
         setValues({...values, [e.target.name]: e.target.value})
     };
 
-    const storeUserId = (value) => {
-        try {
-            localStorage.setItem('@storage_user', value);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     const handleSubmit = async (e) => {
-
         e.preventDefault();
-
+    
         try {
-
-            const { data } = await axios.post("http://localhost:5000/login", {...values}, {withCredentials: true})
-
-            if(data) {
-                if(data.errors) {
-                    const { username, password } = data.errors;
-
-                    if(username) initializeError(username);
-                        else if(password) initializeError(password);
+            const { data } = await axios.post("http://localhost:5000/login", { ...values }, { withCredentials: true });
+    
+            if (data) {
+                if (data.errors) {
+                    // Handle errors here (username, password, etc.)
                 } else {
-                    if (values.username !==  "" && values.password !== "") {
-                        toast.success("Welcome back, " + values.username + ". You will be redirected to your user home page shortly.", {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "colored"
-                        });
-
-                        storeUserId(data);
-
-                        if(values.username.includes("coach")) {
-                            await timeout(2000).then(() => {
-                                navigate("/coach");
-                            })
-                        } else {
-                            await timeout(2000).then(() => {
-                                navigate("/home");
-                            })
-                        }
-                    } else {
-                        toast.error("An error occured while trying to login to this account.", {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "colored",
-                            style: {
-                                background: "#CDFADC",
-                                color: '#333333' 
-                            }
-                        }); 
-                    }
+                    // Handle success (set cookies and redirect to /home)
+                    toast.success(`Welcome back, ${values.username}!`);
+                    navigate("/home");  // Redirect to /home after successful login
                 }
             }
-        } catch(error) {
-            toast.error("An error occured while trying to login to this account.", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                style: {
-                    background: "#CDFADC",
-                    color: '#333333' 
-                }
-            }); 
+        } catch (error) {
+            toast.error("An error occurred during login.");
         }
-    }; 
-
+    };
+    
+    
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
             e.preventDefault(); // Prevent the default action (form submission)
