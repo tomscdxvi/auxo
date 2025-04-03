@@ -309,7 +309,7 @@ export function MainSection() {
     ])
 
     // Loading state to check for API call before rendering page.
-    const [loading, setLoading] = useState(true);   
+    const [loading, setLoading] = useState(false);   
 
     // Data state to store response data from the api
     const [ data, setData ] = useState([]);
@@ -354,55 +354,27 @@ export function MainSection() {
         }); 
     }
 
-    // Get user data async function
     const getUserData = async () => {
         try {
-            // Initially set Loading to true to ensure that the page is loading at the moment
-            setLoading(true);
 
-            // Get user id from local storage when it is initially stored when the user logs in
-            const userId = localStorage.getItem('@storage_user');
-
-            // Axios get from api route which will find a user by id and return the user's data
-            await axios.get(`http://localhost:5000/user/${userId}`).then((res) => {
-                // console.log(res.data.history[0].title);
-
-                // Set the data state to hold the response data which is the user's data
-                setData(res);
-
-                
-                // Now set loading to false to render the page which the data from the api
-                setLoading(false);
-
-            });
-        } catch(error) {
-            console.log(error);
-        }
-    }
-
-    // Verify user when before page is rendered
-    useEffect(() => {
-        const verifyUser = async () => {
-            if(!cookies.jwt) {
-                navigate("/");
-            } else {
-                try { 
-                    await axios.post(
-                        "http://localhost:5000/home",
-                        {},
-                        { withCredentials: true }
-                    );
+            // Fetch user data from the backend
+            const response = await axios.get("http://localhost:5000/user/data", { withCredentials: true });
+            
+            console.log(response.data);  // Check the response in the console
     
-                    await getUserData();
-                } catch(error) {
-                    console.error("Error verifying user", error);
-                }
+            // Assuming response.data.userDetails contains the user data you want
+            if (response.data.user) {
+                setData(response.data.user); // Store user details
             }
-        };
-        verifyUser();
-    }, [cookies, navigate, removeCookie]);
 
     
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    };
+
+    // Get User data on page load
     useEffect(() => {
         try {
             getUserData().then(() => {
@@ -413,6 +385,7 @@ export function MainSection() {
             console.log(error);
         } 
     }, []);
+
 
     const classes = useStyles();
 

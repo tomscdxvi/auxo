@@ -464,7 +464,7 @@ export function MainSection() {
             console.log(response.data);  // Check the response in the console
     
             // Assuming response.data.userDetails contains the user data you want
-            if (response.data.userDetails) {
+            if (response.data.user) {
                 setData(response.data.user); // Store user details
                 setTrackingHistory(response.data.workouts)
             }
@@ -570,7 +570,6 @@ export function MainSection() {
         // Return the favorite workout or '-' if no favorite is found
         return favoriteWorkout || '-';
     };
-    
 
     // Card Data
     const cardData = [
@@ -579,123 +578,6 @@ export function MainSection() {
         { id: 3, color: '#ff7675', header: 'Favorite Exercise', text: getFavoriteExercise() },
         { id: 4, color: '#e17055', header: 'Workouts in April', text: trackingHistory.length },
     ];
-
-    // Navigation items
-    const NavItems = () => {
-        return (
-            <ListContainer>
-                <Link to="/home" className='auth-link'>
-                    <NavItem>
-                        Home
-                    </NavItem>
-                </Link>
-
-                <Link to="/track" className='auth-link'>
-                    <NavItem>
-                        Track
-                    </NavItem>
-                </Link>
-
-                <Link to="/plan" className='auth-link'>
-                    <NavItem>
-                        History
-                    </NavItem>
-                </Link>
-    
-                <Link to="/calculate" className='auth-link'>
-                    <NavItem>
-                        Calculate
-                    </NavItem>
-                </Link>
-    
-                <LogOutItem onClick={handleLogOutModal}>
-                    Log Out
-                </LogOutItem>
-
-                <Modal
-                    open={logOutModalOpen}
-                    onClose={handleLogOutModalClose}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Log Out
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                            Do you wish to log out of this account?
-                        </Typography>
-                        <div className="flex mt-12">
-                            <Button theme="outline-white" text="Back" onClick={handleLogOutModalClose} className="mr-9" /> 
-                            <Button theme="filled" text="Confirm" className="mr-9" onClick={handleLogOut} /> 
-                        </div>
-                    </Box>
-                </Modal>
-    
-                {/* <NavItem style={{ color: 'white' }}>
-                    <Link to="/track">Track</Link>
-                </NavItem> */}
-            </ListContainer>
-        )
-    }
-
-    const MobileNavItems = () => {
-        return (
-            <MobileListContainer>
-                <Link to="/home" className='auth-link'>
-                    <MobileSignUpItem style={{ color: 'white', borderBottom: '2px solid white' }} className='bg-button'>
-                        Home
-                    </MobileSignUpItem>
-                </Link>
-
-                <Link to="/track" className='auth-link'>
-                    <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white', marginTop: '24px' }}>
-                        Track Workout
-                    </MobileSignUpItem>
-                </Link>
-
-                <Link to="/plan" className='auth-link'>
-                    <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white', marginTop: '24px' }}>
-                        View Plans
-                    </MobileSignUpItem>
-                </Link>
-    
-                <Link to="/calculate" className='auth-link'>
-                    <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white', marginTop: '24px' }}>
-                        Calculate
-                    </MobileSignUpItem>
-                </Link>
-    
-                <MobileSignUpItem style={{ color: 'bg-button', borderBottom: '2px solid white', marginTop: '24px' }} onClick={handleLogOutModal}>
-                    Log Out
-                </MobileSignUpItem>
-
-                <Modal
-                    open={logOutModalOpen}
-                    onClose={handleLogOutModalClose}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Log Out
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                            Do you wish to log out of this account?
-                        </Typography>
-                        <div className="flex mt-12">
-                            <Button theme="outline-white" text="Back" onClick={handleLogOutModalClose} className="mr-9" /> 
-                            <Button theme="filled" text="Confirm" className="mr-9" onClick={handleLogOut} /> 
-                        </div>
-                    </Box>
-                </Modal>
-    
-                {/* <NavItem style={{ color: 'white' }}>
-                    <Link to="/track">Track</Link>
-                </NavItem> */}
-            </MobileListContainer>
-        )
-    }
     
     const handleDelete = async (workoutId) => {
         try {
@@ -720,45 +602,6 @@ export function MainSection() {
             console.error("Error deleting workout:", error.message);
         }
     };
-    
-    // Handles chart view type 
-    const handleChartView = (e) => {
-        e.preventDefault();
-
-        setViewType(2);
-    }
-
-    // Handles the list view type
-    const handleListView = (e) => {
-        e.preventDefault();
-
-        setViewType(1);
-    }
-
-    // Handles the extra view type
-    const handleExtraView = (e) => {
-        e.preventDefault();
-
-        setViewType(3);
-    }
-
-    // Sorts the tracking history (A-Z)
-    const handleAZSort = (e) => {
-        e.preventDefault()
-
-        const sortedArray = [...trackingHistory].sort((a, b) => (a.title > b.title) ? 1 : -1)
-
-        setTrackingHistory(sortedArray)
-    }
-
-    // Sorts the tracking history (Z-A)
-    const handleZASort = (e) => {
-        e.preventDefault()
-
-        const sortedArray = [...trackingHistory].sort((a, b) => (a.title < b.title) ? 1 : -1)
-
-        setTrackingHistory(sortedArray)
-    }
 
     // Styling classes 
     const classes = useStyles();
@@ -766,81 +609,6 @@ export function MainSection() {
  
     if(loading) {
         return <Loading loadingProgress={loadingProgress} />
-    } else if(!loading && isMobile) {
-        return (
-            <>
-                <NavbarContainer>  
-                    <Title         
-                        id="demo-positioned-button"
-                        aria-controls={open ? 'demo-positioned-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
-                        className='bm-burger-button'
-                    >
-                        =
-                    </Title>
-
-                    <Menu
-                        id="demo-positioned-menu"
-                        aria-labelledby="demo-positioned-button"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                        }}
-                        transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                        }}
-                    >
-                        <MobileNavItems />
-                    </Menu>
-
-                    {/* <Menu>
-                        <DarkLogo />
-                        <MobileNavItems />
-                    </Menu> */}
-                </NavbarContainer>
-                <PageContainer>
-                    <ToastContainer position="top-right"
-                        autoClose={1500} 
-                        hideProgressBar={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        theme="colored"
-                    />
-
-                    <MainContainer>
-                        <Title>Hi, {data.data.username}</Title>
-                        <Title style={{ textDecoration: "underline", marginTop: '3rem' }}>Tracking History</Title>
-
-                        <MobileTrackContainer>
-                            {data.data.history?.map((track) => {
-                                if(track === null) {
-                                    return (
-                                        <Title style={{ fontSize: '16px' }}>Your tracking history is empty, enter your first workout to see your history!</Title>
-                                    )
-                                } else {
-                                    return (
-                                        <>
-                                            <TrackCard key={track._id} track={track} handleDelete={handleDelete} />
-                                        </>
-                                    )
-                                }
-                            })} 
-                        </MobileTrackContainer>
-
-                    </MainContainer>
-                </PageContainer>
-            </>
-        )
     } else {
         return (
             <>

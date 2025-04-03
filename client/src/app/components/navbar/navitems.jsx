@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie';
 import styled from 'styled-components';
 import tw from 'twin.macro';
+import axios from 'axios';
 import { useMediaQuery } from 'react-responsive';
 import { Box, FormControl, InputLabel, Menu, MenuItem, Modal, Select, TextField, Typography, Pagination, Stack } from '@mui/material';
 
@@ -260,11 +261,19 @@ export function NavItemsLoggedIn() {
     }
 
     // Handle logout function 
-    const handleLogOut = () => {
-        removeCookie("jwt");
-        localStorage.removeItem('@storage_user');
-        
-        navigate("/");
+    const handleLogOut = async () => {
+        try {
+            // Call logout API route to clear the JWT securely
+            await axios.get("http://localhost:5000/logout", { withCredentials: true });
+    
+            // Remove any stored user ID
+            localStorage.removeItem('@storage_user');
+            
+            // Redirect to login page
+            navigate("/");
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
     };
 
     const style = {

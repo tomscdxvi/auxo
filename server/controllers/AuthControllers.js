@@ -1,13 +1,15 @@
 const User = require('../models/User.js');
-const Workout = require('../models/Workout.js')
+const Workout = require('../models/Workout.js');
+const Program = require("../models/Program.js");
 const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt");
 const AsyncStorage = require('@react-native-async-storage/async-storage');
 const { default: mongoose } = require('mongoose');
 
 const expiry = 3 * 24 * 60 * 60;
 
 const generateToken = (id) => {
-    return jwt.sign({id}, process.env.JWT_TOKEN, {
+    return jwt.sign({ id }, process.env.JWT_TOKEN, {
         expiresIn: expiry
     });
 }
@@ -69,39 +71,7 @@ module.exports.register = async(req, res, next) => {
     }
 };
 
-module.exports.registerCoach = async(req, res, next) => {
-    try {
-
-        const { username, email, password } = req.body;
-
-        const coach = await Coach.create({
-            username,
-            email,
-            password
-        });
-
-        const token = generateToken(coach._id);
-
-        res.cookie("jwt", token, {
-            withCredentials: true,
-            httpOnly: false,
-            maxAge: expiry * 1000
-        });
-
-        res.status(201).json({
-            coach: coach._id,
-            created: true
-        });
-
-    } catch (error) {
-        console.log(error);
-        
-        const errors = handleErrors(error);
-
-        res.json({ errors, created: false });
-    }
-};
-
+/*
 module.exports.login = async(req, res, next) => {
     try {
 
@@ -141,24 +111,134 @@ module.exports.login = async(req, res, next) => {
     }
 };
 
+*/
+
+module.exports.login = async (req, res, next) => {
+    try {
+        const { username, password } = req.body;
+        const user = await User.findOne({ username });
+
+        if (!user) throw Error("Invalid Credentials");
+
+        const auth = await bcrypt.compare(password, user.password);
+        if (!auth) throw Error("Invalid Credentials");
+
+        // Generate JWT token
+        const token = generateToken(user._id);
+
+        // Set Secure Cookie with HttpOnly
+        res.cookie("jwt", token, {
+            httpOnly: true,
+            secure: false,  // Only send cookie over HTTPS in production
+            sameSite: "Strict",
+            maxAge: expiry * 1000,
+        });
+
+        res.status(200).json(user); 
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({ error: "Invalid Credentials" });
+    }
+};
+
+
+module.exports.logout = async (req, res) => {
+    res.cookie("jwt", "", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "Strict",
+        expires: new Date(0), // Expire immediately
+    });
+    res.json({ message: "Logged out successfully" });
+};
+
+module.exports.registerCoach = async(req, res, next) => {
+    try {
+
+        const { username, email, password } = req.body;
+
+        const coach = await Coach.create({
+            username,
+            email,
+            password
+        });
+
+        const token = generateToken(coach._id);
+
+        res.cookie("jwt", token, {
+            withCredentials: true,
+            httpOnly: false,
+            maxAge: expiry * 1000
+        });
+
+        res.status(201).json({
+            coach: coach._id,
+            created: true
+        });
+
+    } catch (error) {
+        console.log(error);
+        
+        const errors = handleErrors(error);
+
+        res.json({ errors, created: false });
+    }
+};
+
+module.exports.getUserDetails = async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
+
+        // Assuming user has a `history` array of workout IDs
+        const workouts = await Workout.find({ userId: req.user._id });
+
+        res.json({ 
+            user: req.user, // Send user details
+            workouts: workouts
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error fetching user data" });
+    }
+};
+
+
+/*
 module.exports.getUserDetails = async(req, res, next) => {
     try {
-        const user = await User.findById(req.params._id); // ✅ Fetch User details
+
+        const token = req.cookies.jwt;  // Get JWT token from cookies
+        if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+        // Verify the token using the secret key from the environment variable
+        const decoded = jwt.verify(token, process.env.JWT_TOKEN);  // This secret should match the one used to sign the JWT
+
+        console.log("Decoded Token:", decoded);  // Log decoded token for debugging
+
+        // If the token is valid, get the userId from the decoded payload
+        if (!decoded.userId) return res.status(401).json({ error: "Invalid Token" });
+
+        // Fetch the user from the database using the userId from the decoded token
+        const user = await User.findById(decoded.userId);  // Do not use .select() to get all fields
+
         if (!user) return res.status(404).json({ error: "User not found" });
 
-        res.json(user); // ✅ Send User Details
+        res.json(user.username);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Error fetching workouts" });
     }
 }
+*/
 
 module.exports.getUserWorkoutHistory = async(req, res, next) => {
     try {
-        const user = await User.findById(req.params._id).populate('history'); // ✅ Fetch workouts
+        const user = await User.findById(req.params._id).exec(); // ✅ Fetch workouts
         if (!user) return res.status(404).json({ error: "User not found" });
 
-        res.json(user.history); // ✅ Send workouts instead of just IDs
+        res.json(user); // ✅ Send workouts instead of just IDs
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Error fetching workouts" });

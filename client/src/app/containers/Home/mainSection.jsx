@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import Lottie from 'react-lottie';
 import styled from 'styled-components';
 import tw from 'twin.macro';
+import axios from 'axios';
 import { Button } from '../../components/button';
 import { Footer } from '../../components/footer';
 import { useMediaQuery } from 'react-responsive'
@@ -205,6 +206,27 @@ export function MainSection() {
     const [ isOpen, setIsOpen ] = useState(false);
 
     const [ open, setOpen ] = useState(false);
+
+    useEffect(() => {
+        const checkUserLoggedIn = async() => {
+            try {
+                const response = await axios.get("http://localhost:5000/user/data", { withCredentials: true });
+
+                // If the user is logged in, the request will succeed and return user data
+                if (response.data) {
+                    // User is logged in, proceed to render the home page
+                    console.log("User is logged in:", response.data.user);
+                    navigate("/home");
+                } else {
+                    navigate("/");
+                }
+            } catch (error) {
+                navigate("/");
+            }
+        };
+
+        checkUserLoggedIn();
+    }, [navigate]);
 
     const handleClose = () => {
         setOpen(false);
