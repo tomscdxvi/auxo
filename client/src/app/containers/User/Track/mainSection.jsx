@@ -532,158 +532,37 @@ export function MainSection() {
 
     const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
 
-    if (isMobile) {
-        return (
-            <>
-                <NavbarContainer>  
-                    <Title         
-                        id="demo-positioned-button"
-                        aria-controls={open ? 'demo-positioned-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
-                        className='bm-burger-button'
-                    >
-                        =
-                    </Title>
-                {/*
-                    <Menu
-                        id="demo-positioned-menu"
-                        aria-labelledby="demo-positioned-button"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                        }}
-                        transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                        }}
-                    >
-                        <MobileNavItems />
-                    </Menu>
+    return (
+        <>
+            <PageContainer>
+                <MainContainer>
+                    
+                    {/* 
+                    <Box sx={{ width: '50%', bgcolor: 'background.paper' }} className="rounded-md">
+                        <Tabs value={value} onChange={handleTabChange} centered>
+                            <Tab label="One" />
+                            <Tab label="Two" />
+                        </Tabs>
+                    </Box> */}
 
-                    <Menu>
-                        <DarkLogo />
-                        <MobileNavItems />
-                    </Menu> */}
-                </NavbarContainer>
-                <PageContainer>
-                    <NavbarContainer>
-                        <DarkLogo />
-                    </NavbarContainer>
-                    <ImageContainer>
-                        <img src={SignUpIllustration} alt="" />
-                    </ImageContainer>
-                    {/* <HorizontalLine /> */}
-                    <MainContainer>
-                        
-                        <ToastContainer
-                            position="top-right"
-                            autoClose={5000}
-                            hideProgressBar={false}
-                            newestOnTop={false}
-                            closeOnClick
-                            rtl={false}
-                            pauseOnFocusLoss
-                            draggable
-                            pauseOnHover
-                            theme="colored"
-                        />  
-    
-                        {/* 
-                        <Box sx={{ width: '50%', bgcolor: 'background.paper' }} className="rounded-md">
-                            <Tabs value={value} onChange={handleTabChange} centered>
-                                <Tab label="One" />
-                                <Tab label="Two" />
-                            </Tabs>
-                        </Box> */}
-    
-                        <ToastContainer
-                            position="top-right"
-                            autoClose={5000}
-                            hideProgressBar={false}
-                            newestOnTop={false}
-                            closeOnClick
-                            rtl={false}
-                            pauseOnFocusLoss
-                            draggable
-                            pauseOnHover
-                            theme="colored"
-                        />  
-    
-                        <TrackForm />
-    
-                        {/*
-                        <Form onSubmit={handleSubmit}> 
-                            <TabPanel tabValue={value} index={0}>
-                                <Title>Date/Time</Title>    
-                                <FormContainer>
-                                    {inputs1.map((input) => (
-                                        <FormInputDark key={input.id} {...input} value={track[input.name]} onChange={onChangeHandler1} />
-                                    ))}
-                                </FormContainer>
-                            </TabPanel>
-                        
-                            <TabPanel tabValue={value} index={1}>
-                                <Title>Workout Details</Title>
-                                <FormContainer>
-                                    {inputs2.map((input) => (
-                                        <FormInputDark key={input.id} {...input} value={workout[input.name]} onChange={onChangeHandler2} />
-                                    ))}
-                                </FormContainer>
-                                <button className="text-white text-xl">
-                                    +
-                                </button>
-                            </TabPanel> 
-    
-                            <ButtonsContainer>
-                                <Link to="/">
-                                    <Button theme="outline" text="Cancel" />
-                                </Link>
-    
-                                <Button theme="filled" text="Submit" /> 
-                            </ButtonsContainer>
-                        </Form>  */}
-                    </MainContainer>
-                </PageContainer>
-            </>
-        )
-    } else {
-        return (
-            <>
-                <PageContainer>
-                    <MainContainer>
-                        
-                        {/* 
-                        <Box sx={{ width: '50%', bgcolor: 'background.paper' }} className="rounded-md">
-                            <Tabs value={value} onChange={handleTabChange} centered>
-                                <Tab label="One" />
-                                <Tab label="Two" />
-                            </Tabs>
-                        </Box> */}
-    
-                        <ToastContainer
-                            position="top-right"
-                            autoClose={5000}
-                            hideProgressBar={false}
-                            newestOnTop={false}
-                            closeOnClick
-                            rtl={false}
-                            pauseOnFocusLoss
-                            draggable
-                            pauseOnHover
-                            theme="colored"
-                        />  
-    
-                        <TrackForm />
-                    </MainContainer>
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="colored"
+                    />  
 
-                    <Sidebar />
-                </PageContainer>
-            </>
-        )
-    }
+                    <TrackForm />
+                </MainContainer>
+
+                <Sidebar />
+            </PageContainer>
+        </>
+    )
 }

@@ -174,191 +174,96 @@ export default function WorkoutDetails({ prevStep, nextStep, handleChange, track
     const classes = useStyles();
     const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
 
-    if (isMobile) {
-        return (  
-            <Form>
-                <MobileFormContainer>
-                    <MobileTopFormContainer>
-                        <div>
-                            <Title>Name</Title>
-                            <TextField
-                                placeholder="Name"
-                                label="Name"
-                                onChange={handleChange('name')}
-                                className={classes.root}
-                            />
-                        </div>
-                        <Box sx={{ minWidth: 60 }}>
-                            <Title>Intensity</Title>
-                            <FormControl style={{ minWidth: 180 }}>
-                                <InputLabel id="demo-simple-select-label" style={{ color: "#172C66" }}>Intensity</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    label="Intensity"
-                                    onChange={handleChange('intensity')}
-                                    className={classes.select}
-                                    defaultValue=""
-                                >
-                                    <MenuItem value={"Easy"}>Easy</MenuItem>
-                                    <MenuItem value={"Normal"}>Normal</MenuItem>
-                                    <MenuItem value={"Hard"}>Hard</MenuItem>
-                                </Select>
-                            </FormControl>
-                            <DefaultToolTip 
-                                content="
-                                Easy (Could easily do many more reps)
-                                Normal (Could do 3-5 more reps)
-                                Hard (Could only do 1-3 reps)"
-                                text="Learn more"
-                                placement="bottom"
-                                tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
-                                buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
-                            />
-                        </Box>
-                    </MobileTopFormContainer>
-                    <MobileBottomFormContainer>
-                        <div>
-                            <Title>Sets</Title>
-                            <TextField
-                                placeholder="Sets"
-                                label="Sets"
-                                inputProps={{ type: "number", min: "1" }}
-                                onChange={handleChange('sets')}
-                                className={classes.root}
-                                onKeyPress={(event) => { 
-                                    if (!/[1-9]/.test(event.key)) { 
-                                        event.preventDefault();
-                                    }
-                                }}
-                            />
-                        </div>
-                        <div style={{ marginTop: 25 }}>
-                            <Title>Reps</Title>
-                            <TextField
-                                placeholder="Reps"
-                                label="Reps"
-                                inputProps={{ type: "number", min: "1" }}
-                                onChange={handleChange('reps')}
-                                className={classes.root}
-                                onKeyPress={(event) => { 
-                                    if (!/[1-9]/.test(event.key)) { 
-                                        event.preventDefault();
-                                    }
-                                }}
-                            />
-                        </div>
-                        <div style={{ marginTop: 25 }}>
-                            <Title>Weight (in lbs.)</Title>
-                            <TextField
-                                placeholder="Weight"
-                                label="Weight"
-                                inputProps={{ type: "number", min: "1" }}
-                                onChange={handleChange('weight')}
-                                className={classes.root}
-                                onKeyPress={(event) => { 
-                                    if (!/[1-9]/.test(event.key)) { 
-                                        event.preventDefault();
-                                    }
-                                }}
-                            />
-                        </div>
-                    </MobileBottomFormContainer>
-                </MobileFormContainer>
-            </Form>
-        )
-    } else {
-        return (  
-            <Form>
-                <FormContainer>
-                    <TopFormContainer>
-                        <div>
-                            <Title>Name</Title>
-                            <TextField
-                                placeholder="Name"
-                                label="Name"
-                                onChange={handleChange('name')}
-                                className={classes.root}
-                            />
-                        </div>
-                        <Box sx={{ minWidth: 60 }}>
-                            <Title>Intensity</Title>
-                            <FormControl style={{ minWidth: 180 }}>
-                                <InputLabel id="demo-simple-select-label" style={{ color: "#172C66" }}>Intensity</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    label="Intensity"
-                                    onChange={handleChange('intensity')}
-                                    className={classes.select}
-                                    defaultValue=""
-                                >
-                                    <MenuItem value={"Easy"}>Easy</MenuItem>
-                                    <MenuItem value={"Normal"}>Normal</MenuItem>
-                                    <MenuItem value={"Hard"}>Hard</MenuItem>
-                                </Select>
-                            </FormControl>
-                            <DefaultToolTip 
-                                content="
-                                Easy (Could easily do many more reps)
-                                Normal (Could do 3-5 more reps)
-                                Hard (Could only do 1-3 reps)"
-                                text="Learn more"
-                                placement="bottom"
-                                tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
-                                buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
-                            />
-                        </Box>
-                    </TopFormContainer>
-                    <BottomFormContainer>
-                        <div>
-                        <Title>Sets</Title>
+    return (  
+        <Form>
+            <FormContainer>
+                <TopFormContainer>
+                    <div>
+                        <Title>Name</Title>
                         <TextField
-                            placeholder="Sets"
-                            label="Sets"
-                            inputProps={{ type: "number", min: "1" }}
-                            onChange={handleChange('sets')}
+                            placeholder="Name"
+                            label="Name"
+                            onChange={handleChange('name')}
                             className={classes.root}
-                            onKeyPress={(event) => { 
-                              if (!/[1-9]/.test(event.key)) { 
-                                  event.preventDefault();
-                              }
-                          }}
                         />
-                        </div>
-                        <div>
-                        <Title>Reps</Title>
-                        <TextField
-                            placeholder="Reps"
-                            label="Reps"
-                            inputProps={{ type: "number", min: "1" }}
-                            onChange={handleChange('reps')}
-                            className={classes.root}
-                            onKeyPress={(event) => { 
-                              if (!/[1-9]/.test(event.key)) { 
-                                  event.preventDefault();
-                              }
-                          }}
+                    </div>
+                    <Box sx={{ minWidth: 60 }}>
+                        <Title>Intensity</Title>
+                        <FormControl style={{ minWidth: 180 }}>
+                            <InputLabel id="demo-simple-select-label" style={{ color: "#172C66" }}>Intensity</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Intensity"
+                                onChange={handleChange('intensity')}
+                                className={classes.select}
+                                defaultValue=""
+                            >
+                                <MenuItem value={"Easy"}>Easy</MenuItem>
+                                <MenuItem value={"Normal"}>Normal</MenuItem>
+                                <MenuItem value={"Hard"}>Hard</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <DefaultToolTip 
+                            content="
+                            Easy (Could easily do many more reps)
+                            Normal (Could do 3-5 more reps)
+                            Hard (Could only do 1-3 reps)"
+                            text="Learn more"
+                            placement="bottom"
+                            tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
+                            buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
                         />
-                        </div>
-                        <div>
-                        <Title>Weight (in lbs.)</Title>
-                        <TextField
-                            placeholder="Weight"
-                            label="Weight"
-                            inputProps={{ type: "number", min: "1" }}
-                            onChange={handleChange('weight')}
-                            className={classes.root}
-                            onKeyPress={(event) => { 
-                              if (!/[1-9]/.test(event.key)) { 
-                                  event.preventDefault();
-                              }
-                          }}
-                        />
-                        </div>
-                    </BottomFormContainer>
-                </FormContainer>
-            </Form>
-        )
-    }
+                    </Box>
+                </TopFormContainer>
+                <BottomFormContainer>
+                    <div>
+                    <Title>Sets</Title>
+                    <TextField
+                        placeholder="Sets"
+                        label="Sets"
+                        inputProps={{ type: "number", min: "1" }}
+                        onChange={handleChange('sets')}
+                        className={classes.root}
+                        onKeyPress={(event) => { 
+                            if (!/[1-9]/.test(event.key)) { 
+                                event.preventDefault();
+                            }
+                        }}
+                    />
+                    </div>
+                    <div>
+                    <Title>Reps</Title>
+                    <TextField
+                        placeholder="Reps"
+                        label="Reps"
+                        inputProps={{ type: "number", min: "1" }}
+                        onChange={handleChange('reps')}
+                        className={classes.root}
+                        onKeyPress={(event) => { 
+                            if (!/[1-9]/.test(event.key)) { 
+                                event.preventDefault();
+                            }
+                        }}
+                    />
+                    </div>
+                    <div>
+                    <Title>Weight (in lbs.)</Title>
+                    <TextField
+                        placeholder="Weight"
+                        label="Weight"
+                        inputProps={{ type: "number", min: "1" }}
+                        onChange={handleChange('weight')}
+                        className={classes.root}
+                        onKeyPress={(event) => { 
+                            if (!/[1-9]/.test(event.key)) { 
+                                event.preventDefault();
+                            }
+                        }}
+                    />
+                    </div>
+                </BottomFormContainer>
+            </FormContainer>
+        </Form>
+    )
 }

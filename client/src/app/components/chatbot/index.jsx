@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import tw from 'twin.macro';
-import { FaComments, FaTimes } from 'react-icons/fa';
+import { FaComments, FaTimes, FaDumbbell } from 'react-icons/fa';
 
 const ChatbotContainer = styled.div`
     ${tw`
@@ -17,7 +17,7 @@ const ChatButton = styled.button`
     ${tw`
         w-16 
         h-16 
-        bg-headline 
+        bg-gray-background
         text-white 
         flex 
         items-center 
@@ -30,7 +30,11 @@ const ChatButton = styled.button`
     `}
 
     ${
-        (props) => (props.isOpen ? tw`bg-red-600` : tw`bg-headline`)
+        (props) => (props.isOpen ? tw`bg-red-600` : tw`bg-gray-background`)
+    }
+
+    &:hover {
+        background-color: #172C66; /* Change this to your desired hover color */
     }
 `;
 
@@ -123,7 +127,7 @@ const Chatbot = () => {
                 <ChatWindow>
                     <ChatHeader>
                         <h3 className="text-lg font-semibold">AuxoBot</h3>
-                        <button onClick={toggleChat} className="text-red-600 hover:text-red-400">
+                        <button onClick={toggleChat} className="text-black">
                             <FaTimes size={20} />
                         </button>
                     </ChatHeader>
@@ -153,7 +157,7 @@ const Chatbot = () => {
                 </ChatWindow>
             )}
             <ChatButton onClick={toggleChat} isOpen={isOpen}>
-                <FaComments size={24} />
+                <FaDumbbell size={24} />
             </ChatButton>
         </ChatbotContainer>
     );

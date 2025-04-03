@@ -24,6 +24,7 @@ import TrackCard from './Card';
 import { Modal, Pagination, Stack, Typography } from '@mui/material';
 import { NavItemsLoggedIn } from 'src/app/components/navbar/navitems';
 import Sidebar from 'src/app/components/chatbot';
+import { WorkInProgress } from 'src/app/components/wip';
 
 const PageContainer = styled.div`
     min-height: 100vh;
@@ -394,6 +395,7 @@ export function MainSection() {
 
     const classes = useStyles();
 
+    {/*
     return (
         <>
             <PageContainer>
@@ -454,5 +456,10 @@ export function MainSection() {
                 <Sidebar />
             </PageContainer>
         </>
+    )
+    */}
+
+    return (
+        <WorkInProgress />
     )
 }

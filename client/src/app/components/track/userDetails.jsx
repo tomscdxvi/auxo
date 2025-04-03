@@ -34,6 +34,7 @@ const Title = styled.h1`
         text-headline
         mb-4
         tracking-wider
+        font-bold
         xlarge:text-xl 
         xlarge:leading-relaxed
     `}
@@ -45,8 +46,6 @@ const FormContainer = styled.div`
     z-index: 100;
     ${tw`
         bg-white
-        grid
-        grid-cols-2
         gap-12
         p-12
         mb-8
@@ -143,213 +142,83 @@ export default function UserDetails({ nextStep, handleChange, track }) {
 
     const classes = useStyles();
     const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
+    
+    return (  
+        <Form>
+            <FormContainer>
+                <div>
+                    <Title>Title</Title>
+                    <TextField
+                        placeholder="Title"
+                        label="Title"
+                        variant="standard"
+                        onChange={handleChange('title')}
+                    />
+                </div>
+                <div>
+                    <div>
+                        <Title>Date</Title>
+                        <TextField
+                            label="Today's Date"
+                            value={date}
+                            variant="standard"
+                        />
+                        {/*
+                        <DefaultToolTip
+                            content="You have the freedom to format the date to your preference."
+                            text="Learn more"
+                            placement="bottom"
+                            tooltipClass="bg-headline medium:w-[290px] xlarge:w-[280px] cursor-default"
+                            buttonClass="bg-headline text-white font-normal rounded-full outline-black !cursor-default w-[130px] mt-2"
+                        />
+                        */}
+                    </div>
 
-    if (isMobile) {
-        return (  
-            <Form>
-                <MobileFormContainer>
                     <div>
-                        <Title>Title</Title>
+                        <Title>Time</Title>
                         <TextField
-                            placeholder="Title"
-                            label="Title"
-                            onChange={handleChange('title')}
-                            className={classes.root}
+                            placeholder="Start Time"
+                            label="Start Time"
+                            variant="standard"
+                            onChange={handleChange('start_time')}
+                            sx={{ marginBottom: 2.5, marginRight: 2.5 }}
                         />
-                    </div>
-                    <div>
                         <div>
-                            <Title>Date</Title>
                             <TextField
-                                label="Date"
-                                type="date" // Use "date" type for the TextField
-                                value={date}
-                                InputLabelProps={{
-                                    shrink: true, // Ensures the label doesn't overlap the value
-                                }}
-                            />
-                            <DefaultToolTip
-                                content="You have the freedom to format the date to your preference."
-                                text="Learn more"
-                                placement="bottom"
-                                tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
-                                buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
-                            />
-                        </div>
-    
-                        <div>
-                            <Title>Time</Title>
-                            <TextField
-                                placeholder="Start Time"
-                                label="Start Time"
-                                onChange={handleChange('start_time')}
-                                className={classes.root}
-                                sx={{ marginBottom: 2.5, marginRight: 2.5 }}
-                            />
-                            <div>
-                                <TextField
-                                    placeholder="End Time"
-                                    label="End Time"
-                                    onChange={handleChange('end_time')}
-                                    className={classes.root}
-                                />
-                                <DefaultToolTip
-                                    content="You have the freedom to format the time to your preference."
-                                    text="Learn more"
-                                    placement="bottom"
-                                    tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
-                                    buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
-                                />
-                            </div>
-                        </div>
-                        
-                    </div>
-                    {/*
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <div>
-                            <Title>Date</Title>
-                            <TextField
-                                label="Date"
-                                type="date" // Use "date" type for the TextField
-                                value={date}
-                                InputLabelProps={{
-                                    shrink: true, // Ensures the label doesn't overlap the value
-                                }}
-                            />
-                            <DefaultToolTip
-                                content="You have the freedom to format the date to your preference."
-                                text="Learn more"
-                                placement="bottom"
-                                tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
-                                buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
-                            />
-                        </div>
-    
-                        <div>
-                            <Title>Time</Title>
-                            <TextField
-                                placeholder="Start Time"
-                                label="Start Time"
-                                onChange={handleChange('start_time')}
-                                className={classes.root}
-                                sx={{ marginBottom: 2.5, marginRight: 2.5 }}
-                            />
-                            <div>
-                                <TextField
-                                    placeholder="End Time"
-                                    label="End Time"
-                                    onChange={handleChange('end_time')}
-                                    className={classes.root}
-                                />
-                                <DefaultToolTip
-                                    content="You have the freedom to format the time to your preference."
-                                    text="Learn more"
-                                    placement="bottom"
-                                    tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
-                                    buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
-                                />
-                            </div>
-                        </div>
-                        
-                    </LocalizationProvider>
-                    */}
-                    <Box sx={{ minWidth: 60 }}>
-                        <Title>Type</Title>
-                        <FormControl style={{ minWidth: 180 }}>
-                            <InputLabel id="demo-simple-select-label" style={{ color: "#172C66" }}>Type</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                label="Type"
-                                defaultValue=""
-                                onChange={handleChange('type')}
-                                className={classes.select}
-                            >
-                                <MenuItem value={"Reps"}>Reps</MenuItem>
-                                <MenuItem value={"Singles"}>Singles</MenuItem>
-                                <MenuItem value={"Cardio"}>Cardio</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
-                </MobileFormContainer>
-            </Form>
-        )
-    } else {
-        return (  
-            <Form>
-                <FormContainer>
-                    <div>
-                        <Title>Title</Title>
-                        <TextField
-                            placeholder="Title"
-                            label="Title"
-                            onChange={handleChange('title')}
-                            className={classes.root}
-                        />
-                    </div>
-                    <div>
-                        <div>
-                            <Title>Date</Title>
-                            <TextField
-                                label="Date"
-                                value={date}
+                                placeholder="End Time"
+                                label="End Time"
                                 variant="standard"
+                                onChange={handleChange('end_time')}
                             />
                             <DefaultToolTip
-                                content="You have the freedom to format the date to your preference."
+                                content="You have the freedom to format the time to your preference."
                                 text="Learn more"
                                 placement="bottom"
-                                tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
-                                buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
+                                tooltipClass="bg-headline medium:w-[290px] xlarge:w-[280px] cursor-default"
+                                buttonClass="bg-headline text-white font-normal rounded-full outline-black !cursor-default w-[130px] mt-2"
                             />
-                        </div>
-    
-                        <div>
-                            <Title>Time</Title>
-                            <TextField
-                                placeholder="Start Time"
-                                label="Start Time"
-                                onChange={handleChange('start_time')}
-                                className={classes.root}
-                                sx={{ marginBottom: 2.5, marginRight: 2.5 }}
-                            />
-                            <div>
-                                <TextField
-                                    placeholder="End Time"
-                                    label="End Time"
-                                    onChange={handleChange('end_time')}
-                                    className={classes.root}
-                                />
-                                <DefaultToolTip
-                                    content="You have the freedom to format the time to your preference."
-                                    text="Learn more"
-                                    placement="bottom"
-                                    tooltipClass="medium:w-[290px] xlarge:w-[280px] cursor-default"
-                                    buttonClass="text-white font-normal rounded-full bg-gray-800 outline-black !cursor-default w-[130px] mt-2"
-                                />
-                            </div>
                         </div>
                     </div>
-                    <Box sx={{ minWidth: 60 }}>
-                        <Title>Type</Title>
-                        <FormControl style={{ minWidth: 180 }}>
-                            <InputLabel id="demo-simple-select-label" style={{ color: "#172C66" }}>Type</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                label="Type"
-                                defaultValue=""
-                                onChange={handleChange('type')}
-                                className={classes.select}
-                            >
-                                <MenuItem value={"Reps"}>Reps</MenuItem>
-                                <MenuItem value={"Singles"}>Singles</MenuItem>
-                                <MenuItem value={"Cardio"}>Cardio</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
-                </FormContainer>
-            </Form>
-        )
-    }
+                </div>
+                <Box sx={{ minWidth: 60 }}>
+                    <Title>Type</Title>
+                    <FormControl style={{ minWidth: 180 }}>
+                        <InputLabel id="demo-simple-select-label" style={{ color: "#172C66" }}>Type</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            label="Type"
+                            defaultValue=""
+                            variant="standard"
+                            onChange={handleChange('type')}
+                        >
+                            <MenuItem value={"Reps"}>Reps</MenuItem>
+                            <MenuItem value={"Singles"}>Singles</MenuItem>
+                            <MenuItem value={"Cardio"}>Cardio</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
+            </FormContainer>
+        </Form>
+    )
 }

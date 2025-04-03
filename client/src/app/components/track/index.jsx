@@ -10,8 +10,50 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { Box, Modal, Typography } from '@mui/material';
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 import { SCREENS } from '../../components/responsive';
+
+const AccordionContainer = styled.div`
+    ${tw`
+        w-full
+    `}
+`;
+
+const AccordionItemContainer = styled.div`
+    ${tw`
+        border 
+        border-gray-300 
+        rounded-lg 
+        overflow-hidden 
+        mb-4
+    `}
+`;
+
+const AccordionHeader = styled.div`
+    ${tw`
+        flex 
+        justify-between 
+        items-center 
+        bg-white
+        text-headline
+        text-2xl
+        p-4 
+        cursor-pointer
+    `}
+
+    &:hover {
+        background-color: #172C66; /* Change this to your desired hover color */
+        color: #fff;
+    }
+`;
+
+const AccordionContent = styled.div`
+    ${tw`
+        p-4 
+        bg-gray-100
+    `}
+`;
 
 const ButtonsContainer = styled.div`
     ${tw`
@@ -19,6 +61,8 @@ const ButtonsContainer = styled.div`
         flex-wrap
         justify-end
         items-end
+        hover:bg-gray-background
+        hover:text-white
     `}
 `;
 
@@ -41,6 +85,7 @@ const Title = styled.h1`
         tracking-wider
         ml-0
         mr-auto
+        font-bold
         xlarge:text-xl 
         xlarge:leading-relaxed
     `}
@@ -96,6 +141,9 @@ export default function TrackForm() {
         setOpenModal(true);
         // pushWorkout();
     }
+
+    const [isUserDetailsOpen, setIsUserDetailsOpen] = useState(false);
+    const [isWorkoutDetailsOpen, setIsWorkoutDetailsOpen] = useState(false);
     
     const handleClose = (e) => {
 
@@ -296,29 +344,33 @@ export default function TrackForm() {
 
     const isMobile = useMediaQuery({ maxWidth: SCREENS.small});
 
-    if (isMobile) {
-        if (step === 1) {
-            return (
-                <>
-                <div>
-                    <div>
-                        <Title style={{ color: "white", marginTop: 50 }}>Workout Details</Title>
+    return (
+        <>
+            <AccordionContainer>
+                {/* User Details Accordion */}
+                <AccordionItemContainer>
+                <AccordionHeader onClick={() => setIsUserDetailsOpen(!isUserDetailsOpen)}>
+                    <span>User Details</span>
+                    {isUserDetailsOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                </AccordionHeader>
+                {isUserDetailsOpen && (
+                    <AccordionContent>
                         <UserDetails 
                             handleChange={handleChangeTrack} 
                             values={track} 
                         />
-                    </div>
-                    <MobileButtonsContainer>
-                        <Button theme="filled" text="Next" onClick={nextStep} />
-                    </MobileButtonsContainer>
-                </div>
-                </>
-            )
-        } else if (step === 2) {
-            return (
-                <>
-                    <div>
-                        <Title style={{ color: "white", marginTop: 50, marginLeft: 10 }}>Exercise Details</Title>
+                    </AccordionContent>
+                )}
+                </AccordionItemContainer>
+
+                {/* Workout Details Accordion */}
+                <AccordionItemContainer>
+                <AccordionHeader onClick={() => setIsWorkoutDetailsOpen(!isWorkoutDetailsOpen)}>
+                    <span>Workout Details</span>
+                    {isWorkoutDetailsOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                </AccordionHeader>
+                {isWorkoutDetailsOpen && (
+                    <AccordionContent>
                         <WorkoutDetails 
                             prevStep={prevStep}
                             addOne={addExercise}
@@ -326,131 +378,13 @@ export default function TrackForm() {
                             handleChange={handleChangeTrack} 
                             values={workout} 
                         />
-                        {/*
-                        <Title style={{ color: "white" }}>Exercise Details</Title> 
-                        <div>
-                            {workoutList.map((workout, index) =>             
-                                <WorkoutDetails 
-                                    key={index}
-                                    prevStep={prevStep}
-                                    addOne={addExercise}
-                                    removeOne={removeExercise}
-                                    handleChange={handleChangeWorkout} 
-                                    values={workout} 
-                                />
-                            )}
-                            </div> */}
-                        <MobileButtonsContainer>
-                            {/* {workoutList.length < workoutCounter ? <Button theme="filled" text="+" onClick={addExercise} className="mr-auto ml-0" />  
-                                : <Button theme="disabled-filled" text="+" onClick={addExercise} className="mr-auto ml-0" />
-                            } */}
-                            {/* {workoutList.length > 0 ? <Button theme="filled" text="-" onClick={removeExercise} className="ml-0 mr-96" /> : null} */}
-                            {/* {workoutList.length > 0 ? <Button theme="filled" text="Confirm" onClick={handleOpen} /> : null} */}
-                            {/* <Button theme="disabled-filled" text="+" onClick={addExercise} />
-                            <Button theme="disabled-filled" text="-" onClick={removeExercise} /> */}
-                            <Button theme="filled" text="Confirm" onClick={handleOpen} />
-                            
-                        </MobileButtonsContainer>
-                        <Modal
-                            open={openModal}
-                            onClose={handleClose}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                        >
-                            <Box sx={style}>
-                                <Typography id="modal-modal-title" variant="h6" component="h2">
-                                    Track Workout
-                                </Typography>
-                                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                    Do you wish to track this workout?
-                                </Typography>
-                                <div className="flex mt-12">
-                                    <Button theme="outline-white" text="Back" onClick={handleClose} className="mr-9" /> 
-                                    <Button theme="filled" text="Track" className="mr-9" onClick={handleTrack} /> 
-                                </div>
-                            </Box>
-                        </Modal>
-                    </div>
-                </>
-            )
-        }
-    } else {
-        if (step === 1) {
-            return (
-                <>
-                <div>
-                    <div>
-                        <Title style={{ color: "white", marginTop: 50 }}>Workout Details</Title>
-                        <UserDetails 
-                            handleChange={handleChangeTrack} 
-                            values={track} 
-                        />
-                    </div>
-                    <ButtonsContainer>
-                        <Button theme="filled" text="Next" className="mr-0 ml-auto" onClick={nextStep} />
-                    </ButtonsContainer>
-                </div>
-                </>
-            )
-        } else if (step === 2) {
-            return (
-                <>
-                    <div>
-                        <Title style={{ color: "white", marginTop: 50 }}>Exercise Details</Title>
-                        <WorkoutDetails 
-                            prevStep={prevStep}
-                            addOne={addExercise}
-                            removeOne={removeExercise}
-                            handleChange={handleChangeTrack} 
-                            values={workout} 
-                        />
-                        {/*
-                        <Title style={{ color: "white" }}>Exercise Details</Title> 
-                        <div>
-                            {workoutList.map((workout, index) =>             
-                                <WorkoutDetails 
-                                    key={index}
-                                    prevStep={prevStep}
-                                    addOne={addExercise}
-                                    removeOne={removeExercise}
-                                    handleChange={handleChangeWorkout} 
-                                    values={workout} 
-                                />
-                            )}
-                            </div> */}
-                        <ButtonsContainer>
-                            {/* {workoutList.length < workoutCounter ? <Button theme="filled" text="+" onClick={addExercise} className="mr-auto ml-0" />  
-                                : <Button theme="disabled-filled" text="+" onClick={addExercise} className="mr-auto ml-0" />
-                            } */}
-                            {/* {workoutList.length > 0 ? <Button theme="filled" text="-" onClick={removeExercise} className="ml-0 mr-96" /> : null} */}
-                            {/* {workoutList.length > 0 ? <Button theme="filled" text="Confirm" onClick={handleOpen} /> : null} */}
-                            <Button theme="disabled-filled" text="+" onClick={addExercise} className="mr-auto ml-0" />
-                            <Button theme="disabled-filled" text="-" onClick={removeExercise} className="ml-0 mr-96"/>
-                            <Button theme="filled" text="Confirm" onClick={handleOpen} />
-                            
-                        </ButtonsContainer>
-                        <Modal
-                            open={openModal}
-                            onClose={handleClose}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                        >
-                            <Box sx={style}>
-                                <Typography id="modal-modal-title" variant="h6" component="h2">
-                                    Track Workout
-                                </Typography>
-                                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                    Do you wish to track this workout?
-                                </Typography>
-                                <div className="flex mt-12">
-                                    <Button theme="outline-white" text="Back" onClick={handleClose} className="mr-9" /> 
-                                    <Button theme="filled" text="Track" className="mr-9" onClick={handleTrack} /> 
-                                </div>
-                            </Box>
-                        </Modal>
-                    </div>
-                </>
-            )
-        }
-    }
+                    </AccordionContent>
+                )}
+                </AccordionItemContainer>
+            </AccordionContainer>
+            <ButtonsContainer>
+                <Button theme="text" text="Track" />
+            </ButtonsContainer>
+        </>
+    )
 }
